@@ -1,0 +1,12 @@
+# Configuration for Flutter's `flutter gen-l10n` code generator.
+#
+# ARB files live in `lib/l10n` (one per supported locale) and the generated
+# `AppLocalizations` class is emitted into `lib/l10n/generated` so that the
+# compiled artefacts are visible inside `lib/` instead of the build folder.
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+output-dir: lib/l10n/generated
+nullable-getter: false
+use-escaping: true

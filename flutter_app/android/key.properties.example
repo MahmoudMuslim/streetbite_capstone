@@ -1,0 +1,6 @@
+# Copy this file to `key.properties` (same folder) and fill in your values.
+# `key.properties` is git-ignored — never commit real keys.
+
+# Google Maps SDK for Android.
+# Firebase console -> Project settings -> Your apps -> Android app -> "API key"
+MAPS_API_KEY=YOUR_GOOGLE_MAPS_API_KEY_HERE
