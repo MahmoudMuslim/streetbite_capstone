@@ -16,7 +16,6 @@ import '../../widgets/app_surface.dart';
 import '../../widgets/cart_badge.dart';
 import '../../widgets/empty_state_view.dart';
 import '../../widgets/semantic_id.dart';
-import '../../widgets/theme_toggle_button.dart';
 
 /// The receipt behind a row in the Orders tab (and in the Profile history).
 ///
@@ -42,7 +41,6 @@ class OrderDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(context.l10n.orderDetails),
         actions: [
-          const ThemeToggleButton(),
           IconButton(
             key: const ValueKey('order_details_open_cart_button'),
             onPressed: () => Navigator.of(context).pushNamed(AppRoutes.cart),

@@ -24,12 +24,10 @@ import '../../widgets/app_search_field.dart';
 import '../../widgets/cart_badge.dart';
 import '../../widgets/home_feed_skeleton.dart';
 import '../../widgets/hot_offer_card.dart';
-import '../../widgets/language_toggle_button.dart';
 import '../../widgets/meal_banner_page.dart';
 import '../../widgets/meal_card.dart';
 import '../../widgets/section_header.dart';
 import '../../widgets/semantic_id.dart';
-import '../../widgets/theme_toggle_button.dart';
 import 'menu_search_sheet.dart';
 
 /// The live menu feed — StreetBite's home screen.
@@ -185,7 +183,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   PreferredSizeWidget _buildAppBar(UserEntity user) {
     final firstName = user.displayName.split(' ').first;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return AppBar(
       titleSpacing: 20,
       title: Column(
@@ -217,27 +214,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       actions: [
-        _appBarAction(child: const ThemeToggleButton()),
-        // The EN/AR switch lives on every screen, not just Settings, so an
-        // Arabic tester never has to leave the feed to change language.
-        LanguageToggleButton(
-          style: OutlinedButton.styleFrom(
-            minimumSize: const Size(40, 40),
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            backgroundColor: isDark
-                ? AppColors.surfaceDark
-                : AppColors.background,
-            foregroundColor: isDark ? Colors.white : AppColors.primaryDark,
-            side: const BorderSide(color: Colors.transparent),
-            shadowColor: Colors.black.withValues(alpha: 0.08),
-            elevation: 0,
-            textStyle: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-        ),
-        const SizedBox(width: 8),
         _appBarAction(
           child: SemanticId(
             key: const ValueKey('open_map_button'),

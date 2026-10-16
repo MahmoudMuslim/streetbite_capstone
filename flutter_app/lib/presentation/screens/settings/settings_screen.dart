@@ -16,7 +16,6 @@ import '../../widgets/app_segmented_picker.dart';
 import '../../widgets/app_surface.dart';
 import '../../widgets/settings_row.dart';
 import '../../widgets/theme_options_sheet.dart';
-import '../../widgets/theme_toggle_button.dart';
 
 /// Appearance + security preferences.
 ///
@@ -53,10 +52,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.settings),
-        actions: const [ThemeToggleButton(), SizedBox(width: 8)],
-      ),
+      appBar: AppBar(title: Text(context.l10n.settings)),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Responsive.constrainWidth(

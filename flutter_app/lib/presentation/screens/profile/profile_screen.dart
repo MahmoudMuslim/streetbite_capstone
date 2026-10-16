@@ -118,10 +118,7 @@ class _ProfileViewState extends State<_ProfileView> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      appBar: AppBar(
-        title: Text(context.l10n.profile),
-        actions: const [LanguageToggleButton(), SizedBox(width: 8)],
-      ),
+      appBar: AppBar(title: Text(context.l10n.profile)),
       body: BlocListener<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state.messageKey == null) return;

@@ -18,7 +18,6 @@ import '../../widgets/cart_badge.dart';
 import '../../widgets/cart_line_action.dart';
 import '../../widgets/meta_pill.dart';
 import '../../widgets/semantic_id.dart';
-import '../../widgets/theme_toggle_button.dart';
 
 /// Full description of a single meal.
 ///
@@ -39,7 +38,6 @@ class MealDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(context.l10n.mealDetails),
         actions: [
-          const ThemeToggleButton(),
           IconButton(
             key: const ValueKey('details_open_cart_button'),
             onPressed: () => Navigator.of(context).pushNamed(AppRoutes.cart),
