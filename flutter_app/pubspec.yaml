@@ -53,6 +53,29 @@ dev_dependencies:
   bloc_test: ^10.0.0
   mocktail: ^1.0.4
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
+# Launcher icon generated from the sources in assets/icon (see
+# scripts/make_launcher_icons.py). They live outside assets/images on purpose:
+# that folder is declared below and would ship the 1024px masters inside the APK.
+flutter_launcher_icons:
+  android: true
+  # iOS stays on the template icons. 0.14.4 rewrites the pbxproj with
+  # `ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = AppIcon`,
+  # which is not a valid value for that YES/NO setting, and the capstone ships as
+  # an APK only. Revisit with a plugin version that leaves the project file alone.
+  ios: false
+  image_path: "assets/icon/launcher_icon.png"
+  # Adaptive icons are masked by the launcher, so the foreground layer keeps its
+  # art inside the 66dp safe zone of the 108dp canvas and the background is the
+  # flat brand green rather than the gradient.
+  adaptive_icon_background: "#00C16A"
+  adaptive_icon_foreground: "assets/icon/launcher_icon_foreground.png"
+  adaptive_icon_monochrome: "assets/icon/launcher_icon_monochrome.png"
+  # The plugin insets the foreground by 16% by default. The foreground master is
+  # already drawn to the safe zone, so that padding would shrink the bowl to
+  # about a third of the tile; zero lets the 108dp canvas map 1:1 to the PNG.
+  adaptive_icon_foreground_inset: 0
 
 flutter:
   uses-material-design: true
