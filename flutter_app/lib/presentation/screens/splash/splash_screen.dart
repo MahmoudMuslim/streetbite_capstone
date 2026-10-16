@@ -200,9 +200,9 @@ class _SplashScreenState extends State<SplashScreen>
                   // The language toggle is always reachable, even on the
                   // splash, so an Arabic tester never lands on an English
                   // first frame.
-                  Positioned(
+                  PositionedDirectional(
                     top: 8,
-                    right: 12,
+                    end: 12,
                     child: LanguageToggleButton(
                       onDarkBackground: true,
                       style: ButtonStyle(

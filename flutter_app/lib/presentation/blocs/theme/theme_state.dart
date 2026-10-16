@@ -1,17 +1,27 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-/// Light / dark mode preference owned by [ThemeCubit].
+import '../../../core/theme/app_theme_mode.dart';
+
+/// Appearance preference owned by [ThemeCubit].
+///
+/// Holds the app's own [AppThemeMode] rather than Flutter's [ThemeMode] so the
+/// third "Liquid Glass" look can exist without leaking a rendering detail into
+/// every screen: [themeMode] and [isDark] translate it back for `MaterialApp`
+/// and for the widgets that only care about brightness.
 class ThemeState extends Equatable {
-  const ThemeState(this.themeMode);
+  const ThemeState(this.mode);
 
-  final ThemeMode themeMode;
+  final AppThemeMode mode;
 
-  bool get isDark => themeMode == ThemeMode.dark;
+  ThemeMode get themeMode => mode.materialMode;
 
-  ThemeState copyWith({ThemeMode? themeMode}) =>
-      ThemeState(themeMode ?? this.themeMode);
+  bool get isDark => mode.isDark;
+
+  bool get isLiquidGlass => mode.isLiquidGlass;
+
+  ThemeState copyWith({AppThemeMode? mode}) => ThemeState(mode ?? this.mode);
 
   @override
-  List<Object?> get props => [themeMode];
+  List<Object?> get props => [mode];
 }

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 
+import '../../../core/theme/app_glass_tokens.dart';
 import '../../blocs/auth/auth_cubit.dart';
 import '../../blocs/auth/auth_state.dart';
 import '../../blocs/orders/orders_cubit.dart';
 import '../../extensions/l10n_extension.dart';
+import '../../widgets/glass_aurora.dart';
 import 'home_screen.dart';
 import '../orders/orders_screen.dart';
 import '../profile/profile_tab_screen.dart';
@@ -17,6 +20,11 @@ import '../browse/browse_screen.dart';
 /// feed keeps its scroll position and its `PageView` index, and returning from
 /// the Cart does not re-trigger a network fetch. That matters on a phone where
 /// users bounce between tabs dozens of times per session.
+///
+/// Under the Liquid Glass theme the same stack is hosted by a `GlassScaffold`
+/// with a real refractive `GlassTabBar`, which is the one place the glass look
+/// changes structure rather than just palette — navigation chrome is what the
+/// material is designed for.
 class MainShellScreen extends StatefulWidget {
   const MainShellScreen({super.key, this.initialIndex = 0});
 
@@ -52,16 +60,75 @@ class _MainShellScreenState extends State<MainShellScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index: _index,
-        children: [
-          _tab(0, const HomeScreen()),
-          _tab(1, const BrowseScreen()),
-          _tab(2, const OrdersScreen()),
-          _tab(3, const ProfileTabScreen()),
+    final body = IndexedStack(
+      index: _index,
+      children: [
+        _tab(0, const HomeScreen()),
+        _tab(1, const BrowseScreen()),
+        _tab(2, const OrdersScreen()),
+        _tab(3, const ProfileTabScreen()),
+      ],
+    );
+
+    if (AppGlassTokens.enabledOf(context)) {
+      final isDark = Theme.of(context).brightness == Brightness.dark;
+      final tabBar = GlassTabBar.bottom(
+        tabs: [
+          GlassTab(
+            icon: const Icon(Icons.home_outlined),
+            activeIcon: const Icon(Icons.home_rounded),
+            label: context.l10n.homeTitle,
+            semanticLabel: context.l10n.homeTitle,
+          ),
+          GlassTab(
+            icon: const Icon(Icons.search_rounded),
+            activeIcon: const Icon(Icons.travel_explore_rounded),
+            label: context.l10n.browseTitle,
+            semanticLabel: context.l10n.browseTitle,
+          ),
+          GlassTab(
+            icon: const Icon(Icons.receipt_long_outlined),
+            activeIcon: const Icon(Icons.receipt_long_rounded),
+            label: context.l10n.ordersTitle,
+            semanticLabel: context.l10n.ordersTitle,
+          ),
+          GlassTab(
+            icon: const Icon(Icons.person_outline_rounded),
+            activeIcon: const Icon(Icons.person_rounded),
+            label: context.l10n.profileTitle,
+            semanticLabel: context.l10n.profileTitle,
+          ),
         ],
-      ),
+        selectedIndex: _index,
+        onTabSelected: (index) => setState(() => _index = index),
+        verticalPadding: 12,
+      );
+
+      return GlassScaffold(
+        background: const GlassAurora(),
+        // `auto` follows the *device* brightness, which can disagree with the
+        // in-app theme, so the style is pinned to the active brightness.
+        statusBarStyle: isDark
+            ? GlassStatusBarStyle.light
+            : GlassStatusBarStyle.dark,
+        body: body,
+        // GlassScaffold does not wrap its bottomBar in a Material, so the tab
+        // labels would otherwise inherit MaterialApp's fallback text style —
+        // monospace with a yellow double underline. Supply the app's own base
+        // style with the decoration cleared; the bar still layers its per-state
+        // color/size/weight on top.
+        bottomBar: DefaultTextStyle(
+          style:
+              Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(decoration: TextDecoration.none) ??
+              const TextStyle(decoration: TextDecoration.none),
+          child: tabBar,
+        ),
+      );
+    }
+
+    return Scaffold(
+      body: body,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).navigationBarTheme.backgroundColor,

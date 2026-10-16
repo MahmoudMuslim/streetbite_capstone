@@ -44,6 +44,8 @@ dependencies:
   # --- UI helpers ---
   cupertino_icons: ^1.0.8
   cached_network_image: ^3.4.1
+  shimmer: ^3.0.0
+  liquid_glass_widgets: ^1.13.0
 
 dev_dependencies:
   flutter_test:

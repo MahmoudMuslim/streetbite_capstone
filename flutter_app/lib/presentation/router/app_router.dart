@@ -10,7 +10,9 @@ import '../screens/home/main_shell_screen.dart';
 import '../screens/home/meal_details_screen.dart';
 import '../screens/map/vendor_map_screen.dart';
 import '../screens/profile/profile_screen.dart';
+import '../screens/settings/settings_screen.dart';
 import '../screens/splash/splash_screen.dart';
+import 'app_page_route.dart';
 
 /// Central `onGenerateRoute` implementation.
 ///
@@ -23,7 +25,7 @@ class AppRouter {
 
   /// Signature required by `MaterialApp.onGenerateRoute`.
   static Route<dynamic> generate(RouteSettings settings) {
-    return MaterialPageRoute<dynamic>(
+    return AppPageRoute<dynamic>(
       settings: settings,
       builder: (_) => resolve(settings),
     );
@@ -73,6 +75,9 @@ class AppRouter {
 
       case AppRoutes.profile:
         return const ProfileScreen();
+
+      case AppRoutes.settings:
+        return const SettingsScreen();
 
       default:
         // Unknown route (bad deep link): land on the splash rather than crash.

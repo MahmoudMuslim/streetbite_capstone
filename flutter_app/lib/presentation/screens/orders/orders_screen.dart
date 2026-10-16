@@ -9,9 +9,9 @@ import '../../blocs/auth/auth_state.dart';
 import '../../blocs/orders/orders_cubit.dart';
 import '../../blocs/orders/orders_state.dart';
 import '../../widgets/app_error_view.dart';
-import '../../widgets/app_loading_view.dart';
 import '../../widgets/empty_state_view.dart';
 import '../../widgets/order_history_tile.dart';
+import '../../widgets/order_list_skeleton.dart';
 
 /// "Orders" tab — the two-block layout from the Figma design.
 ///
@@ -31,10 +31,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _refresh());
   }
 
-  void _refresh() {
+  Future<void> _refresh() async {
     final state = context.read<AuthCubit>().state;
     if (state is AuthAuthenticated) {
-      context.read<OrdersCubit>().load(state.user.uid);
+      await context.read<OrdersCubit>().refresh(state.user.uid);
     }
   }
 
@@ -56,7 +56,18 @@ class _OrdersScreenState extends State<OrdersScreen> {
         child: BlocBuilder<OrdersCubit, OrdersState>(
           builder: (context, state) {
             return switch (state) {
-              OrdersInitial() || OrdersLoading() => const AppLoadingView(),
+              OrdersInitial() || OrdersLoading() => Responsive.constrainWidth(
+                context,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    Responsive.horizontalPadding(context),
+                    16,
+                    Responsive.horizontalPadding(context),
+                    0,
+                  ),
+                  child: const OrderListSkeleton(itemCount: 4),
+                ),
+              ),
               OrdersError(:final messageKey) => AppErrorView(
                 messageKey: messageKey,
                 icon: Icons.receipt_long_rounded,
@@ -71,7 +82,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     Navigator.of(context)
                         .pushNamedAndRemoveUntil(AppRoutes.home, (_) => false),
               ),
-              OrdersLoaded() => _OrderList(orders: state),
+              OrdersLoaded() => _OrderList(orders: state, onRefresh: _refresh),
             };
           },
         ),
@@ -81,9 +92,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
 }
 
 class _OrderList extends StatelessWidget {
-  const _OrderList({required this.orders});
+  const _OrderList({required this.orders, required this.onRefresh});
 
   final OrdersLoaded orders;
+  final Future<void> Function() onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -94,38 +106,74 @@ class _OrderList extends StatelessWidget {
 
     return Responsive.constrainWidth(
       context,
-      child: ListView(
-        key: const ValueKey('orders_list'),
-        padding: padding,
-        children: [
-          if (orders.active.isNotEmpty) ...[
-            _BlockTitle(label: context.l10n.current),
-            ...orders.active.map((order) => OrderHistoryTile(order: order)),
+      child: RefreshIndicator(
+        onRefresh: onRefresh,
+        child: ListView(
+          key: const ValueKey('orders_list'),
+          padding: padding,
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
+            if (orders.active.isNotEmpty) ...[
+              _BlockTitle(
+                label: context.l10n.current,
+                count: orders.active.length,
+              ),
+              ...orders.active.map((order) => OrderHistoryTile(order: order)),
+            ],
+            if (orders.past.isNotEmpty) ...[
+              _BlockTitle(
+                label: context.l10n.past,
+                count: orders.past.length,
+                spacing: 20,
+              ),
+              ...orders.past.map((order) => OrderHistoryTile(order: order)),
+            ],
           ],
-          if (orders.past.isNotEmpty) ...[
-            _BlockTitle(label: context.l10n.past, spacing: 20),
-            ...orders.past.map((order) => OrderHistoryTile(order: order)),
-          ],
-        ],
+        ),
       ),
     );
   }
 }
 
 class _BlockTitle extends StatelessWidget {
-  const _BlockTitle({required this.label, this.spacing = 8});
+  const _BlockTitle({
+    required this.label,
+    required this.count,
+    this.spacing = 8,
+  });
 
   final String label;
+  final int count;
   final double spacing;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Padding(
-      padding: EdgeInsets.only(top: spacing, bottom: 4),
-      child: Text(
-        label,
-        style: Theme.of(context).textTheme.headlineSmall
-            ?.copyWith(fontSize: 20),
+      padding: EdgeInsets.only(top: spacing, bottom: 8),
+      child: Row(
+        children: [
+          Text(
+            label,
+            style: theme.textTheme.headlineSmall?.copyWith(fontSize: 20),
+          ),
+          const SizedBox(width: 10),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              '$count',
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

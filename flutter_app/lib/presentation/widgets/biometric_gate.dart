@@ -26,9 +26,11 @@ Future<void> openBiometricGate(
 }) async {
   final service = GetIt.I<BiometricService>();
 
-  final result = await service.authenticate(
-    reason: BiometricGateReason.profile,
-  );
+  // Captured before the await: the OS prompt shows this string, and reading it
+  // from `context` after the gap would risk a deactivated element.
+  final reason = context.l10n.biometricReason;
+
+  final result = await service.authenticate(reason: reason);
 
   if (!context.mounted) return;
 
@@ -87,11 +89,4 @@ Future<void> openBiometricGate(
     onBypass?.call();
     onUnlocked();
   }
-}
-
-/// Reason strings passed to the OS biometric prompt.
-class BiometricGateReason {
-  const BiometricGateReason._();
-
-  static const String profile = 'Unlock your StreetBite profile';
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_routes.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils/string_helpers.dart';
 import '../../../domain/entities/cart_item_entity.dart';
 import '../../../domain/entities/payment.dart';
 import '../../../domain/usecases/calculate_order_totals.dart';
@@ -37,6 +38,12 @@ class _CartScreenState extends State<CartScreen> {
   /// Held as a [PaymentMethod] abstraction, never as an enum, so the screen
   /// compiles unchanged when a third strategy is added (Open/closed).
   PaymentMethod _payment = const CashPayment();
+
+  /// Guards the checkout button.
+  ///
+  /// `CartBloc` has no in-flight state, so without this a slow Firestore write
+  /// leaves the button live and a second tap places a duplicate order.
+  bool _isPlacing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -159,8 +166,21 @@ class _CartScreenState extends State<CartScreen> {
               const SizedBox(height: 20),
               FilledButton(
                 key: const ValueKey('place_order_button'),
-                onPressed: () => _placeOrder(context),
-                child: Text(context.l10n.placeOrder),
+                onPressed: _isPlacing ? null : () => _placeOrder(context),
+                child: _isPlacing
+                    ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.4,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Text(
+                        context.trArgs('placeOrderFor', {
+                          'amount': formatPrice(totals.total),
+                        }),
+                      ),
               ),
               const SizedBox(height: 8),
             ],
@@ -180,9 +200,14 @@ class _CartScreenState extends State<CartScreen> {
         );
       return;
     }
-    await context.read<CartBloc>().checkout(
-      user: authState.user,
-      payment: _payment,
-    );
+
+    final bloc = context.read<CartBloc>();
+    setState(() => _isPlacing = true);
+
+    await bloc.checkout(user: authState.user, payment: _payment);
+
+    // On success the screen is already gone; this only re-arms the button after
+    // a failed write.
+    if (mounted) setState(() => _isPlacing = false);
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_categories.dart';
 import '../../../core/constants/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_glass_tokens.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../domain/entities/meal_entity.dart';
 import '../../../domain/entities/user_entity.dart';
@@ -20,8 +21,8 @@ import '../../blocs/meals/meals_cubit.dart';
 import '../../blocs/meals/meals_state.dart';
 import '../../extensions/l10n_extension.dart';
 import '../../widgets/app_error_view.dart';
-import '../../widgets/app_loading_view.dart';
 import '../../widgets/cart_badge.dart';
+import '../../widgets/home_feed_skeleton.dart';
 import '../../widgets/hot_offer_card.dart';
 import '../../widgets/language_toggle_button.dart';
 import '../../widgets/meal_banner_page.dart';
@@ -162,8 +163,8 @@ class _HomeScreenState extends State<HomeScreen> {
           child: BlocBuilder<MealsCubit, MealsState>(
             builder: (context, state) {
               return switch (state) {
-                MealsInitial() => const AppLoadingView(),
-                MealsLoading() => const AppLoadingView(),
+                MealsInitial() => const HomeFeedSkeleton(),
+                MealsLoading() => const HomeFeedSkeleton(),
                 MealsError(:final messageKey) => AppErrorView(
                   messageKey: messageKey,
                   onRetry: () =>
@@ -268,16 +269,24 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// Circular white "pill" that unifies the AppBar's icon actions.
+  /// Circular "pill" that unifies the AppBar's icon actions.
   Widget _appBarAction({required Widget child}) {
+    final isGlass = AppGlassTokens.enabledOf(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: 40,
       height: 40,
-      margin: const EdgeInsets.only(right: 6),
+      margin: const EdgeInsetsDirectional.only(end: 6),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceDark : AppColors.background,
+        color: isGlass
+            ? AppGlassTokens.wellColor(context)
+            : isDark
+            ? AppColors.surfaceDark
+            : AppColors.background,
         shape: BoxShape.circle,
+        border: isGlass
+            ? Border.all(color: AppGlassTokens.wellBorder(context))
+            : null,
         boxShadow: isDark
             ? null
             : [
@@ -497,6 +506,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// means — and a chip that matches nothing yields the grid's empty state
   /// instead of pretending to work.
   Widget _buildCategories(bool isDark) {
+    final isGlass = AppGlassTokens.enabledOf(context);
     return SizedBox(
       height: 104,
       child: ListView.separated(
@@ -534,10 +544,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: BoxDecoration(
                       color: isSelected
                           ? AppColors.primary
+                          : isGlass
+                          ? AppGlassTokens.wellColor(context)
                           : isDark
                           ? AppColors.surfaceDark
                           : AppColors.background,
                       shape: BoxShape.circle,
+                      border: isGlass && !isSelected
+                          ? Border.all(
+                              color: AppGlassTokens.wellBorder(context),
+                            )
+                          : null,
                       boxShadow: isSelected
                           ? [
                               BoxShadow(
@@ -558,7 +575,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: Icon(
                       category.icon,
-                      color: isSelected ? Colors.white : AppColors.primaryDark,
+                      color: isSelected
+                          ? Colors.white
+                          : isGlass
+                          ? Theme.of(context).colorScheme.onSurface
+                          : AppColors.primaryDark,
                       size: 27,
                     ),
                   ),

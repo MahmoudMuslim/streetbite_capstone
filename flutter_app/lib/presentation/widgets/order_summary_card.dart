@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_glass_tokens.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/string_helpers.dart';
 import '../../domain/usecases/calculate_order_totals.dart';
@@ -27,14 +28,22 @@ class OrderSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final glass = AppGlassTokens.enabledOf(context);
 
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: theme.brightness == Brightness.dark
+        // The panel stays opaque under glass too: it floats over a scrolling
+        // list, and a translucent sheet over moving content reads as a smear.
+        color: glass
+            ? theme.bottomSheetTheme.backgroundColor
+            : theme.brightness == Brightness.dark
             ? theme.cardColor
             : theme.colorScheme.surfaceContainerLowest,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+        border: glass
+            ? Border(top: BorderSide(color: AppGlassTokens.wellBorder(context)))
+            : null,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.08),

@@ -44,4 +44,37 @@ class AppColors {
   // --- Splash gradient -----------------------------------------------------
   static const Color splashTop = Color(0xFF00D07A);
   static const Color splashBottom = Color(0xFF00A85A);
+
+  // --- Liquid Glass (dark) -------------------------------------------------
+  /// Canvas the glass surfaces refract against. Deliberately deep and slightly
+  /// blue so the frosted panels read as objects floating over it; a flat white
+  /// backdrop would make blur invisible.
+  static const Color glassCanvasTop = Color(0xFF080D18);
+  static const Color glassCanvasBottom = Color(0xFF111C2E);
+
+  /// The two aurora blobs painted behind the canvas gradient.
+  static const Color glassAuroraGreen = Color(0xFF00C16A);
+  static const Color glassAuroraBlue = Color(0xFF2E6BFF);
+
+  /// Translucent panel fill + hairline edge used where a real glass widget is
+  /// not available (or would be too expensive), so surfaces still match.
+  static const Color glassSurface = Color(0x14FFFFFF);
+  static const Color glassSurfaceStrong = Color(0x22FFFFFF);
+  static const Color glassBorder = Color(0x26FFFFFF);
+
+  static const Color glassTextPrimary = Color(0xFFF2F6FC);
+  static const Color glassTextSecondary = Color(0xFF9DAABF);
+
+  // --- Liquid Glass (light) ------------------------------------------------
+  /// Same frosted treatment over a pale canvas: the panels are white-tinted
+  /// glass instead of dark-tinted glass, so blur still reads on a bright page.
+  static const Color glassCanvasTopLight = Color(0xFFDCE9F7);
+  static const Color glassCanvasBottomLight = Color(0xFFEAF3EC);
+
+  static const Color glassSurfaceLight = Color(0x8CFFFFFF);
+  static const Color glassSurfaceLightStrong = Color(0xB3FFFFFF);
+  static const Color glassBorderLight = Color(0x99FFFFFF);
+
+  static const Color glassTextPrimaryLight = Color(0xFF12222E);
+  static const Color glassTextSecondaryLight = Color(0xFF54687A);
 }

@@ -500,11 +500,11 @@ abstract class AppLocalizations {
   /// **'Free'**
   String get free;
 
-  /// No description provided for @placeOrder.
+  /// No description provided for @placeOrderFor.
   ///
   /// In en, this message translates to:
-  /// **'Place order'**
-  String get placeOrder;
+  /// **'Place order · {amount}'**
+  String placeOrderFor(String amount);
 
   /// No description provided for @orderPlacedTitle.
   ///
@@ -679,6 +679,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unlock your profile'**
   String get biometricPromptTitle;
+
+  /// No description provided for @biometricReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your identity to open StreetBite'**
+  String get biometricReason;
 
   /// No description provided for @biometricSubtitle.
   ///
@@ -913,6 +919,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your session expired. Please sign in again.'**
   String get authSessionExpired;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @appearanceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme and language apply instantly across the app.'**
+  String get appearanceHint;
+
+  /// No description provided for @themeMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get themeMode;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
+
+  /// No description provided for @themeLiquidGlass.
+  ///
+  /// In en, this message translates to:
+  /// **'Liquid Glass'**
+  String get themeLiquidGlass;
+
+  /// No description provided for @themeLiquidGlassHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Frosted, refractive surfaces. Needs a GPU; falls back gracefully on older devices.'**
+  String get themeLiquidGlassHint;
+
+  /// No description provided for @security.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get security;
+
+  /// No description provided for @biometricUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric unlock'**
+  String get biometricUnlock;
+
+  /// No description provided for @biometricUnlockHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for a fingerprint or face scan before opening the profile.'**
+  String get biometricUnlockHint;
+
+  /// No description provided for @biometricStatusAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Available on this device'**
+  String get biometricStatusAvailable;
+
+  /// No description provided for @biometricStatusUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available on this device'**
+  String get biometricStatusUnavailable;
+
+  /// No description provided for @general.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get general;
+
+  /// No description provided for @vendorMapHint.
+  ///
+  /// In en, this message translates to:
+  /// **'See the five StreetBite vendors near you.'**
+  String get vendorMapHint;
 }
 
 class _AppLocalizationsDelegate

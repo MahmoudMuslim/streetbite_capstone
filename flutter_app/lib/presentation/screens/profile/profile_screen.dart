@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../core/constants/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_theme_mode.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../domain/entities/user_entity.dart';
 import '../../blocs/auth/auth_cubit.dart';
@@ -21,15 +22,20 @@ import '../../blocs/profile/profile_state.dart';
 import '../../blocs/theme/theme_cubit.dart';
 import '../../blocs/theme/theme_state.dart';
 import '../../extensions/l10n_extension.dart';
-import '../../widgets/app_loading_view.dart';
 import '../../widgets/app_error_view.dart';
+import '../../widgets/app_surface.dart';
+import '../../widgets/favourites_skeleton.dart';
 import '../../widgets/info_row.dart';
 import '../../widgets/order_history_tile.dart';
+import '../../widgets/order_list_skeleton.dart';
 import '../../widgets/settings_row.dart';
 import '../../widgets/app_network_image.dart';
 import '../../widgets/empty_state_view.dart';
 import '../../widgets/language_toggle_button.dart';
 import '../../widgets/profile_gate_button.dart';
+import '../../widgets/shimmer_box.dart';
+import '../../widgets/shimmer_scope.dart';
+import '../../widgets/theme_toggle_button.dart';
 
 /// Profile screen — reachable only after the biometric gate on the Home AppBar.
 ///
@@ -173,9 +179,8 @@ class _ProfileHeader extends StatelessWidget {
         final photoUrl = state.user.photoUrl;
         final firstName = state.user.displayName.split(' ').first;
 
-        return Container(
+        return AppSurface(
           padding: const EdgeInsets.all(18),
-          decoration: AppTheme.cardDecoration(context),
           child: Row(
             children: [
               Stack(
@@ -202,8 +207,8 @@ class _ProfileHeader extends StatelessWidget {
                   // The camera shortcut sits on top of the avatar and bypasses
                   // the biometric gate: changing your own picture is not a
                   // sensitive read, and gating it would be pure friction.
-                  Positioned(
-                    right: -2,
+                  PositionedDirectional(
+                    end: -2,
                     bottom: -2,
                     child: GestureDetector(
                       key: const ValueKey('change_photo_button'),
@@ -286,55 +291,91 @@ class _ProfileHeader extends StatelessWidget {
   }
 }
 
-/// Appearance + language rows, wired to the global cubits.
+/// Appearance + language shortcuts, with a door into the full Settings screen.
+///
+/// The quick rows stay here because the two switches are used constantly and
+/// Profile is where users look for them; the segmented three-way theme picker
+/// (including Liquid Glass) lives on [SettingsScreen], which is too wide for a
+/// profile card.
 class _SettingsSection extends StatelessWidget {
   const _SettingsSection();
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return BlocBuilder<ThemeCubit, ThemeState>(
       builder: (context, themeState) {
         return BlocBuilder<LocaleCubit, LocaleState>(
           builder: (context, localeState) {
+            final (themeIcon, themeLabel) = switch (themeState.mode) {
+              AppThemeMode.light => (Icons.light_mode_rounded, l10n.themeLight),
+              AppThemeMode.dark => (Icons.dark_mode_rounded, l10n.themeDark),
+              AppThemeMode.glassLight => (
+                Icons.blur_on_rounded,
+                '${l10n.themeLiquidGlass} · ${l10n.themeLight}',
+              ),
+              AppThemeMode.glassDark => (
+                Icons.blur_on_rounded,
+                '${l10n.themeLiquidGlass} · ${l10n.themeDark}',
+              ),
+            };
+
             return Column(
               children: [
-                SettingsRow(
-                  icon: themeState.isDark
-                      ? Icons.dark_mode_rounded
-                      : Icons.light_mode_rounded,
-                  label: themeState.isDark
-                      ? context.l10n.darkMode
-                      : context.l10n.lightMode,
-                  trailing: Switch(
-                    key: const ValueKey('dark_mode_switch'),
-                    value: themeState.isDark,
-                    onChanged: (_) => context.read<ThemeCubit>().toggle(),
+                AppSurface(
+                  child: SettingsRow(
+                    key: const ValueKey('settings_entry_row'),
+                    icon: Icons.tune_rounded,
+                    label: l10n.settings,
+                    subtitle: l10n.appearanceHint,
+                    onTap: () =>
+                        Navigator.of(context).pushNamed(AppRoutes.settings),
                   ),
                 ),
                 const SizedBox(height: 10),
-                SettingsRow(
-                  icon: Icons.translate_rounded,
-                  label: context.l10n.language,
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        localeState.isArabic
-                            ? context.l10n.arabic
-                            : context.l10n.english,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      const SizedBox(width: 8),
-                      const LanguageToggleButton(),
-                    ],
+                AppSurface(
+                  child: SettingsRow(
+                    icon: themeIcon,
+                    label: l10n.themeMode,
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          themeLabel,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        const ThemeToggleButton(),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),
-                SettingsRow(
-                  icon: Icons.map_outlined,
-                  label: context.l10n.vendorMap,
-                  onTap: () =>
-                      Navigator.of(context).pushNamed(AppRoutes.vendorMap),
+                AppSurface(
+                  child: SettingsRow(
+                    icon: Icons.translate_rounded,
+                    label: l10n.language,
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          localeState.isArabic ? l10n.arabic : l10n.english,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        const SizedBox(width: 8),
+                        const LanguageToggleButton(),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                AppSurface(
+                  child: SettingsRow(
+                    icon: Icons.map_outlined,
+                    label: l10n.vendorMap,
+                    onTap: () =>
+                        Navigator.of(context).pushNamed(AppRoutes.vendorMap),
+                  ),
                 ),
               ],
             );
@@ -353,9 +394,8 @@ class _DeviceInfoCard extends StatelessWidget {
 
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return Container(
+        return AppSurface(
           padding: const EdgeInsets.all(AppTheme.radius),
-          decoration: AppTheme.cardDecoration(context),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -374,9 +414,16 @@ class _DeviceInfoCard extends StatelessWidget {
               ),
               const SizedBox(height: 14),
               if (state.isLoadingDevice)
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                  child: LinearProgressIndicator(),
+                const ShimmerScope(
+                  child: Column(
+                    children: [
+                      _DeviceRowSkeleton(),
+                      SizedBox(height: 14),
+                      _DeviceRowSkeleton(),
+                      SizedBox(height: 14),
+                      _DeviceRowSkeleton(),
+                    ],
+                  ),
                 )
               else ...[
                 InfoRow(
@@ -418,10 +465,8 @@ class _FavouritesSection extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             switch (state) {
-              FavouritesInitial() || FavouritesLoading() => const SizedBox(
-                height: 120,
-                child: AppLoadingView(),
-              ),
+              FavouritesInitial() ||
+              FavouritesLoading() => const FavouritesSkeleton(),
               FavouritesError(:final messageKey) => AppErrorView(
                 messageKey: messageKey,
                 icon: Icons.favorite_border_rounded,
@@ -466,10 +511,8 @@ class _OrderHistorySection extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             switch (state) {
-              OrdersInitial() || OrdersLoading() => const SizedBox(
-                height: 120,
-                child: AppLoadingView(),
-              ),
+              OrdersInitial() ||
+              OrdersLoading() => const OrderListSkeleton(itemCount: 2),
               OrdersError(:final messageKey) => AppErrorView(
                 messageKey: messageKey,
                 icon: Icons.receipt_long_rounded,
@@ -532,27 +575,30 @@ class _FavouriteThumb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      width: 110,
+    return AppSurface(
+      borderRadius: 18,
       padding: const EdgeInsets.all(6),
-      decoration: AppTheme.cardDecoration(context),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppNetworkImage(
-            url: meal.thumbnailUrl as String,
-            width: 98,
-            height: 76,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            meal.name as String,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.bodySmall,
-          ),
-        ],
+      clipContent: true,
+      child: SizedBox(
+        width: 110,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppNetworkImage(
+              url: meal.thumbnailUrl as String,
+              width: 98,
+              height: 76,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              meal.name as String,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.bodySmall,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -577,6 +623,22 @@ class _LogoutButton extends StatelessWidget {
       ),
       icon: const Icon(Icons.logout_rounded),
       label: Text(context.l10n.logout),
+    );
+  }
+}
+
+/// One "label ............ value" line while `device_info_plus` answers.
+class _DeviceRowSkeleton extends StatelessWidget {
+  const _DeviceRowSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: const [
+        ShimmerBox(width: 84, height: 11, borderRadius: 6),
+        Spacer(),
+        ShimmerBox(width: 120, height: 11, borderRadius: 6),
+      ],
     );
   }
 }

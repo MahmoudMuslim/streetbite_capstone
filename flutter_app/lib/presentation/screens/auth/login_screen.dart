@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 import '../../../core/constants/app_routes.dart';
 import '../../../core/utils/validators.dart';
-import '../../../data/services/biometric_service.dart';
 import '../../blocs/auth/auth_cubit.dart';
 import '../../blocs/auth/auth_state.dart';
 import '../../extensions/l10n_extension.dart';
 import '../../widgets/app_error_view.dart';
 import '../../widgets/app_page_body.dart';
 import '../../widgets/app_text_field.dart';
-import '../../widgets/semantic_id.dart';
 import '../../widgets/auth_card.dart';
 import '../../widgets/auth_header.dart';
-import '../../widgets/biometric_gate.dart';
 import '../../widgets/language_toggle_button.dart';
+import '../../widgets/semantic_id.dart';
 import '../../widgets/theme_toggle_button.dart';
 
 /// Sign-in screen backed by **Firebase Authentication**.
@@ -192,58 +189,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              const _BiometricSignIn(),
             ],
           );
         },
       ),
     );
-  }
-}
-
-/// Optional "sign in with fingerprint" shortcut under the form.
-///
-/// The [BiometricService] is resolved from GetIt rather than constructed inline
-/// so that (a) the plugin is not instantiated twice and (b) a widget test can
-/// swap in a stub instead of hitting a platform channel. Hidden automatically
-/// when the device has no biometric hardware, so the screen never offers an
-/// action that cannot work.
-class _BiometricSignIn extends StatelessWidget {
-  const _BiometricSignIn();
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: GetIt.I<BiometricService>().isAvailable(),
-      builder: (context, snapshot) {
-        if (snapshot.data != true) return const SizedBox.shrink();
-        return Center(
-          child: TextButton.icon(
-            key: const ValueKey('biometric_login_button'),
-            onPressed: () => _prompt(context),
-            icon: const Icon(Icons.fingerprint_rounded),
-            label: Text(context.l10n.biometricPromptTitle),
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> _prompt(BuildContext context) async {
-    final result = await GetIt.I<BiometricService>().authenticate(
-      reason: BiometricGateReason.profile,
-    );
-    if (!context.mounted) return;
-
-    if (result.isSuccess) {
-      Navigator.of(context).pushNamed(AppRoutes.home);
-      return;
-    }
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(content: Text(context.trKey(result.messageKey!))),
-      );
   }
 }

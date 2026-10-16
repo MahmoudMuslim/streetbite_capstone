@@ -177,8 +177,8 @@ class _VendorMapScreenState extends State<VendorMapScreen> {
             // Dart-visible error, so the markers cannot be tapped either. The
             // list keeps every vendor reachable - and the info window, which
             // is a Flutter widget, fully usable - until the key is fixed.
-            Positioned(
-              right: 16,
+            PositionedDirectional(
+              end: 16,
               top: 16,
               child: Material(
                 color: Theme.of(context).cardColor,

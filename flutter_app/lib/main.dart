@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 
 import 'app.dart';
+import 'core/theme/app_glass_theme.dart';
 import 'injection.dart';
 import 'presentation/blocs/auth/auth_cubit.dart';
 import 'presentation/blocs/cart/cart_bloc.dart';
@@ -39,6 +41,15 @@ Future<void> main() async {
     debugPrint('StreetBite: start-up degraded ($error)\n$stack');
   }
 
+  // Shader pre-warm for the Liquid Glass theme. Purely async disk I/O, but a
+  // device without a usable GPU can still throw here — and losing the glass
+  // look must never cost the user the app, so it degrades instead of aborting.
+  try {
+    await LiquidGlassWidgets.initialize();
+  } catch (error, stack) {
+    debugPrint('StreetBite: liquid glass unavailable ($error)\n$stack');
+  }
+
   // A partially wired container would make `sl<T>()` throw *inside* `runApp`,
   // which is the one place with no safety net. Checking here turns a crash
   // into a readable diagnostic screen.
@@ -48,14 +59,22 @@ Future<void> main() async {
   }
 
   runApp(
-    StreetBiteApp(
-      themeCubit: sl<ThemeCubit>(),
-      localeCubit: sl<LocaleCubit>(),
-      authCubit: sl<AuthCubit>(),
-      mealsCubit: sl<MealsCubit>(),
-      cartBloc: sl<CartBloc>(),
-      favouritesCubit: sl<FavouritesCubit>(),
-      ordersCubit: sl<OrdersCubit>(),
+    // `wrap` installs the glass theme + adaptive-quality scope above
+    // `MaterialApp`; `brightnessResolver` is what lets the glass follow the
+    // in-app theme instead of the OS setting.
+    LiquidGlassWidgets.wrap(
+      brightnessResolver: Theme.maybeBrightnessOf,
+      adaptiveQuality: true,
+      theme: AppGlassTheme.data,
+      child: StreetBiteApp(
+        themeCubit: sl<ThemeCubit>(),
+        localeCubit: sl<LocaleCubit>(),
+        authCubit: sl<AuthCubit>(),
+        mealsCubit: sl<MealsCubit>(),
+        cartBloc: sl<CartBloc>(),
+        favouritesCubit: sl<FavouritesCubit>(),
+        ordersCubit: sl<OrdersCubit>(),
+      ),
     ),
   );
 }

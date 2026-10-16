@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_theme.dart';
 import '../../core/utils/string_helpers.dart';
 import '../../domain/entities/order_entity.dart';
 import '../extensions/l10n_extension.dart';
+import 'app_surface.dart';
 
 /// One past/present order in the Profile history and the Orders tab.
 ///
@@ -21,10 +21,9 @@ class OrderHistoryTile extends StatelessWidget {
     final firstItem = order.items.isEmpty ? null : order.items.first;
     final isActive = order.status == OrderStatus.active;
 
-    return Container(
+    return AppSurface(
       margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.all(14),
-      decoration: AppTheme.cardDecoration(context),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -32,12 +31,14 @@ class OrderHistoryTile extends StatelessWidget {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              color: AppColors.primarySoft,
+              // Tinted from the accent rather than a fixed pale green, so the
+              // well still reads on the dark and glass canvases.
+              color: theme.colorScheme.primary.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.takeout_dining_rounded,
-              color: AppColors.primaryDark,
+              color: theme.colorScheme.primary,
             ),
           ),
           const SizedBox(width: 12),
@@ -70,14 +71,20 @@ class OrderHistoryTile extends StatelessWidget {
                 else
                   Text(
                     _firstMealName(order, context),
-
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.titleSmall,
                   ),
                 const SizedBox(height: 4),
+                // The meta line concatenates three translated fragments, and the
+                // Arabic payment labels are markedly longer than the English
+                // ones — clamping it is what keeps the tile inside the screen.
                 Text(
                   '${context.itemCount(order.itemCount)} · '
                   '${context.trArgs('paidWith', {'method': context.trKey(order.payment.labelKey)})} · '
                   '${formatPrice(order.total)}',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                   ),

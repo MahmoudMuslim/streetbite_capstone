@@ -16,6 +16,7 @@ import 'core/constants/app_routes.dart';
 import 'core/theme/app_theme.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'presentation/router/app_router.dart';
+import 'presentation/widgets/glass_backdrop.dart';
 
 /// Root widget of StreetBite.
 ///
@@ -73,8 +74,15 @@ class StreetBiteApp extends StatelessWidget {
               return MaterialApp(
                 title: AppConstants.appName,
                 debugShowCheckedModeBanner: false,
-                theme: AppTheme.light,
-                darkTheme: AppTheme.dark,
+                // Glass exists in both brightnesses, so each slot swaps its own
+                // glass object and `themeMode` keeps driving light/dark exactly
+                // as it does for the Material themes.
+                theme: themeState.isLiquidGlass
+                    ? AppTheme.liquidGlassLight
+                    : AppTheme.light,
+                darkTheme: themeState.isLiquidGlass
+                    ? AppTheme.liquidGlassDark
+                    : AppTheme.dark,
                 themeMode: themeState.themeMode,
                 locale: localeState.locale,
                 supportedLocales: AppLocalizations.supportedLocales,
@@ -84,6 +92,14 @@ class StreetBiteApp extends StatelessWidget {
                   GlobalWidgetsLocalizations.delegate,
                   GlobalCupertinoLocalizations.delegate,
                 ],
+                // Sits above the Navigator, so every route — including pushed
+                // ones — gets the aurora layer the glass surfaces refract.
+                builder: (context, child) {
+                  final route = child ?? const SizedBox.shrink();
+                  return themeState.isLiquidGlass
+                      ? GlassBackdrop(child: route)
+                      : route;
+                },
                 onGenerateRoute: AppRouter.generate,
                 initialRoute: AppRoutes.splash,
               );

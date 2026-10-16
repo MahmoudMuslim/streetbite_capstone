@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/string_helpers.dart';
 import '../../../domain/entities/cart_item_entity.dart';
 import 'app_network_image.dart';
+import 'app_surface.dart';
 
 /// One line of the cart: image, name, price, quantity stepper and a remove
 /// button.
@@ -33,9 +33,8 @@ class CartItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
+    return AppSurface(
       padding: const EdgeInsets.all(12),
-      decoration: AppTheme.cardDecoration(context),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -79,6 +78,8 @@ class CartItemTile extends StatelessWidget {
             children: [
               Text(
                 formatPrice(item.lineTotal),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: theme.colorScheme.primary,
                 ),

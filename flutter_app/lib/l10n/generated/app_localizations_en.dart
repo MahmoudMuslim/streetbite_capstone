@@ -219,7 +219,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get free => 'Free';
 
   @override
-  String get placeOrder => 'Place order';
+  String placeOrderFor(String amount) {
+    return 'Place order · $amount';
+  }
 
   @override
   String get orderPlacedTitle => 'Order placed!';
@@ -321,6 +323,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get biometricPromptTitle => 'Unlock your profile';
+
+  @override
+  String get biometricReason => 'Verify your identity to open StreetBite';
 
   @override
   String get biometricSubtitle =>
@@ -448,4 +453,52 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authSessionExpired =>
       'Your session expired. Please sign in again.';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get appearanceHint =>
+      'Theme and language apply instantly across the app.';
+
+  @override
+  String get themeMode => 'Theme';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get themeLiquidGlass => 'Liquid Glass';
+
+  @override
+  String get themeLiquidGlassHint =>
+      'Frosted, refractive surfaces. Needs a GPU; falls back gracefully on older devices.';
+
+  @override
+  String get security => 'Security';
+
+  @override
+  String get biometricUnlock => 'Biometric unlock';
+
+  @override
+  String get biometricUnlockHint =>
+      'Ask for a fingerprint or face scan before opening the profile.';
+
+  @override
+  String get biometricStatusAvailable => 'Available on this device';
+
+  @override
+  String get biometricStatusUnavailable => 'Not available on this device';
+
+  @override
+  String get general => 'General';
+
+  @override
+  String get vendorMapHint => 'See the five StreetBite vendors near you.';
 }

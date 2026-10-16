@@ -14,6 +14,7 @@ class AppRoutes {
   static const String orderConfirmation = '/order-confirmation';
   static const String vendorMap = '/vendor-map';
   static const String profile = '/profile';
+  static const String settings = '/settings';
 
   /// Bottom-navigation tab indices (Home · Browse · Orders · Profile).
   static const int tabHome = 0;

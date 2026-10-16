@@ -25,8 +25,8 @@ class CartBadge extends StatelessWidget {
           children: [
             child,
             if (count > 0)
-              Positioned(
-                right: -6,
+              PositionedDirectional(
+                end: -6,
                 top: -4,
                 child: Container(
                   padding: const EdgeInsets.symmetric(

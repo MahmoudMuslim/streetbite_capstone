@@ -218,7 +218,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get free => 'مجاني';
 
   @override
-  String get placeOrder => 'تأكيد الطلب';
+  String placeOrderFor(String amount) {
+    return 'تأكيد الطلب · $amount';
+  }
 
   @override
   String get orderPlacedTitle => 'تم تأكيد الطلب!';
@@ -319,6 +321,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get biometricPromptTitle => 'افتح حسابك';
+
+  @override
+  String get biometricReason => 'أكّد هويتك لفتح StreetBite';
 
   @override
   String get biometricSubtitle => 'أكّد هويتك لعرض حسابك في StreetBite.';
@@ -441,4 +446,51 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get authSessionExpired => 'انتهت جلستك. يرجى تسجيل الدخول مرة أخرى.';
+
+  @override
+  String get settings => 'الإعدادات';
+
+  @override
+  String get appearance => 'المظهر';
+
+  @override
+  String get appearanceHint => 'يتم تطبيق السمة واللغة فورًا في كل التطبيق.';
+
+  @override
+  String get themeMode => 'السمة';
+
+  @override
+  String get themeLight => 'فاتح';
+
+  @override
+  String get themeDark => 'داكن';
+
+  @override
+  String get themeLiquidGlass => 'زجاجي';
+
+  @override
+  String get themeLiquidGlassHint =>
+      'أسطح مصقولة تنكس الضوء. تحتاج معالج رسومات، وتعود تلقائيًا للأداء الأخف.';
+
+  @override
+  String get security => 'الأمان';
+
+  @override
+  String get biometricUnlock => 'الفتح بالبصمة';
+
+  @override
+  String get biometricUnlockHint =>
+      'اطلب البصمة أو الوجه قبل فتح الملف الشخصي.';
+
+  @override
+  String get biometricStatusAvailable => 'متاحة على هذا الجهاز';
+
+  @override
+  String get biometricStatusUnavailable => 'غير متاحة على هذا الجهاز';
+
+  @override
+  String get general => 'عام';
+
+  @override
+  String get vendorMapHint => 'شاهد خمسة من بائعي StreetBite القريبين منك.';
 }

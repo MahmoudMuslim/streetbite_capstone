@@ -91,7 +91,14 @@
   "serviceFee": "Service fee",
   "total": "Total",
   "free": "Free",
-  "placeOrder": "Place order",
+  "placeOrderFor": "Place order · {amount}",
+  "@placeOrderFor": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "orderPlacedTitle": "Order placed!",
   "orderPlacedMessage": "Your order is on its way. Estimated arrival in 25–30 minutes.",
   "viewMyOrders": "View my orders",
@@ -142,6 +149,7 @@
   "current": "Current",
   "past": "Past",
   "biometricPromptTitle": "Unlock your profile",
+  "biometricReason": "Verify your identity to open StreetBite",
   "biometricSubtitle": "Confirm it is you to view your StreetBite profile.",
   "biometricFailed": "Biometric check failed. Try again.",
   "biometricNotEnrolled": "No fingerprint or face is enrolled on this device.",
@@ -187,5 +195,20 @@
   "authErrorNetwork": "We couldn''t verify your account. Check your connection.",
   "authErrorUnknown": "We couldn''t sign you in. Please try again.",
   "authLoggedOut": "You have been signed out.",
-  "authSessionExpired": "Your session expired. Please sign in again."
+  "authSessionExpired": "Your session expired. Please sign in again.",
+  "settings": "Settings",
+  "appearance": "Appearance",
+  "appearanceHint": "Theme and language apply instantly across the app.",
+  "themeMode": "Theme",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "themeLiquidGlass": "Liquid Glass",
+  "themeLiquidGlassHint": "Frosted, refractive surfaces. Needs a GPU; falls back gracefully on older devices.",
+  "security": "Security",
+  "biometricUnlock": "Biometric unlock",
+  "biometricUnlockHint": "Ask for a fingerprint or face scan before opening the profile.",
+  "biometricStatusAvailable": "Available on this device",
+  "biometricStatusUnavailable": "Not available on this device",
+  "general": "General",
+  "vendorMapHint": "See the five StreetBite vendors near you."
 }
