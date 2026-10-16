@@ -301,14 +301,43 @@ No `MANAGE_EXTERNAL_STORAGE`, no background location, no contacts.
 
 ### Google Maps
 
-```bash
-cd flutter_app/android
-cp key.properties.example key.properties
-# paste your Maps SDK for Android key
-```
+A key alone is not enough — the Maps SDK for Android renders a blank canvas
+with no Dart-visible error unless **all four** of these are true:
 
-`key.properties` is git-ignored. Without a key the map still opens and renders
-`AppErrorView` instead of crashing — covered by `TC_MAP_004`.
+1. **A billing account is attached** to the Google Cloud project. Google
+   rejects token requests ("Authorization failure") without it, even inside the
+   free monthly credit.
+2. **Maps SDK for Android is enabled** —
+   [console.cloud.google.com/apis/library](https://console.cloud.google.com/apis/library)
+   → search *Maps SDK for Android* → **Enable**. (Check with
+   `https://maps.googleapis.com/maps/api/staticmap?...&key=<key>`: it answers in
+   plain text which Maps APIs the project has activated.)
+3. **The key allows this app's signing certificate.** Either leave the key
+   unrestricted while developing, or add an *Android apps* restriction with the
+   SHA-1 Google's own logcat line prints:
+
+   ```
+   adb logcat | grep "Google Android Maps SDK"
+   #  Android Application (<cert_fingerprint>;<package_name>):
+   #  85:39:45:FC:4A:8C:4C:70:4B:E6:00:97:C2:02:19:66:73:79:29:4D;com.example.streetbite_capstone
+   ```
+
+   That SHA-1 is the **debug** keystore (`~/.android/debug.keystore`); a release
+   build needs its own fingerprint added to the same key.
+4. **The key reaches the manifest** — `MAPS_API_KEY` is read from
+   `android/key.properties` and substituted into
+   `com.google.android.geo.API_KEY` by `app/build.gradle.kts`:
+
+   ```bash
+   cd flutter_app/android
+   cp key.properties.example key.properties
+   # paste your Maps SDK for Android key
+   ```
+
+`key.properties` is git-ignored. Without a key — or with any of the four
+conditions unmet — the map still opens and renders `AppErrorView` instead of
+crashing, and the vendor list button keeps all five stops reachable
+(`TC_MAP_004`).
 
 ### Firebase
 

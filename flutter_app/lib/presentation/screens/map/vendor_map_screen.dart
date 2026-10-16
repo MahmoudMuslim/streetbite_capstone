@@ -41,9 +41,6 @@ class VendorMapScreen extends StatefulWidget {
 }
 
 class _VendorMapScreenState extends State<VendorMapScreen> {
-  /// Identifier of this map instance, required by [GoogleMapController.init].
-  static const String _mapId = 'streetbite.vendor_map';
-
   static const Duration _mapStartupTimeout = VendorMapScreen.mapStartupTimeout;
 
   /// Handed to us by `GoogleMap.onMapCreated`; it cannot be created eagerly
@@ -94,6 +91,7 @@ class _VendorMapScreenState extends State<VendorMapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(title: Text(context.l10n.vendorMap)),
       body: _isLoading
           ? const AppLoadingView()
@@ -159,7 +157,9 @@ class _VendorMapScreenState extends State<VendorMapScreen> {
           children: [
             GoogleMap(
               key: const ValueKey('vendor_google_map'),
-              mapId: _mapId,
+              // No `mapId`: cloud styling needs a Map ID created in the same
+              // Google Cloud project, which would be a second thing to
+              // configure for a map that only draws default-styled markers.
               initialCameraPosition: position,
               markers: VendorMarker.buildAll(
                 _vendors,
