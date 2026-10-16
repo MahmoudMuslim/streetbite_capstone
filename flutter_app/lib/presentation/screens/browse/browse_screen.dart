@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/constants/app_categories.dart';
 import '../../../core/constants/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
+import '../../../domain/entities/meal_entity.dart';
 import '../../extensions/l10n_extension.dart';
 import '../../widgets/app_network_image.dart';
 import '../../blocs/meals/meals_cubit.dart';
@@ -22,55 +24,11 @@ class BrowseScreen extends StatefulWidget {
 }
 
 class _BrowseScreenState extends State<BrowseScreen> {
-  static const List<({IconData icon, String labelKey, String apiCategory})>
-  _categories = [
-    (
-      icon: Icons.local_fire_department_rounded,
-      labelKey: 'categoriesChicken',
-      apiCategory: 'Chicken',
-    ),
-    (
-      icon: Icons.local_pizza_rounded,
-      labelKey: 'categoriesPizza',
-      apiCategory: 'Pizza',
-    ),
-    (
-      icon: Icons.ramen_dining_rounded,
-      labelKey: 'categoriesRamen',
-      apiCategory: 'Pasta',
-    ),
-    (
-      icon: Icons.lunch_dining_rounded,
-      labelKey: 'categoriesBurgers',
-      apiCategory: 'Beef',
-    ),
-    (
-      icon: Icons.icecream_rounded,
-      labelKey: 'categoriesDesserts',
-      apiCategory: 'Dessert',
-    ),
-    (
-      icon: Icons.set_meal_rounded,
-      labelKey: 'categoriesSeafood',
-      apiCategory: 'Seafood',
-    ),
-    (
-      icon: Icons.eco_rounded,
-      labelKey: 'categoriesVegetarian',
-      apiCategory: 'Vegan',
-    ),
-    (
-      icon: Icons.breakfast_dining_rounded,
-      labelKey: 'categoriesAll',
-      apiCategory: '',
-    ),
-  ];
-
   String? _selected;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final selected = AppCategory.byApiCategory(_selected);
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.browseTitle)),
@@ -100,61 +58,97 @@ class _BrowseScreenState extends State<BrowseScreen> {
                     crossAxisSpacing: 12,
                     childAspectRatio: 1.25,
                   ),
-                  itemCount: _categories.length,
+                  itemCount: AppCategory.all.length + 1,
                   itemBuilder: (context, index) {
-                    final category = _categories[index];
-                    final isSelected = _selected == category.apiCategory;
-                    return InkWell(
-                      key: ValueKey('browse_category_${category.apiCategory}'),
-                      onTap: () => setState(
-                        () => _selected = isSelected
-                            ? null
-                            : category.apiCategory,
-                      ),
-                      borderRadius: BorderRadius.circular(18),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? AppColors.primary
-                              : AppColors.primarySoft,
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              category.icon,
-                              size: 30,
-                              color: isSelected
-                                  ? Colors.white
-                                  : AppColors.primaryDark,
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              context.trKey(category.labelKey),
-                              textAlign: TextAlign.center,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                fontWeight: FontWeight.w700,
-                                color: isSelected
-                                    ? Colors.white
-                                    : AppColors.primaryDark,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                    // The trailing tile clears the filter; the rest select one.
+                    if (index == AppCategory.all.length) {
+                      return _categoryTile(
+                        icon: Icons.breakfast_dining_rounded,
+                        labelKey: 'categoriesAll',
+                        apiCategory: null,
+                        isSelected: _selected == null,
+                      );
+                    }
+                    final category = AppCategory.all[index];
+                    return _categoryTile(
+                      icon: category.icon,
+                      labelKey: category.labelKey,
+                      apiCategory: category.apiCategory,
+                      isSelected: _selected == category.apiCategory,
                     );
                   },
                 ),
                 const SizedBox(height: 8),
                 SectionHeader(
-                  title: context.l10n.hotOffers,
+                  // The strip below previews the *selected* category, so the
+                  // heading names it; with no selection it is simply the feed.
+                  title: selected == null
+                      ? context.l10n.recommended
+                      : context.trKey(selected.labelKey),
                   padding: const EdgeInsets.fromLTRB(0, 20, 0, 12),
                 ),
-                const _CategoryPeek(),
+                _CategoryPeek(selected: selected),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _categoryTile({
+    required IconData icon,
+    required String labelKey,
+    required String? apiCategory,
+    required bool isSelected,
+  }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    return InkWell(
+      key: ValueKey('browse_category_${apiCategory ?? 'all'}'),
+      onTap: () => setState(() => _selected = isSelected ? null : apiCategory),
+      borderRadius: BorderRadius.circular(18),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? AppColors.primary
+              : isDark
+              ? AppColors.surfaceDark
+              : AppColors.background,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              color: isSelected
+                  ? AppColors.primary.withValues(alpha: 0.4)
+                  : Colors.black.withValues(alpha: isDark ? 0 : 0.06),
+              blurRadius: isSelected ? 14 : 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 30,
+              color: isSelected ? Colors.white : AppColors.primaryDark,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              context.trKey(labelKey),
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodySmall?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: isSelected
+                    ? Colors.white
+                    : isDark
+                    ? Colors.white
+                    : AppColors.textPrimary,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -182,6 +176,13 @@ class _MapCallToAction extends StatelessWidget {
           gradient: const LinearGradient(
             colors: [AppColors.splashTop, AppColors.splashBottom],
           ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.splashBottom.withValues(alpha: 0.4),
+              blurRadius: 18,
+              offset: const Offset(0, 8),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -216,14 +217,31 @@ class _MapCallToAction extends StatelessWidget {
 }
 
 /// Small preview of the first few cached meals for the selected category.
+///
+/// The selection is applied *here*, which is the whole point of the grid
+/// above: before this, tapping a category recoloured the tile and changed
+/// nothing else, so the filter looked broken to every tester.
 class _CategoryPeek extends StatelessWidget {
-  const _CategoryPeek();
+  const _CategoryPeek({required this.selected});
+
+  final AppCategory? selected;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final meals = _peekMeals(context);
 
-    if (meals.isEmpty) return const SizedBox.shrink();
+    if (meals.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24),
+        child: Center(
+          child: Text(
+            context.l10n.mealNotFound,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
+      );
+    }
 
     return SizedBox(
       height: 140,
@@ -238,23 +256,41 @@ class _CategoryPeek extends StatelessWidget {
             onTap: () =>
                 Navigator.of(context)
                     .pushNamed(AppRoutes.mealDetails, arguments: [meal]),
-            child: SizedBox(
+            child: Container(
               width: 130,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: theme.brightness == Brightness.dark
+                    ? AppColors.surfaceDark
+                    : AppColors.background,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.06),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AppNetworkImage(
                     url: meal.thumbnailUrl,
-                    width: 130,
-                    height: 96,
-                    borderRadius: BorderRadius.circular(16),
+                    width: 114,
+                    height: 84,
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     meal.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.brightness == Brightness.dark
+                          ? Colors.white
+                          : AppColors.textPrimary,
+                    ),
                   ),
                 ],
               ),
@@ -267,9 +303,12 @@ class _CategoryPeek extends StatelessWidget {
 
   /// Reads the already-loaded feed from the shared cubit — the Browse tab never
   /// issues its own request, which is what keeps navigation instant.
-  List<dynamic> _peekMeals(BuildContext context) {
+  List<MealEntity> _peekMeals(BuildContext context) {
     final state = context.read<MealsCubit>().state;
     if (state is! MealsLoaded) return const [];
-    return state.meals.take(8).toList();
+    final meals = state.meals;
+    final category = selected;
+    if (category == null) return meals.take(8).toList();
+    return meals.where(category.matches).take(8).toList();
   }
 }

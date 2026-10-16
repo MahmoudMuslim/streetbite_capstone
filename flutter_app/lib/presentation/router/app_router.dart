@@ -47,7 +47,11 @@ class AppRouter {
         return const SignUpScreen();
 
       case AppRoutes.home:
-        return const MainShellScreen();
+        // An optional tab index travels as the first argument, so a caller can
+        // rebuild the shell already sitting on Orders (see the checkout flow).
+        return MainShellScreen(
+          initialIndex: args.isNotEmpty ? args.first! as int : 0,
+        );
 
       case AppRoutes.mealDetails:
         return MealDetailsScreen(

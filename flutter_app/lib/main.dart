@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'app.dart';
-import 'data/repositories/auth_repository_impl.dart';
 import 'injection.dart';
 import 'presentation/blocs/auth/auth_cubit.dart';
 import 'presentation/blocs/cart/cart_bloc.dart';
@@ -40,6 +39,14 @@ Future<void> main() async {
     debugPrint('StreetBite: start-up degraded ($error)\n$stack');
   }
 
+  // A partially wired container would make `sl<T>()` throw *inside* `runApp`,
+  // which is the one place with no safety net. Checking here turns a crash
+  // into a readable diagnostic screen.
+  if (!_isGraphWired()) {
+    runApp(const _StartupFailureApp());
+    return;
+  }
+
   runApp(
     StreetBiteApp(
       themeCubit: sl<ThemeCubit>(),
@@ -53,12 +60,70 @@ Future<void> main() async {
   );
 }
 
-/// Restores persisted preferences and seeds the QA account.
+/// `true` when every top-level dependency the widget tree needs is present.
+bool _isGraphWired() {
+  final required = <Type>[
+    ThemeCubit,
+    LocaleCubit,
+    AuthCubit,
+    MealsCubit,
+    CartBloc,
+    FavouritesCubit,
+    OrdersCubit,
+  ];
+  return required.every((type) => sl.isRegistered(type: type));
+}
+
+/// Restores the persisted theme and language.
+///
+/// The QA account is seeded by the composition root (`injection.dart`), not
+/// here: `main` only talks to abstractions, which keeps the dependency rule
+/// `presentation → domain` intact.
 Future<void> _prepareAppState() async {
   await sl<ThemeCubit>().load();
   await sl<LocaleCubit>().load();
+}
 
-  // Creates the demo account the Appium suite signs in with. Idempotent, and a
-  // failure here is harmless because the screen simply shows no account.
-  await sl<AuthRepositoryImpl>().prepare();
+/// Shown only when dependency injection could not complete.
+///
+/// Deliberately dependency-free (no cubits, no localisation) so it can render
+/// even in a broken container, and it prints the exact fix on screen instead
+/// of leaving the tester guessing.
+class _StartupFailureApp extends StatelessWidget {
+  const _StartupFailureApp();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.error_outline_rounded,
+                  size: 56,
+                  color: Color(0xFFE23D3D),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'StreetBite could not start',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'The dependency container was not fully built.\n'
+                  'Run `flutter clean && flutter pub get`, then launch again.',
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

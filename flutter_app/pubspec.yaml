@@ -3,7 +3,7 @@ description: "StreetBite - Hyperlocal Food Discovery & Ordering App."
 publish_to: 'none'
 
 # App version used for the Firebase App Distribution release build.
-version: 1.0.0+1
+version: 1.0.0+3
 
 environment:
   sdk: ^3.13.0
@@ -34,8 +34,8 @@ dependencies:
   # --- Device capabilities ---
   google_maps_flutter: ^2.9.0
   image_picker: ^1.1.2
-  local_auth: ^2.3.0
-  local_auth_android: ^1.0.46
+  local_auth: ^3.0.2
+  local_auth_android: ^2.0.4
   device_info_plus: ^11.2.0
 
   # --- Localization ---

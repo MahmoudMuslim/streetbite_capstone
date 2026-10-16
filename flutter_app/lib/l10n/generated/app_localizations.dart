@@ -104,18 +104,6 @@ abstract class AppLocalizations {
   /// **'StreetBite'**
   String get appName;
 
-  /// No description provided for @splashTagline.
-  ///
-  /// In en, this message translates to:
-  /// **'Street food, right around the corner'**
-  String get splashTagline;
-
-  /// No description provided for @splashSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Discover nearby vendors, order in seconds.'**
-  String get splashSubtitle;
-
   /// No description provided for @onboardingTitle.
   ///
   /// In en, this message translates to:
@@ -284,12 +272,6 @@ abstract class AppLocalizations {
   /// **'Park Way 145'**
   String get deliveryAddress;
 
-  /// No description provided for @fastest.
-  ///
-  /// In en, this message translates to:
-  /// **'Fastest'**
-  String get fastest;
-
   /// No description provided for @recommended.
   ///
   /// In en, this message translates to:
@@ -307,24 +289,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'See all'**
   String get seeAll;
-
-  /// No description provided for @greetingMorning.
-  ///
-  /// In en, this message translates to:
-  /// **'Good morning'**
-  String get greetingMorning;
-
-  /// No description provided for @greetingAfternoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Good afternoon'**
-  String get greetingAfternoon;
-
-  /// No description provided for @greetingEvening.
-  ///
-  /// In en, this message translates to:
-  /// **'Good evening'**
-  String get greetingEvening;
 
   /// No description provided for @nearYou.
   ///
@@ -451,12 +415,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Category'**
   String get category;
-
-  /// No description provided for @areaOfOrigin.
-  ///
-  /// In en, this message translates to:
-  /// **'Origin'**
-  String get areaOfOrigin;
 
   /// No description provided for @instructions.
   ///
@@ -602,30 +560,6 @@ abstract class AppLocalizations {
   /// **'Nearby Vendors'**
   String get vendorMap;
 
-  /// No description provided for @vendorMapUnavailable.
-  ///
-  /// In en, this message translates to:
-  /// **'Map is unavailable on this device'**
-  String get vendorMapUnavailable;
-
-  /// No description provided for @vendorMapUnavailableBody.
-  ///
-  /// In en, this message translates to:
-  /// **'We could not load Google Maps here. Check your Play Services and API key configuration.'**
-  String get vendorMapUnavailableBody;
-
-  /// No description provided for @vendorCuisine.
-  ///
-  /// In en, this message translates to:
-  /// **'Cuisine'**
-  String get vendorCuisine;
-
-  /// No description provided for @vendorRating.
-  ///
-  /// In en, this message translates to:
-  /// **'Rating'**
-  String get vendorRating;
-
   /// No description provided for @vendorDistance.
   ///
   /// In en, this message translates to:
@@ -638,17 +572,17 @@ abstract class AppLocalizations {
   /// **'Directions'**
   String get directions;
 
+  /// No description provided for @vendorList.
+  ///
+  /// In en, this message translates to:
+  /// **'Vendor list'**
+  String get vendorList;
+
   /// No description provided for @profile.
   ///
   /// In en, this message translates to:
   /// **'Profile'**
   String get profile;
-
-  /// No description provided for @editPhoto.
-  ///
-  /// In en, this message translates to:
-  /// **'Change profile photo'**
-  String get editPhoto;
 
   /// No description provided for @pickFromGallery.
   ///
@@ -776,6 +710,12 @@ abstract class AppLocalizations {
   /// **'Biometric check cancelled.'**
   String get biometricCancelled;
 
+  /// No description provided for @biometricLockedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many failed attempts. Biometric unlock is locked for now.'**
+  String get biometricLockedOut;
+
   /// No description provided for @useInstead.
   ///
   /// In en, this message translates to:
@@ -787,18 +727,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Skip'**
   String get skip;
-
-  /// No description provided for @settings.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get settings;
-
-  /// No description provided for @appearance.
-  ///
-  /// In en, this message translates to:
-  /// **'Appearance'**
-  String get appearance;
 
   /// No description provided for @darkMode.
   ///
@@ -829,42 +757,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'العربية'**
   String get arabic;
-
-  /// No description provided for @notifications.
-  ///
-  /// In en, this message translates to:
-  /// **'Notifications'**
-  String get notifications;
-
-  /// No description provided for @helpCenter.
-  ///
-  /// In en, this message translates to:
-  /// **'Help center'**
-  String get helpCenter;
-
-  /// No description provided for @contactUs.
-  ///
-  /// In en, this message translates to:
-  /// **'Contact us'**
-  String get contactUs;
-
-  /// No description provided for @about.
-  ///
-  /// In en, this message translates to:
-  /// **'About'**
-  String get about;
-
-  /// No description provided for @notificationsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'StreetBite'**
-  String get notificationsTitle;
-
-  /// No description provided for @notificationAdded.
-  ///
-  /// In en, this message translates to:
-  /// **'{name} is now in your cart'**
-  String notificationAdded(String name);
 
   /// No description provided for @retry.
   ///

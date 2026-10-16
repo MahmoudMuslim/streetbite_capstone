@@ -13,12 +13,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appName => 'StreetBite';
 
   @override
-  String get splashTagline => 'أكل الشارع، على بعد خطوات';
-
-  @override
-  String get splashSubtitle => 'اكتشف البائعين القريبين منك واطلب في ثوانٍ.';
-
-  @override
   String get onboardingTitle => 'طعام وتوصيل\nإلى بابك';
 
   @override
@@ -106,9 +100,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get deliveryAddress => 'بارك واي ١٤٥';
 
   @override
-  String get fastest => 'الأسرع';
-
-  @override
   String get recommended => 'مقترح لك';
 
   @override
@@ -116,15 +107,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get seeAll => 'عرض الكل';
-
-  @override
-  String get greetingMorning => 'صباح الخير';
-
-  @override
-  String get greetingAfternoon => 'طاب يومك';
-
-  @override
-  String get greetingEvening => 'مساء الخير';
 
   @override
   String get nearYou => 'بالقرب منك';
@@ -192,9 +174,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get category => 'التصنيف';
-
-  @override
-  String get areaOfOrigin => 'بلد الأصل';
 
   @override
   String get instructions => 'طريقة التحضير';
@@ -270,19 +249,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get vendorMap => 'البائعون القريبون';
 
   @override
-  String get vendorMapUnavailable => 'الخريطة غير متاحة على هذا الجهاز';
-
-  @override
-  String get vendorMapUnavailableBody =>
-      'تعذّر تحميل خرائط جوجل هنا. تأكد من خدمات Play ومفتاح الـ API.';
-
-  @override
-  String get vendorCuisine => 'المطبخ';
-
-  @override
-  String get vendorRating => 'التقييم';
-
-  @override
   String vendorDistance(String distance) {
     return 'على بُعد $distance كم';
   }
@@ -291,10 +257,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get directions => 'الاتجاهات';
 
   @override
-  String get profile => 'حسابي';
+  String get vendorList => 'قائمة البائعين';
 
   @override
-  String get editPhoto => 'تغيير صورة الحساب';
+  String get profile => 'حسابي';
 
   @override
   String get pickFromGallery => 'اختر من المعرض';
@@ -372,16 +338,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get biometricCancelled => 'تم إلغاء التحقق البيومتري.';
 
   @override
+  String get biometricLockedOut => 'محاولات كثيرة فاشلة. البصمة مقفلة مؤقتًا.';
+
+  @override
   String get useInstead => 'المتابعة بدون البصمة';
 
   @override
   String get skip => 'تخطي';
-
-  @override
-  String get settings => 'الإعدادات';
-
-  @override
-  String get appearance => 'المظهر';
 
   @override
   String get darkMode => 'الوضع الليلي';
@@ -397,26 +360,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get arabic => 'العربية';
-
-  @override
-  String get notifications => 'الإشعارات';
-
-  @override
-  String get helpCenter => 'مركز المساعدة';
-
-  @override
-  String get contactUs => 'تواصل معنا';
-
-  @override
-  String get about => 'حول التطبيق';
-
-  @override
-  String get notificationsTitle => 'StreetBite';
-
-  @override
-  String notificationAdded(String name) {
-    return 'تمت إضافة $name إلى السلة';
-  }
 
   @override
   String get retry => 'إعادة المحاولة';

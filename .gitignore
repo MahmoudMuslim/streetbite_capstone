@@ -1,0 +1,6 @@
+# Local device-audit scratch (screenshots + uiautomator dumps)
+_audit/
+
+# OS / IDE
+.DS_Store
+Thumbs.db

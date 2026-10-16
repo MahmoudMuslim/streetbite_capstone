@@ -1,0 +1,60 @@
+rules_version = '2';
+
+// Cloud Firestore security rules for StreetBite.
+//
+// Why this file exists
+// --------------------
+// The Firebase project was created without a rules file, which left the
+// database in its default locked state: every read and write returned
+// `PERMISSION_DENIED: Missing or insufficient permissions`. That silently broke
+// three features at once - the Profile screen, the favourites list and the
+// order history - while Firebase Auth kept working, so the app looked
+// "mostly fine" and only the screens that talk to Firestore failed.
+//
+// Data model
+// ----------
+//   users/{uid}                      profile document (displayName, photoUrl)
+//   users/{uid}/favourites/{mealId}  a saved meal
+//   orders/{uid}/items/{orderId}     a placed order
+//
+// Every document is nested under the owner's uid, so the whole rule set is one
+// idea: a signed-in user may touch their own data and nothing else. There is no
+// list(), no public read and no wildcard that would leak another user's orders.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /// A request must come from an authenticated Firebase user.
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /// ...and that user must be the owner of the document path.
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    match /users/{uid} {
+      // Profile: read and update the signed-in user's own document.
+      allow read, write: if isOwner(uid);
+
+      match /favourites/{mealId} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+
+    match /orders/{uid} {
+      // Owner-scoped. Orders are deliberately NOT a shared collection: a query
+      // for all orders would need a rule that cannot distinguish rows, so the
+      // uid is part of the path instead.
+      allow read, write: if isOwner(uid);
+
+      match /items/{orderId} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+
+    // Anything not matched above is denied by default. Adding a new collection
+    // without adding a rule fails closed rather than leaking.
+  }
+}

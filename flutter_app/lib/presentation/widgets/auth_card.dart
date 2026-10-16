@@ -11,18 +11,9 @@ class AuthCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(AppTheme.radius),
-      decoration: BoxDecoration(
-        color: theme.brightness == Brightness.dark
-            ? theme.cardColor
-            : theme.colorScheme.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(AppTheme.radius),
-        border: theme.brightness == Brightness.dark
-            ? null
-            : Border.all(color: theme.dividerColor.withValues(alpha: 0.6)),
-      ),
+      decoration: AppTheme.cardDecoration(context),
       child: child,
     );
   }

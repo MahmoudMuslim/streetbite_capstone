@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/constants/app_routes.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../domain/entities/user_entity.dart';
@@ -62,20 +63,50 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-class _ProfileView extends StatelessWidget {
+class _ProfileView extends StatefulWidget {
   const _ProfileView({required this.user});
 
   final UserEntity user;
 
   @override
+  State<_ProfileView> createState() => _ProfileViewState();
+}
+
+class _ProfileViewState extends State<_ProfileView> {
+  @override
+  void initState() {
+    super.initState();
+    _loadOnce();
+  }
+
+  @override
+  void didUpdateWidget(_ProfileView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.user.uid != widget.user.uid) {
+      _loadOnce();
+    }
+  }
+
+  /// Loads both collections, shared by the two sections below.
+  ///
+  /// This used to be called straight from `build()`, which is a bug with two
+  /// faces: every rebuild — including the one caused by the cubit emitting the
+  /// result of this very call — fired the queries again, so the screen hammered
+  /// Firestore continuously and any transient failure left a stale error view
+  /// with no way back. Loading once per uid is both correct and cheaper.
+  void _loadOnce() {
+    final uid = widget.user.uid;
+    // After the first frame: the cubits come from an ancestor provider, and
+    // emitting during build would be illegal.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<FavouritesCubit>().load(uid);
+      context.read<OrdersCubit>().load(uid);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final uid = user.uid;
-
-    // Both collections are loaded once here and shared by the two sections, so
-    // opening the Profile screen issues two queries instead of four.
-    context.read<FavouritesCubit>().load(uid);
-    context.read<OrdersCubit>().load(uid);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.profile),
@@ -142,72 +173,82 @@ class _ProfileHeader extends StatelessWidget {
         final photoUrl = state.user.photoUrl;
         final firstName = state.user.displayName.split(' ').first;
 
-        return Row(
-          children: [
-            Stack(
-              children: [
-                ProfileGateButton(
-                  photoUrl: photoUrl,
-                  bypassAllowed: false,
-                  onUnlocked: () {},
-                ),
-                if (state.isUpdatingPhoto)
-                  const Positioned.fill(
-                    child: Center(
-                      child: SizedBox(
-                        width: 22,
-                        height: 22,
-                        child: CircularProgressIndicator(strokeWidth: 2.4),
-                      ),
-                    ),
-                  ),
-                // The camera shortcut sits on top of the avatar and bypasses
-                // the biometric gate: changing your own picture is not a
-                // sensitive read, and gating it would be pure friction.
-                Positioned(
-                  right: -2,
-                  bottom: -2,
-                  child: GestureDetector(
-                    key: const ValueKey('change_photo_button'),
-                    onTap: () => _pickPhotoSource(context),
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.photo_camera_rounded,
-                        size: 14,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        return Container(
+          padding: const EdgeInsets.all(18),
+          decoration: AppTheme.cardDecoration(context),
+          child: Row(
+            children: [
+              Stack(
                 children: [
-                  Text(
-                    firstName.isEmpty ? context.l10n.profile : '$firstName.',
-                    key: const ValueKey('profile_display_name'),
-                    style: theme.textTheme.headlineMedium,
+                  ProfileGateButton(
+                    photoUrl: photoUrl,
+                    // Already past the gate by the time this is on screen, and
+                    // `onUnlocked` is a no-op - so a failure here must not present
+                    // a dialog that appears to demand something and then does
+                    // nothing. The off-ramp keeps the tap harmless.
+                    bypassAllowed: true,
+                    onUnlocked: () {},
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    state.user.email,
-                    key: const ValueKey('profile_email'),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                  if (state.isUpdatingPhoto)
+                    const Positioned.fill(
+                      child: Center(
+                        child: SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(strokeWidth: 2.4),
+                        ),
+                      ),
+                    ),
+                  // The camera shortcut sits on top of the avatar and bypasses
+                  // the biometric gate: changing your own picture is not a
+                  // sensitive read, and gating it would be pure friction.
+                  Positioned(
+                    right: -2,
+                    bottom: -2,
+                    child: GestureDetector(
+                      key: const ValueKey('change_photo_button'),
+                      onTap: () => _pickPhotoSource(context),
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.photo_camera_rounded,
+                          size: 14,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      firstName.isEmpty ? context.l10n.profile : '$firstName.',
+                      key: const ValueKey('profile_display_name'),
+                      style: theme.textTheme.headlineMedium,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      state.user.email,
+                      key: const ValueKey('profile_email'),
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -314,12 +355,7 @@ class _DeviceInfoCard extends StatelessWidget {
       builder: (context, state) {
         return Container(
           padding: const EdgeInsets.all(AppTheme.radius),
-          decoration: BoxDecoration(
-            color: theme.brightness == Brightness.dark
-                ? theme.cardColor
-                : theme.colorScheme.surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(AppTheme.radius),
-          ),
+          decoration: AppTheme.cardDecoration(context),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -495,23 +531,26 @@ class _FavouriteThumb extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    final theme = Theme.of(context);
+    return Container(
       width: 110,
+      padding: const EdgeInsets.all(6),
+      decoration: AppTheme.cardDecoration(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppNetworkImage(
             url: meal.thumbnailUrl as String,
-            width: 110,
-            height: 86,
-            borderRadius: BorderRadius.circular(14),
+            width: 98,
+            height: 76,
+            borderRadius: BorderRadius.circular(12),
           ),
           const SizedBox(height: 6),
           Text(
             meal.name as String,
-            maxLines: 2,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.bodySmall,
+            style: theme.textTheme.bodySmall,
           ),
         ],
       ),
@@ -532,6 +571,10 @@ class _LogoutButton extends StatelessWidget {
         Navigator.of(context)
             .pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
       },
+      style: OutlinedButton.styleFrom(
+        foregroundColor: AppColors.error,
+        side: BorderSide(color: AppColors.error.withValues(alpha: 0.4)),
+      ),
       icon: const Icon(Icons.logout_rounded),
       label: Text(context.l10n.logout),
     );

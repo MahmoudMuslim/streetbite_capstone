@@ -60,8 +60,8 @@ void main() {
     final koshari = TestFixtures.meal(id: 'a');
 
     List<CartItemEntity> cartWith(int quantity) => [
-          CartItemEntity(meal: koshari, quantity: quantity),
-        ];
+      CartItemEntity(meal: koshari, quantity: quantity),
+    ];
 
     test('decrements the quantity by one', () {
       final two = addToCart(
@@ -129,8 +129,7 @@ void main() {
     });
 
     test('produces zeroes for an empty basket', () {
-      final totals =
-          calculate(const CalculateOrderTotalsParams(items: []));
+      final totals = calculate(const CalculateOrderTotalsParams(items: []));
 
       expect(totals.subtotal, 0);
       expect(totals.deliveryFee, 0);

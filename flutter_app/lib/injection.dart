@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'core/constants/app_constants.dart';
 import 'core/network/dio_client.dart';
 import 'data/datasources/auth_local_data_source.dart';
 import 'data/datasources/auth_remote_data_source.dart';
@@ -72,6 +73,16 @@ final GetIt sl = GetIt.instance;
 
 /// Wires the whole object graph. Call once from `main()` before `runApp`.
 Future<void> configureDependencies() async {
+  // ---- Firestore singleton ------------------------------------------------
+  // Registered **first** because `_initFirebaseSafely()` resolves it in order
+  // to hand it the Firebase instance. Resolving a type before it is registered
+  // throws out of GetIt and would abort the rest of this method, leaving the
+  // cubits unregistered and crashing `main()`.
+  //
+  // `FirestoreService()` always returns the same object, so this registration
+  // merely hands that object to the container.
+  sl.registerLazySingleton<FirestoreService>(FirestoreService.new);
+
   // ---- Firebase ------------------------------------------------------------
   // Failure is tolerated on purpose: the app degrades to its on-device data
   // sources (see `AuthRepositoryImpl`), so a missing `google-services.json`
@@ -91,10 +102,9 @@ Future<void> configureDependencies() async {
   sl.registerLazySingleton<ImagePicker>(ImagePicker.new);
   sl.registerLazySingleton<BiometricService>(BiometricService.new);
 
-  // ---- Firestore singleton -------------------------------------------------
-  // `FirestoreService()` always returns the same object, so this registration
-  // merely hands that object to the container.
-  sl.registerLazySingleton<FirestoreService>(FirestoreService.new);
+  // Registered so the bootstrap below (and any future code) can talk to
+  // Firebase Auth through the container instead of the global singleton.
+  sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
 
   // ---- Data sources --------------------------------------------------------
   sl.registerLazySingleton<MealRemoteDataSource>(
@@ -220,6 +230,93 @@ Future<void> configureDependencies() async {
   sl.registerLazySingleton<OrdersCubit>(
     () => OrdersCubit(sl<GetOrderHistory>()),
   );
+
+  // ---- Bootstrap ---------------------------------------------------------
+  // The demo account is a *composition-root* concern: it seeds the on-device
+  // store that the local auth fallback reads. Doing it here means `main.dart`
+  // never has to resolve a concrete data-layer class, which would defeat the
+  // interface-only registration above.
+  await _seedQaAccount();
+}
+
+/// Creates the QA account the Appium suite signs in with.
+///
+/// The account has to exist in **both** stores:
+///
+/// * the on-device store, which `AuthLocalDataSource` reads when Firebase is
+///   unreachable, and
+/// * Firebase Auth, because that is what `login()` talks to first.
+///
+/// Seeding only the local store is a subtle trap: with Firebase reachable the
+/// sign-in would be rejected with "Incorrect email or password", which looks
+/// like an auth bug but is really a missing seed. Registering here makes the
+/// account real, so the manual suite, the Appium suite and a human tester all
+/// exercise the same genuine code path.
+///
+/// Idempotent and deliberately non-fatal: "already exists" is the expected
+/// outcome on every launch after the first.
+Future<void> _seedQaAccount() async {
+  try {
+    await sl<AuthLocalDataSource>().ensureDemoAccount();
+  } catch (error) {
+    debugPrint('StreetBite: could not seed the local QA account ($error)');
+  }
+
+  if (!sl<FirestoreService>().isAvailable) return;
+
+  final auth = sl<FirebaseAuth>();
+
+  // Whether *this* call authenticated anyone.
+  //
+  // `createUserWithEmailAndPassword` signs the new user in as a side effect, so
+  // a sign-out is needed after that - and only after that. Signing out
+  // unconditionally was far worse than the problem it solved: because seeding
+  // runs on *every* launch, the app signed the real user out of their own
+  // session each time they opened it. The session was restored by the splash
+  // and then immediately destroyed, so the next cold start had nothing to
+  // restore and dropped the user on the Login screen.
+  var authenticatedHere = false;
+
+  try {
+    final credential = await auth.createUserWithEmailAndPassword(
+      email: AppConstants.demoUserEmail,
+      password: AppConstants.demoUserPassword,
+    );
+    authenticatedHere = true;
+    // A Firebase account carries no display name unless one is written, and
+    // the Home AppBar greets the user by name - so set it explicitly.
+    await credential.user?.updateDisplayName(AppConstants.demoUserName);
+    debugPrint('StreetBite: QA account created in Firebase Auth.');
+  } on FirebaseAuthException catch (error) {
+    if (error.code != 'email-already-in-use') {
+      debugPrint(
+        'StreetBite: could not seed the Firebase QA account (${error.code})',
+      );
+      return;
+    }
+
+    // Already created by an earlier launch. Nothing more to do: the display
+    // name was written to the account when it was first created and persists
+    // server-side.
+    //
+    // Deliberately *not* signing in here. Every cold start seeds, so an extra
+    // sign-in per launch is a needless network round trip that also risks
+    // tripping Firebase's auth throttling - which showed up in automation as a
+    // splash that never finished.
+    debugPrint('StreetBite: QA account already present in Firebase Auth.');
+  } catch (error) {
+    debugPrint('StreetBite: could not seed the Firebase QA account ($error)');
+  } finally {
+    // Only undo a sign-in that *we* performed. Signing out when the account
+    // already existed (and the real user was signed in) logged them out.
+    if (authenticatedHere) {
+      try {
+        await auth.signOut();
+      } catch (_) {
+        // Nothing useful to do; the account exists either way.
+      }
+    }
+  }
 }
 
 /// Initialises Firebase and hands the Firestore instance to the singleton.
@@ -232,12 +329,56 @@ Future<void> _initFirebaseSafely() async {
   try {
     await Firebase.initializeApp();
     sl<FirestoreService>().configure(FirebaseFirestore.instance);
+    await _waitForAuthSessionRestore();
     debugPrint('StreetBite: Firebase initialised.');
   } catch (error) {
-    sl<FirestoreService>().configure(null);
+    // `configure(null)` puts the singleton into local mode. It is wrapped in
+    // its own try/catch so that a failure here can never abort the rest of
+    // `configureDependencies()` - a half-wired container is far worse than a
+    // missing Firestore.
+    try {
+      sl<FirestoreService>().configure(null);
+    } catch (_) {
+      // The singleton is simply left unconfigured; `isAvailable` stays false
+      // and the repositories fall back to their local data sources.
+    }
     debugPrint(
       'StreetBite: Firebase unavailable ($error) — '
       'falling back to on-device data sources.',
+    );
+  }
+}
+
+/// Blocks until Firebase Auth has finished restoring its persisted session.
+///
+/// This is a race, and it is a nasty one because the failure is invisible.
+///
+/// `Firebase.initializeApp()` returning does **not** mean Auth is ready. The
+/// SDK reloads any saved session from disk *asynchronously*, so
+/// `currentUser` is still `null` for a short window afterwards. Reading it too
+/// early made the app believe nobody was signed in, fall back to its local
+/// session store, and therefore start Firestore requests with **no** auth
+/// token. The server answered `PERMISSION_DENIED: Missing or insufficient
+/// permissions` — indistinguishable from wrong security rules, which is why
+/// this cost a long detour into the rules before the real cause surfaced.
+///
+/// The symptom that gives it away: a *fresh sign-in* worked perfectly, because
+/// logging in populates Auth synchronously, while every *cold restart* failed
+/// to load favourites and orders.
+///
+/// `userChanges()` emits once Auth has finished loading, with either the
+/// restored user or `null` when genuinely signed out. The timeout is a
+/// belt-and-braces guard: on a device with no Play Services this stream may
+/// never emit, and a stuck splash is worse than a slow one.
+Future<void> _waitForAuthSessionRestore() async {
+  try {
+    await FirebaseAuth.instance.userChanges().first.timeout(
+      const Duration(seconds: 10),
+    );
+  } catch (_) {
+    debugPrint(
+      'StreetBite: Auth session restore timed out; continuing with the local '
+      'session fallback.',
     );
   }
 }

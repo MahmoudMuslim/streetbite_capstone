@@ -53,10 +53,7 @@ void main() {
     });
 
     test('substitutes fallbacks for missing fields', () {
-      final meal = MealModel.fromApiJson({
-        'idMeal': '1',
-        'strMeal': 'Mystery',
-      });
+      final meal = MealModel.fromApiJson({'idMeal': '1', 'strMeal': 'Mystery'});
 
       expect(meal.category, isNotEmpty);
       expect(meal.area, isNotEmpty);
@@ -144,8 +141,10 @@ void main() {
     });
 
     test('rehydrates the card strategy with its masked suffix', () {
-      final strategy =
-          PaymentModel(type: PaymentType.card, last4: '4242').toEntity();
+      final strategy = PaymentModel(
+        type: PaymentType.card,
+        last4: '4242',
+      ).toEntity();
 
       expect(strategy, isA<CardPayment>());
       expect((strategy as CardPayment).last4, '4242');

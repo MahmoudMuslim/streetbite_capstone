@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_routes.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../extensions/l10n_extension.dart';
+import '../home/main_shell_screen.dart';
 
 /// Shown after a successful checkout.
 ///
@@ -52,8 +53,14 @@ class OrderConfirmationScreen extends StatelessWidget {
               const Spacer(),
               FilledButton(
                 key: const ValueKey('view_orders_button'),
-                onPressed: () => Navigator.of(context)
-                    .pushNamedAndRemoveUntil(AppRoutes.home, (route) => false),
+                // Rebuild the shell on the Orders tab: every route is popped,
+                // so the confirmation screen cannot be returned to and the
+                // cart badge starts from the cleared cart.
+                onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                  AppRoutes.home,
+                  (route) => false,
+                  arguments: [MainShellScreen.ordersTabIndex],
+                ),
                 child: Text(context.l10n.viewMyOrders),
               ),
             ],

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>app.streetbite</groupId>
+    <artifactId>streetbite-automation</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>StreetBite Appium Automation</name>
+    <description>
+        End-to-end automation suite for the StreetBite Flutter app.
+        Targets the release APK distributed through Firebase App Distribution.
+    </description>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <appium.version>9.2.2</appium.version>
+        <selenium.version>4.25.0</selenium.version>
+        <testng.version>7.10.1</testng.version>
+        <surefire.version>3.2.5</surefire.version>
+    </properties>
+
+    <dependencyManagement>
+        <!--
+            Force the whole Selenium stack onto one version.
+
+            `io.appium:java-client:9.2.2` transitively pulls Selenium 4.51,
+            which removed interfaces the Appium Android driver still
+            implements (`ContextAware`, `html5.LocationContext`). Mixing the
+            two produces "class file for ... not found" at compile time, so
+            the version is pinned globally rather than per artifact.
+        -->
+        <dependencies>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-bom</artifactId>
+                <version>${selenium.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Appium Java client.
+             Since 9.0 the Android support that used to live in the separate
+             `java-client-android` artifact is merged into this one, so a single
+             dependency covers UiAutomator2. -->
+        <dependency>
+            <groupId>io.appium</groupId>
+            <artifactId>java-client</artifactId>
+            <version>${appium.version}</version>
+        </dependency>
+
+        <!-- TestNG, chosen over JUnit because its @DataProvider maps cleanly
+             onto the "same scenario, several inputs" style used by the Login
+             suite. -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Selenium pinned to the last 4.2x release.
+             Appium 9.2.2 was compiled against the Selenium 4.25 API; newer
+             Selenium builds (4.5x) removed interfaces that `AndroidDriver`
+             still implements (`ContextAware`, `html5.LocationContext`),
+             which produces a class-file error at compile time. Pinning here
+             keeps the classpath internally consistent. -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+
+        <!-- Screenshots for Jira evidence, written straight from the suite. -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.16.1</version>
+        </dependency>
+
+        <!-- Rich failure messages: the error text is printed verbatim in the
+             Surefire report that goes into Jira. -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.13</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+                <configuration>
+                    <!-- One Appium session per class keeps the run fast;
+                         BaseTest quits it in @AfterClass. -->
+                    <forkCount>1</forkCount>
+                    <reuseForks>true</reuseForks>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <trimStackTrace>false</trimStackTrace>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

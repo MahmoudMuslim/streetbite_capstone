@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<!--
+  StreetBite automation suite.
+
+  One <class> per feature, mirroring the manual test suites one-to-one so a
+  failing run can be traced straight to the matching Jira ticket.
+-->
+<suite name="StreetBite" verbose="1" parallel="false">
+
+    <listeners>
+        <listener class-name="utils.SuiteListener"/>
+    </listeners>
+
+    <test name="Login">
+        <classes>
+            <class name="tests.LoginTest"/>
+        </classes>
+    </test>
+
+    <test name="HomeScroll">
+        <classes>
+            <class name="tests.HomeScrollTest"/>
+        </classes>
+    </test>
+
+    <test name="AddToCart">
+        <classes>
+            <class name="tests.AddToCartTest"/>
+        </classes>
+    </test>
+
+</suite>

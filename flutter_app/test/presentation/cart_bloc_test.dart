@@ -39,18 +39,20 @@ void main() {
   final meal = TestFixtures.meal(id: 'a', name: 'Koshari');
 
   CartBloc buildBloc() => CartBloc(
-        addToCart: const AddToCart(),
-        removeFromCart: const RemoveFromCart(),
-        calculateTotals: const CalculateOrderTotals(),
-        placeOrder: PlaceOrder(repository),
-      );
+    addToCart: const AddToCart(),
+    removeFromCart: const RemoveFromCart(),
+    calculateTotals: const CalculateOrderTotals(),
+    placeOrder: PlaceOrder(repository),
+  );
 
   setUp(() {
     repository = MockOrderRepository();
-    when(() => repository.placeOrder(
-          user: any(named: 'user'),
-          order: any(named: 'order'),
-        )).thenAnswer((_) async => const Right<Failure, String>('order-1'));
+    when(
+      () => repository.placeOrder(
+        user: any(named: 'user'),
+        order: any(named: 'order'),
+      ),
+    ).thenAnswer((_) async => const Right<Failure, String>('order-1'));
   });
 
   blocTest<CartBloc, CartState>(
@@ -115,10 +117,12 @@ void main() {
     wait: const Duration(milliseconds: 50),
     verify: (bloc) {
       expect(bloc.state, isA<CartOrderPlaced>());
-      verify(() => repository.placeOrder(
-            user: user,
-            order: any(named: 'order'),
-          )).called(1);
+      verify(
+        () => repository.placeOrder(
+          user: user,
+          order: any(named: 'order'),
+        ),
+      ).called(1);
     },
   );
 
@@ -135,10 +139,12 @@ void main() {
       ),
     ),
     setUp: () {
-      when(() => repository.placeOrder(
-            user: any(named: 'user'),
-            order: any(named: 'order'),
-          )).thenAnswer((_) async => const Left(ServerFailure()));
+      when(
+        () => repository.placeOrder(
+          user: any(named: 'user'),
+          order: any(named: 'order'),
+        ),
+      ).thenAnswer((_) async => const Left(ServerFailure()));
     },
     act: (bloc) => bloc.checkout(user: user, payment: const CardPayment()),
     wait: const Duration(milliseconds: 50),

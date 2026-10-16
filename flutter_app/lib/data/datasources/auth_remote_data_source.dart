@@ -35,6 +35,17 @@ class AuthRemoteDataSource {
     );
   });
 
+  /// Forces a brand-new ID token for the persisted session.
+  ///
+  /// Needed after a cold start. `currentUser` is restored from disk together
+  /// with a cached ID token that may already be expired, and Firestore attaches
+  /// that stale token to its first request — which the server rejects with
+  /// `PERMISSION_DENIED`, indistinguishable from wrong security rules.
+  /// Refreshing here means every later Firestore read carries a valid token.
+  Future<void> refreshIdToken() async {
+    await _auth.currentUser?.getIdToken(true);
+  }
+
   Future<UserModel> login({
     required String email,
     required String password,

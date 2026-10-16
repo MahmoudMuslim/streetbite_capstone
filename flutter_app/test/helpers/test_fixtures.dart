@@ -12,19 +12,19 @@ class TestFixtures {
     String id = 'meal-1',
     String name = 'Koshari',
     double price = 12.5,
-  }) =>
-      MealEntity(
-        id: id,
-        name: name,
-        category: 'Egyptian',
-        area: 'Egypt',
-        instructions: 'Mix lentils, rice and pasta.',
-        thumbnailUrl: 'https://example.com/$id.jpg',
-        price: price,
-      );
+    String category = 'Egyptian',
+  }) => MealEntity(
+    id: id,
+    name: name,
+    category: category,
+    area: 'Egypt',
+    instructions: 'Mix lentils, rice and pasta.',
+    thumbnailUrl: 'https://example.com/$id.jpg',
+    price: price,
+  );
 
   static List<MealEntity> meals(int count) => List.generate(
-        count,
-        (index) => meal(id: 'meal-$index', name: 'Meal $index'),
-      );
+    count,
+    (index) => meal(id: 'meal-$index', name: 'Meal $index'),
+  );
 }

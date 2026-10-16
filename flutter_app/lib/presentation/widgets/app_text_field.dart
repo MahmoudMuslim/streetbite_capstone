@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../extensions/l10n_extension.dart';
+import 'semantic_id.dart';
 
 /// Reusable labelled text field used by both the Login and Sign Up screens.
 ///
@@ -59,34 +60,47 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      key: ValueKey(widget.fieldKeyName),
-      controller: widget.controller,
-      obscureText: _obscured,
-      enabled: widget.enabled,
-      keyboardType: widget.keyboardType,
-      textInputAction: widget.textInputAction,
-      textCapitalization: widget.textCapitalization,
-      autofillHints: widget.autofillHints,
-      validator: widget.validator,
-      onChanged: widget.onChanged,
-      style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 16),
-      decoration: InputDecoration(
-        labelText: context.trKey(widget.labelKey),
-        hintText: widget.hintKey == null
-            ? null
-            : context.trKey(widget.hintKey!),
-        prefixIcon: widget.icon == null ? null : Icon(widget.icon),
-        suffixIcon: widget.obscure
-            ? IconButton(
-                icon: Icon(
-                  _obscured
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility_outlined,
-                ),
-                onPressed: () => setState(() => _obscured = !_obscured),
-              )
-            : null,
+    // Wrapped in [SemanticId] so the Appium suite can address this input by
+    // `resource-id` instead of by its label, which changes with the language.
+    return SemanticId(
+      id: widget.fieldKeyName,
+      label: context.trKey(widget.labelKey),
+      child: TextFormField(
+        key: ValueKey(widget.fieldKeyName),
+        controller: widget.controller,
+        obscureText: _obscured,
+        enabled: widget.enabled,
+        keyboardType: widget.keyboardType,
+        textInputAction: widget.textInputAction,
+        textCapitalization: widget.textCapitalization,
+        autofillHints: widget.autofillHints,
+        // `Validators` deliberately returns an **ARB key**, never a literal, so
+        // the rules stay locale-agnostic. The key is resolved to a sentence
+        // here, at the last possible moment, which is what allows the same
+        // validator to render in English and in Arabic.
+        validator: (value) {
+          final key = widget.validator?.call(value);
+          return key == null ? null : context.trKey(key);
+        },
+        onChanged: widget.onChanged,
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 16),
+        decoration: InputDecoration(
+          labelText: context.trKey(widget.labelKey),
+          hintText: widget.hintKey == null
+              ? null
+              : context.trKey(widget.hintKey!),
+          prefixIcon: widget.icon == null ? null : Icon(widget.icon),
+          suffixIcon: widget.obscure
+              ? IconButton(
+                  icon: Icon(
+                    _obscured
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                  ),
+                  onPressed: () => setState(() => _obscured = !_obscured),
+                )
+              : null,
+        ),
       ),
     );
   }

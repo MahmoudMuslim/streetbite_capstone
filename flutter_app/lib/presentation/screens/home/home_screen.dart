@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/constants/app_categories.dart';
 import '../../../core/constants/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
@@ -22,9 +23,11 @@ import '../../widgets/app_error_view.dart';
 import '../../widgets/app_loading_view.dart';
 import '../../widgets/cart_badge.dart';
 import '../../widgets/hot_offer_card.dart';
+import '../../widgets/language_toggle_button.dart';
 import '../../widgets/meal_banner_page.dart';
 import '../../widgets/meal_card.dart';
 import '../../widgets/section_header.dart';
+import '../../widgets/semantic_id.dart';
 import '../../widgets/theme_toggle_button.dart';
 import 'menu_search_sheet.dart';
 
@@ -52,6 +55,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int _bannerIndex = 0;
   Timer? _searchDebounce;
+
+  /// `apiCategory` of the selected chip, or `null` for "show everything".
+  String? _selectedCategory;
 
   @override
   void initState() {
@@ -115,16 +121,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<MealEntity> _filter(List<MealEntity> meals) {
+    final category = AppCategory.byApiCategory(_selectedCategory);
     final query = _searchController.text.trim().toLowerCase();
-    if (query.isEmpty) return meals;
-    return meals
-        .where(
-          (meal) =>
-              meal.name.toLowerCase().contains(query) ||
-              meal.category.toLowerCase().contains(query) ||
-              meal.area.toLowerCase().contains(query),
-        )
-        .toList();
+
+    return meals.where((meal) {
+      if (category != null && !category.matches(meal)) return false;
+      if (query.isEmpty) return true;
+      return meal.name.toLowerCase().contains(query) ||
+          meal.category.toLowerCase().contains(query) ||
+          meal.area.toLowerCase().contains(query);
+    }).toList();
   }
 
   @override
@@ -177,6 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   PreferredSizeWidget _buildAppBar(UserEntity user) {
     final firstName = user.displayName.split(' ').first;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return AppBar(
       titleSpacing: 20,
       title: Column(
@@ -186,7 +193,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(
             firstName.isEmpty ? context.l10n.appName : '$firstName.',
             key: const ValueKey('home_greeting'),
-            style: Theme.of(context).textTheme.headlineSmall,
+            style: Theme.of(context).textTheme.headlineSmall
+                ?.copyWith(fontSize: 21),
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -207,21 +215,80 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       actions: [
-        const ThemeToggleButton(),
-        IconButton(
-          key: const ValueKey('open_map_button'),
-          tooltip: context.l10n.vendorMap,
-          onPressed: () => Navigator.of(context).pushNamed(AppRoutes.vendorMap),
-          icon: const Icon(Icons.map_outlined),
+        _appBarAction(child: const ThemeToggleButton()),
+        // The EN/AR switch lives on every screen, not just Settings, so an
+        // Arabic tester never has to leave the feed to change language.
+        LanguageToggleButton(
+          style: OutlinedButton.styleFrom(
+            minimumSize: const Size(40, 40),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            backgroundColor: isDark
+                ? AppColors.surfaceDark
+                : AppColors.background,
+            foregroundColor: isDark ? Colors.white : AppColors.primaryDark,
+            side: const BorderSide(color: Colors.transparent),
+            shadowColor: Colors.black.withValues(alpha: 0.08),
+            elevation: 0,
+            textStyle: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
         ),
-        IconButton(
-          key: const ValueKey('open_cart_button'),
-          tooltip: context.l10n.cart,
-          onPressed: () => Navigator.of(context).pushNamed(AppRoutes.cart),
-          icon: CartBadge(child: const Icon(Icons.shopping_bag_outlined)),
+        const SizedBox(width: 8),
+        _appBarAction(
+          child: SemanticId(
+            key: const ValueKey('open_map_button'),
+            id: 'open_map_button',
+            label: context.l10n.vendorMap,
+            button: true,
+            child: IconButton(
+              tooltip: context.l10n.vendorMap,
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(AppRoutes.vendorMap),
+              icon: const Icon(Icons.map_outlined),
+            ),
+          ),
         ),
-        const SizedBox(width: 4),
+        _appBarAction(
+          child: SemanticId(
+            key: const ValueKey('open_cart_button'),
+            id: 'open_cart_button',
+            label: context.l10n.cart,
+            button: true,
+            child: IconButton(
+              tooltip: context.l10n.cart,
+              onPressed: () => Navigator.of(context).pushNamed(AppRoutes.cart),
+              icon: CartBadge(child: const Icon(Icons.shopping_bag_outlined)),
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
       ],
+    );
+  }
+
+  /// Circular white "pill" that unifies the AppBar's icon actions.
+  Widget _appBarAction({required Widget child}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      width: 40,
+      height: 40,
+      margin: const EdgeInsets.only(right: 6),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.surfaceDark : AppColors.background,
+        shape: BoxShape.circle,
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.06),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+      ),
+      child: child,
     );
   }
 
@@ -248,6 +315,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: InputDecoration(
                   hintText: context.l10n.searchHint,
                   prefixIcon: const Icon(Icons.search_rounded),
+                  prefixIconColor: AppColors.textSecondary,
+                  suffixIcon: _searchController.text.isEmpty
+                      ? null
+                      : IconButton(
+                          key: const ValueKey('home_search_clear'),
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() {});
+                          },
+                          icon: const Icon(Icons.close_rounded, size: 18),
+                        ),
                 ),
               ),
             ),
@@ -311,22 +389,26 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverToBoxAdapter(
               child: SizedBox(
                 height: 190,
-                child: ListView.separated(
+                child: SemanticId(
                   key: const ValueKey('hot_offers_list'),
-                  scrollDirection: Axis.horizontal,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Responsive.horizontalPadding(context),
+                  id: 'hot_offers_list',
+                  label: context.l10n.hotOffers,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Responsive.horizontalPadding(context),
+                    ),
+                    itemCount: hotOffers.length,
+                    separatorBuilder: (_, _) => const SizedBox(width: 12),
+                    itemBuilder: (context, index) {
+                      final meal = hotOffers[index];
+                      return HotOfferCard(
+                        meal: meal,
+                        discountPercent: 10 + index * 5,
+                        onTap: () => _openMeal(meal),
+                      );
+                    },
                   ),
-                  itemCount: hotOffers.length,
-                  separatorBuilder: (_, _) => const SizedBox(width: 12),
-                  itemBuilder: (context, index) {
-                    final meal = hotOffers[index];
-                    return HotOfferCard(
-                      meal: meal,
-                      discountPercent: 10 + index * 5,
-                      onTap: () => _openMeal(meal),
-                    );
-                  },
                 ),
               ),
             ),
@@ -335,7 +417,11 @@ class _HomeScreenState extends State<HomeScreen> {
           // ---- Meals grid ------------------------------------------------
           SliverToBoxAdapter(
             child: SectionHeader(
-              title: context.l10n.recommended,
+              title: _selectedCategory == null
+                  ? context.l10n.recommended
+                  : context.trKey(
+                      AppCategory.byApiCategory(_selectedCategory)!.labelKey,
+                    ),
               actionLabel: context.l10n.seeAll,
               onAction: () => showMenuSearchSheet(context, meals),
             ),
@@ -343,8 +429,25 @@ class _HomeScreenState extends State<HomeScreen> {
           if (visible.isEmpty)
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 40),
-                child: Center(child: Text(context.l10n.mealNotFound)),
+                padding: const EdgeInsets.symmetric(vertical: 48),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.ramen_dining_rounded,
+                        size: 56,
+                        color: AppColors.textSecondary.withValues(alpha: 0.5),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        context.l10n.mealNotFound,
+                        style: Theme.of(context).textTheme.bodyLarge
+                            ?.copyWith(color: AppColors.textSecondary),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             )
           else
@@ -354,6 +457,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               sliver: SliverGrid(
                 key: const ValueKey('meals_grid_view'),
+                // Exposed to the automation suite as `resource-id`, so a test
+                // can scroll to the grid without knowing pixel offsets.
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: Responsive.mealGridColumns(context),
                   mainAxisSpacing: 14,
@@ -384,21 +489,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// Circular category chips from the design (Aclaimed / Healthy / Pizza ...).
+  /// Circular category chips from the design (Chicken / Vegetarian / ...).
+  ///
+  /// Tapping a chip filters the meals grid below and tapping it again clears
+  /// the filter. The chips read [AppCategory.all], the same table the Browse
+  /// tab uses, so the two screens can never disagree about what a category
+  /// means — and a chip that matches nothing yields the grid's empty state
+  /// instead of pretending to work.
   Widget _buildCategories(bool isDark) {
-    final categories = <({IconData icon, String labelKey})>[
-      (
-        icon: Icons.local_fire_department_rounded,
-        labelKey: 'categoriesChicken',
-      ),
-      (icon: Icons.eco_rounded, labelKey: 'categoriesVegetarian'),
-      (icon: Icons.local_pizza_rounded, labelKey: 'categoriesPizza'),
-      (icon: Icons.ramen_dining_rounded, labelKey: 'categoriesRamen'),
-      (icon: Icons.lunch_dining_rounded, labelKey: 'categoriesBurgers'),
-      (icon: Icons.icecream_rounded, labelKey: 'categoriesDesserts'),
-      (icon: Icons.set_meal_rounded, labelKey: 'categoriesSeafood'),
-    ];
-
     return SizedBox(
       height: 104,
       child: ListView.separated(
@@ -410,34 +508,77 @@ class _HomeScreenState extends State<HomeScreen> {
           Responsive.horizontalPadding(context),
           0,
         ),
-        itemCount: categories.length,
+        itemCount: AppCategory.all.length,
         separatorBuilder: (_, _) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
-          final category = categories[index];
-          return Column(
-            children: [
-              Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  color: AppColors.primarySoft,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  category.icon,
-                  color: AppColors.primaryDark,
-                  size: 28,
-                ),
+          final category = AppCategory.all[index];
+          final isSelected = _selectedCategory == category.apiCategory;
+          return SemanticId(
+            id: 'category_chip_${category.apiCategory}',
+            label: context.trKey(category.labelKey),
+            button: true,
+            child: InkWell(
+              key: ValueKey('category_chip_${category.apiCategory}'),
+              onTap: () => setState(
+                () => _selectedCategory = isSelected
+                    ? null
+                    : category.apiCategory,
               ),
-              const SizedBox(height: 8),
-              Text(
-                context.trKey(category.labelKey),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: isDark ? Colors.white70 : AppColors.textPrimary,
-                ),
+              borderRadius: BorderRadius.circular(32),
+              child: Column(
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? AppColors.primary
+                          : isDark
+                          ? AppColors.surfaceDark
+                          : AppColors.background,
+                      shape: BoxShape.circle,
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: AppColors.primary.withValues(alpha: 0.4),
+                                blurRadius: 14,
+                                offset: const Offset(0, 6),
+                              ),
+                            ]
+                          : isDark
+                          ? null
+                          : [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.06),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                    ),
+                    child: Icon(
+                      category.icon,
+                      color: isSelected ? Colors.white : AppColors.primaryDark,
+                      size: 27,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    context.trKey(category.labelKey),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontWeight: isSelected
+                          ? FontWeight.w800
+                          : FontWeight.w600,
+                      color: isSelected
+                          ? AppColors.primary
+                          : isDark
+                          ? Colors.white70
+                          : AppColors.textPrimary,
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           );
         },
       ),

@@ -37,14 +37,46 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<Failure, UserEntity?>> restoreSession() async {
-    // A live Firebase session always wins: it is the source of truth after a
-    // token refresh or a device restore.
-    final user = _remote?.currentUser;
-    if (user != null) {
-      await _local.saveSession(user);
-      return Right<Failure, UserEntity?>(user);
+    // When Firebase is usable it is the **only** authority on whether anyone is
+    // signed in.
+    //
+    // Falling back to the local store while Firebase is healthy produced a
+    // "zombie session": the UI showed a signed-in Home screen while the backend
+    // had no session at all, so every Firestore read came back
+    // `PERMISSION_DENIED` and favourites and orders rendered an error the user
+    // could not clear. A local cache is a convenience for offline use, never a
+    // substitute for an authentication decision.
+    if (_firebaseUsable) {
+      await _refreshToken();
+      return Right<Failure, UserEntity?>(_remote?.currentUser);
     }
+
+    // Offline / no Play Services: the local session is all there is.
     return Right<Failure, UserEntity?>(_local.readSession());
+  }
+
+  /// Forces a fresh ID token before any Firestore read happens.
+  ///
+  /// This is not a theoretical nicety. After the app is killed and relaunched,
+  /// `currentUser` is populated from disk while its cached ID token may be
+  /// expired. Firestore then attaches that expired token to its first request
+  /// and the server answers `PERMISSION_DENIED: Missing or insufficient
+  /// permissions` — which looks exactly like broken security rules, and is not.
+  ///
+  /// The symptom was maddeningly stateful: a *fresh sign-in* worked, because
+  /// login mints a valid token, while every *restored* session failed to load
+  /// favourites and orders. The rules were fine the whole time.
+  ///
+  /// Failures are swallowed on purpose: an offline device should still open the
+  /// app, and the reads will then be served from Firestore's local cache or
+  /// retry once connectivity returns.
+  Future<void> _refreshToken() async {
+    if (_remote == null) return;
+    try {
+      await _remote.refreshIdToken();
+    } catch (_) {
+      // Offline or the refresh raced a sign-out; not fatal.
+    }
   }
 
   @override
@@ -120,9 +152,6 @@ class AuthRepositoryImpl implements AuthRepository {
     if (remote == null) return Stream<UserEntity?>.value(null);
     return remote.authStateChanges();
   }
-
-  /// Seeds the QA account the Appium suite signs in with.
-  Future<void> prepare() => _local.ensureDemoAccount();
 
   // ---------------------------------------------------------------------------
 

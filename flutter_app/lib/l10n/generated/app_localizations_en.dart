@@ -13,12 +13,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appName => 'StreetBite';
 
   @override
-  String get splashTagline => 'Street food, right around the corner';
-
-  @override
-  String get splashSubtitle => 'Discover nearby vendors, order in seconds.';
-
-  @override
   String get onboardingTitle => 'Food and groceries\ndelivered to you';
 
   @override
@@ -106,9 +100,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deliveryAddress => 'Park Way 145';
 
   @override
-  String get fastest => 'Fastest';
-
-  @override
   String get recommended => 'Recommended';
 
   @override
@@ -116,15 +107,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get seeAll => 'See all';
-
-  @override
-  String get greetingMorning => 'Good morning';
-
-  @override
-  String get greetingAfternoon => 'Good afternoon';
-
-  @override
-  String get greetingEvening => 'Good evening';
 
   @override
   String get nearYou => 'Near you';
@@ -193,9 +175,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get category => 'Category';
-
-  @override
-  String get areaOfOrigin => 'Origin';
 
   @override
   String get instructions => 'Instructions';
@@ -272,19 +251,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get vendorMap => 'Nearby Vendors';
 
   @override
-  String get vendorMapUnavailable => 'Map is unavailable on this device';
-
-  @override
-  String get vendorMapUnavailableBody =>
-      'We could not load Google Maps here. Check your Play Services and API key configuration.';
-
-  @override
-  String get vendorCuisine => 'Cuisine';
-
-  @override
-  String get vendorRating => 'Rating';
-
-  @override
   String vendorDistance(String distance) {
     return '$distance km away';
   }
@@ -293,10 +259,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get directions => 'Directions';
 
   @override
-  String get profile => 'Profile';
+  String get vendorList => 'Vendor list';
 
   @override
-  String get editPhoto => 'Change profile photo';
+  String get profile => 'Profile';
 
   @override
   String get pickFromGallery => 'Choose from gallery';
@@ -375,16 +341,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get biometricCancelled => 'Biometric check cancelled.';
 
   @override
+  String get biometricLockedOut =>
+      'Too many failed attempts. Biometric unlock is locked for now.';
+
+  @override
   String get useInstead => 'Continue without biometrics';
 
   @override
   String get skip => 'Skip';
-
-  @override
-  String get settings => 'Settings';
-
-  @override
-  String get appearance => 'Appearance';
 
   @override
   String get darkMode => 'Dark mode';
@@ -400,26 +364,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get arabic => 'العربية';
-
-  @override
-  String get notifications => 'Notifications';
-
-  @override
-  String get helpCenter => 'Help center';
-
-  @override
-  String get contactUs => 'Contact us';
-
-  @override
-  String get about => 'About';
-
-  @override
-  String get notificationsTitle => 'StreetBite';
-
-  @override
-  String notificationAdded(String name) {
-    return '$name is now in your cart';
-  }
 
   @override
   String get retry => 'Retry';

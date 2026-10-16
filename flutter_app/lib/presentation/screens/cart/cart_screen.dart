@@ -127,7 +127,7 @@ class _CartScreenState extends State<CartScreen> {
               8,
             ),
             itemCount: items.length,
-            separatorBuilder: (_, _) => const Divider(height: 24),
+            separatorBuilder: (_, _) => const SizedBox(height: 12),
             itemBuilder: (context, index) => CartItemTile(
               item: items[index],
               onIncrement: () => context.read<CartBloc>().add(

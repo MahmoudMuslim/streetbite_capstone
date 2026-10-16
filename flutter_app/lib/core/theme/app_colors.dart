@@ -20,12 +20,20 @@ class AppColors {
   // --- Neutrals ------------------------------------------------------------
   static const Color background = Color(0xFFFFFFFF);
   static const Color backgroundDark = Color(0xFF10151A);
-  static const Color surface = Color(0xFFF6F7F9);
+  static const Color surface = Color(0xFFF4F6F8);
   static const Color surfaceDark = Color(0xFF1A2027);
   static const Color textPrimary = Color(0xFF12141A);
   static const Color textSecondary = Color(0xFF8A93A3);
   static const Color divider = Color(0xFFE9ECF1);
   static const Color border = Color(0xFFDCE1E8);
+
+  // --- Elevation -----------------------------------------------------------
+  /// Ambient + key shadow that lifts white cards off the grey canvas.
+  /// Dark mode relies on surface contrast instead, so shadows stay empty.
+  static const List<BoxShadow> cardShadow = [
+    BoxShadow(color: Color(0x1412141A), blurRadius: 20, offset: Offset(0, 8)),
+    BoxShadow(color: Color(0x0A12141A), blurRadius: 2, offset: Offset(0, 1)),
+  ];
 
   // --- Status --------------------------------------------------------------
   static const Color rating = Color(0xFFFFB020);

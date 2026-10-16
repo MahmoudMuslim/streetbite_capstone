@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../data/services/biometric_service.dart';
 import '../extensions/l10n_extension.dart';
@@ -13,13 +14,17 @@ import '../extensions/l10n_extension.dart';
 /// * **failure / cancel / no hardware** -> a dialog explaining the reason,
 ///   with a "continue without biometrics" escape when `bypassAllowed`.
 /// * `await`s the prompt, so a caller can sequence navigation after it.
+///
+/// The service comes from GetIt rather than being constructed here, which keeps
+/// `local_auth` instantiable in exactly one place and lets tests substitute a
+/// stub without touching a platform channel.
 Future<void> openBiometricGate(
   BuildContext context, {
   required VoidCallback onUnlocked,
   bool bypassAllowed = true,
   VoidCallback? onBypass,
 }) async {
-  final service = BiometricService();
+  final service = GetIt.I<BiometricService>();
 
   final result = await service.authenticate(
     reason: BiometricGateReason.profile,

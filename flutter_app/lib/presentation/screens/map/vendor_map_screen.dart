@@ -16,13 +16,25 @@ import '../../widgets/vendor_marker.dart';
 /// Full-screen "Nearby Vendors" map with five pinned markers across five
 /// cities.
 ///
-/// Failure handling is the interesting part: `google_maps_flutter` renders
-/// through a platform view, so on a device without Play Services or a valid API
-/// key it can throw while building. The map therefore sits inside an
-/// [ErrorWidget.builder] that swaps in [AppErrorView] — that is how the
-/// "no unhandled exceptions anywhere" rule also covers the map.
+/// Failure handling is the interesting part, and it took two layers to get
+/// right.
+///
+/// `google_maps_flutter` renders through a platform view, so a map that cannot
+/// authenticate does **not** throw where Dart can see it: the platform view
+/// simply paints black. That defeats a plain [ErrorWidget.builder], so the map
+/// is additionally given a deadline. If [GoogleMap.onMapCreated] has not fired
+/// within [_mapStartupTimeout] the widget swaps in [AppErrorView] itself.
+///
+/// The deadline matters more than it looks. When the Maps API key is missing or
+/// rejected, Google's SDK retries token acquisition *on the UI thread*, and the
+/// app stops responding entirely - Android eventually shows "StreetBite isn't
+/// responding" and kills it. A map that times out into a readable error costs
+/// the user one retry button; a map that blocks costs them the whole session.
 class VendorMapScreen extends StatefulWidget {
   const VendorMapScreen({super.key});
+
+  /// How long to wait for the platform view before declaring defeat.
+  static const Duration mapStartupTimeout = Duration(seconds: 8);
 
   @override
   State<VendorMapScreen> createState() => _VendorMapScreenState();
@@ -32,6 +44,8 @@ class _VendorMapScreenState extends State<VendorMapScreen> {
   /// Identifier of this map instance, required by [GoogleMapController.init].
   static const String _mapId = 'streetbite.vendor_map';
 
+  static const Duration _mapStartupTimeout = VendorMapScreen.mapStartupTimeout;
+
   /// Handed to us by `GoogleMap.onMapCreated`; it cannot be created eagerly
   /// because it needs the platform view to exist first.
   GoogleMapController? _controller;
@@ -40,6 +54,13 @@ class _VendorMapScreenState extends State<VendorMapScreen> {
   String? _selectedVendorId;
   String? _errorKey;
   bool _isLoading = true;
+
+  /// `true` once the platform view reported in, which is the only reliable
+  /// signal that the map is actually going to draw.
+  bool _mapReady = false;
+
+  /// Guards [_startupDeadline] so each attempt arms exactly one timer.
+  bool _deadlineArmed = false;
 
   @override
   void initState() {
@@ -80,26 +101,57 @@ class _VendorMapScreenState extends State<VendorMapScreen> {
           ? AppErrorView(
               messageKey: _errorKey!,
               icon: Icons.map_outlined,
-              onRetry: () {
-                setState(() {
-                  _errorKey = null;
-                  _isLoading = true;
-                });
-                _load();
-              },
+              onRetry: _retry,
             )
           : _buildMap(context),
     );
   }
 
+  /// Re-arms the startup deadline and re-reads the vendors.
+  void _retry() {
+    setState(() {
+      _errorKey = null;
+      _isLoading = true;
+      _mapReady = false;
+      _deadlineArmed = false;
+    });
+    _load();
+  }
+
+  /// Fails the map into an error view when the platform view never reports in.
+  void _onMapStartupTimeout() {
+    if (!mounted || _mapReady) return;
+    setState(() {
+      _deadlineArmed = false;
+      _mapReady = false;
+      _errorKey = 'failureGeneric';
+    });
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    _controller = controller;
+    if (!mounted) return;
+    setState(() {
+      _mapReady = true;
+      _deadlineArmed = false;
+    });
+  }
+
   Widget _buildMap(BuildContext context) {
     final position = _initialPosition();
+
+    // Arm the deadline as the map is placed, and cancel it the moment the
+    // platform view reports success.
+    if (!_deadlineArmed && !_mapReady) {
+      _deadlineArmed = true;
+      Future<void>.delayed(_mapStartupTimeout, _onMapStartupTimeout);
+    }
 
     return MapErrorBoundary(
       fallbackBuilder: (context, error) => AppErrorView(
         messageKey: 'failureGeneric',
         icon: Icons.map_outlined,
-        onRetry: _load,
+        onRetry: _retry,
       ),
       child: Responsive.constrainWidth(
         context,
@@ -114,12 +166,48 @@ class _VendorMapScreenState extends State<VendorMapScreen> {
                 selectedId: _selectedVendorId,
                 onTap: _onMarkerTap,
               ),
-              onMapCreated: (controller) => _controller = controller,
+              onMapCreated: _onMapCreated,
               onTap: (_) => setState(() => _selectedVendorId = null),
 
               myLocationButtonEnabled: false,
               zoomControlsEnabled: false,
               mapToolbarEnabled: false,
+            ),
+            // A rejected or missing Maps key paints a blank canvas with no
+            // Dart-visible error, so the markers cannot be tapped either. The
+            // list keeps every vendor reachable - and the info window, which
+            // is a Flutter widget, fully usable - until the key is fixed.
+            Positioned(
+              right: 16,
+              top: 16,
+              child: Material(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(24),
+                elevation: 3,
+                child: InkWell(
+                  key: const ValueKey('vendor_list_button'),
+                  onTap: _showVendorList,
+                  borderRadius: BorderRadius.circular(24),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.list_rounded, size: 18),
+                        const SizedBox(width: 6),
+                        Text(
+                          context.l10n.vendorList,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
             // The info window floats above the map rather than being pinned to
             // the marker, which keeps it readable in both orientations and
@@ -141,10 +229,55 @@ class _VendorMapScreenState extends State<VendorMapScreen> {
     );
   }
 
+  /// Bottom sheet listing every vendor, for when the tiles cannot draw.
+  ///
+  /// Selecting a row does exactly what tapping its marker does: the info
+  /// window opens and the camera animates, so the sheet is a second door to
+  /// the same feature rather than a parallel implementation.
+  Future<void> _showVendorList() async {
+    final selected = await showModalBottomSheet<String>(
+      context: context,
+      builder: (sheetContext) => SafeArea(
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+              child: Text(
+                context.l10n.vendorList,
+                style: Theme.of(sheetContext).textTheme.titleLarge,
+              ),
+            ),
+            for (final vendor in _vendors)
+              ListTile(
+                key: ValueKey('vendor_list_${vendor.id}'),
+                leading: const Icon(Icons.storefront_rounded),
+                title: Text(vendor.name),
+                subtitle: Text(
+                  '${vendor.cuisine} · ${vendor.rating.toStringAsFixed(1)}',
+                ),
+                trailing: const Icon(Icons.chevron_right_rounded),
+                onTap: () => Navigator.of(sheetContext).pop(vendor.id),
+              ),
+          ],
+        ),
+      ),
+    );
+
+    if (selected == null || !mounted) return;
+    _onMarkerTap(selected);
+  }
+
   VendorEntity? get _selectedVendor {
     final id = _selectedVendorId;
     if (id == null) return null;
-    return _vendors.firstWhere((vendor) => vendor.id == id);
+    // A plain `firstWhere` throws a StateError the moment the selected id is
+    // not in the list (a stale selection after a failed reload), which would
+    // crash the screen mid-gesture.
+    for (final vendor in _vendors) {
+      if (vendor.id == id) return vendor;
+    }
+    return null;
   }
 
   /// Camera that frames every marker, so no vendor is off-screen on launch.

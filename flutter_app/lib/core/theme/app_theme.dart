@@ -17,6 +17,17 @@ class AppTheme {
   /// Maximum content width used on tablets / wide windows.
   static const double maxContentWidth = 720;
 
+  /// Shared card surface: white (dark: elevated grey) with a soft shadow in
+  /// light mode, so every card across the app lifts off the canvas identically.
+  static BoxDecoration cardDecoration(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return BoxDecoration(
+      color: isDark ? AppColors.surfaceDark : AppColors.background,
+      borderRadius: BorderRadius.circular(radius),
+      boxShadow: isDark ? null : AppColors.cardShadow,
+    );
+  }
+
   static ThemeData get light => _build(Brightness.light);
 
   static ThemeData get dark => _build(Brightness.dark);
@@ -40,14 +51,18 @@ class AppTheme {
       useMaterial3: true,
       brightness: brightness,
       colorScheme: scheme,
-      scaffoldBackgroundColor: scheme.surface,
+      // Grey canvas in light mode: white cards read as objects on it instead
+      // of dissolving into a white page.
+      scaffoldBackgroundColor: isDark
+          ? AppColors.backgroundDark
+          : AppColors.surface,
       splashFactory: InkSparkle.splashFactory,
     );
 
     return base.copyWith(
       textTheme: _textTheme(base.textTheme),
       appBarTheme: AppBarTheme(
-        backgroundColor: scheme.surface,
+        backgroundColor: isDark ? AppColors.backgroundDark : AppColors.surface,
         foregroundColor: scheme.onSurface,
         elevation: 0,
         scrolledUnderElevation: 0,
@@ -99,7 +114,7 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: isDark ? AppColors.surfaceDark : AppColors.surface,
+        fillColor: isDark ? AppColors.surfaceDark : AppColors.background,
         hintStyle: const TextStyle(color: AppColors.textSecondary),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -137,6 +152,8 @@ class AppTheme {
       ),
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: isDark ? AppColors.surfaceDark : AppColors.background,
+        showDragHandle: true,
+        dragHandleColor: isDark ? Colors.white24 : AppColors.border,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         ),
@@ -144,14 +161,18 @@ class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: isDark ? AppColors.surfaceDark : AppColors.background,
         indicatorColor: AppColors.primarySoft,
+        indicatorShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(22),
+        ),
         elevation: 0,
-        height: 68,
+        height: 76,
         labelTextStyle: WidgetStateProperty.resolveWith(
           (states) => TextStyle(
             fontSize: 12,
+            letterSpacing: 0.1,
             fontWeight: states.contains(WidgetState.selected)
-                ? FontWeight.w700
-                : FontWeight.w500,
+                ? FontWeight.w800
+                : FontWeight.w600,
             color: states.contains(WidgetState.selected)
                 ? scheme.primary
                 : AppColors.textSecondary,
@@ -159,7 +180,7 @@ class AppTheme {
         ),
         iconTheme: WidgetStateProperty.resolveWith(
           (states) => IconThemeData(
-            size: 24,
+            size: 25,
             color: states.contains(WidgetState.selected)
                 ? scheme.primary
                 : AppColors.textSecondary,
@@ -188,20 +209,35 @@ class AppTheme {
   /// body copy, and muted supporting labels.
   static TextTheme _textTheme(TextTheme base) {
     return base.copyWith(
-      displaySmall: base.displaySmall?.copyWith(fontWeight: FontWeight.w800),
+      displaySmall: base.displaySmall?.copyWith(
+        fontWeight: FontWeight.w800,
+        letterSpacing: -0.8,
+      ),
       headlineMedium: base.headlineMedium?.copyWith(
         fontWeight: FontWeight.w800,
+        letterSpacing: -0.6,
         height: 1.15,
       ),
       headlineSmall: base.headlineSmall?.copyWith(
         fontWeight: FontWeight.w800,
+        letterSpacing: -0.5,
         height: 1.2,
       ),
-      titleLarge: base.titleLarge?.copyWith(fontWeight: FontWeight.w700),
-      titleMedium: base.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+      titleLarge: base.titleLarge?.copyWith(
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.2,
+      ),
+      titleMedium: base.titleMedium?.copyWith(
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.1,
+      ),
       bodyLarge: base.bodyLarge?.copyWith(height: 1.5),
       bodyMedium: base.bodyMedium?.copyWith(height: 1.45),
-      labelLarge: base.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+      bodySmall: base.bodySmall?.copyWith(letterSpacing: 0.1),
+      labelLarge: base.labelLarge?.copyWith(
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0.1,
+      ),
     );
   }
 }
