@@ -473,6 +473,24 @@ class AppLocalizationsAr extends AppLocalizations {
       'أسطح مصقولة تنكس الضوء. تحتاج معالج رسومات، وتعود تلقائيًا للأداء الأخف.';
 
   @override
+  String get themeSheetTitle => 'اختر المظهر';
+
+  @override
+  String get themeOptionLightHint => 'أسطح صلبة مناسبة للنهار';
+
+  @override
+  String get themeOptionDarkHint => 'أسطح صلبة مريحة لليل';
+
+  @override
+  String get themeOptionGlassLightHint => 'زجاج مصقول فوق تدرج فاتح';
+
+  @override
+  String get themeOptionGlassDarkHint => 'زجاج مصقول فوق تدرج داكن';
+
+  @override
+  String get viewAllThemes => 'عرض كل المظاهر';
+
+  @override
   String get security => 'الأمان';
 
   @override

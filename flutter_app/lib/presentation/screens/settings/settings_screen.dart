@@ -15,6 +15,7 @@ import '../../extensions/l10n_extension.dart';
 import '../../widgets/app_segmented_picker.dart';
 import '../../widgets/app_surface.dart';
 import '../../widgets/settings_row.dart';
+import '../../widgets/theme_options_sheet.dart';
 import '../../widgets/theme_toggle_button.dart';
 
 /// Appearance + security preferences.
@@ -179,6 +180,15 @@ class _AppearanceCard extends StatelessWidget {
                     const SizedBox(height: 8),
                     _Hint(text: l10n.themeLiquidGlassHint),
                   ],
+                  const SizedBox(height: 18),
+                  // The two-axis controls above are the quick path; this opens
+                  // the sheet with all four looks drawn side by side.
+                  OutlinedButton.icon(
+                    key: const ValueKey('theme_options_button'),
+                    onPressed: () => showThemeOptionsSheet(context),
+                    icon: const Icon(Icons.palette_outlined, size: 18),
+                    label: Text(l10n.viewAllThemes),
+                  ),
                   const SizedBox(height: 22),
                   _PickerLabel(
                     icon: Icons.translate_rounded,

@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import '../../../core/constants/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_theme_mode.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../domain/entities/user_entity.dart';
 import '../../blocs/auth/auth_cubit.dart';
@@ -21,6 +20,7 @@ import '../../blocs/profile/profile_cubit.dart';
 import '../../blocs/profile/profile_state.dart';
 import '../../blocs/theme/theme_cubit.dart';
 import '../../blocs/theme/theme_state.dart';
+import '../../extensions/app_theme_mode_l10n.dart';
 import '../../extensions/l10n_extension.dart';
 import '../../widgets/app_error_view.dart';
 import '../../widgets/app_surface.dart';
@@ -35,7 +35,7 @@ import '../../widgets/language_toggle_button.dart';
 import '../../widgets/profile_gate_button.dart';
 import '../../widgets/shimmer_box.dart';
 import '../../widgets/shimmer_scope.dart';
-import '../../widgets/theme_toggle_button.dart';
+import '../../widgets/theme_options_sheet.dart';
 
 /// Profile screen — reachable only after the biometric gate on the Home AppBar.
 ///
@@ -308,19 +308,6 @@ class _SettingsSection extends StatelessWidget {
       builder: (context, themeState) {
         return BlocBuilder<LocaleCubit, LocaleState>(
           builder: (context, localeState) {
-            final (themeIcon, themeLabel) = switch (themeState.mode) {
-              AppThemeMode.light => (Icons.light_mode_rounded, l10n.themeLight),
-              AppThemeMode.dark => (Icons.dark_mode_rounded, l10n.themeDark),
-              AppThemeMode.glassLight => (
-                Icons.blur_on_rounded,
-                '${l10n.themeLiquidGlass} · ${l10n.themeLight}',
-              ),
-              AppThemeMode.glassDark => (
-                Icons.blur_on_rounded,
-                '${l10n.themeLiquidGlass} · ${l10n.themeDark}',
-              ),
-            };
-
             return Column(
               children: [
                 AppSurface(
@@ -336,18 +323,14 @@ class _SettingsSection extends StatelessWidget {
                 const SizedBox(height: 10),
                 AppSurface(
                   child: SettingsRow(
-                    icon: themeIcon,
+                    key: const ValueKey('theme_options_row'),
+                    icon: themeState.mode.icon,
                     label: l10n.themeMode,
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          themeLabel,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        const ThemeToggleButton(),
-                      ],
-                    ),
+                    subtitle: themeState.mode.currentLabel(l10n),
+                    // The whole row is the door to the sheet, so the four looks
+                    // are one tap away from Profile without hunting for the
+                    // small app-bar button.
+                    onTap: () => showThemeOptionsSheet(context),
                   ),
                 ),
                 const SizedBox(height: 10),

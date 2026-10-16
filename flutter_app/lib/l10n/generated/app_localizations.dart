@@ -968,6 +968,42 @@ abstract class AppLocalizations {
   /// **'Frosted, refractive surfaces. Needs a GPU; falls back gracefully on older devices.'**
   String get themeLiquidGlassHint;
 
+  /// No description provided for @themeSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an appearance'**
+  String get themeSheetTitle;
+
+  /// No description provided for @themeOptionLightHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Solid surfaces, tuned for daylight'**
+  String get themeOptionLightHint;
+
+  /// No description provided for @themeOptionDarkHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Solid surfaces that are easy at night'**
+  String get themeOptionDarkHint;
+
+  /// No description provided for @themeOptionGlassLightHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Frosted glass over a light aurora'**
+  String get themeOptionGlassLightHint;
+
+  /// No description provided for @themeOptionGlassDarkHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Frosted glass over a deep aurora'**
+  String get themeOptionGlassDarkHint;
+
+  /// No description provided for @viewAllThemes.
+  ///
+  /// In en, this message translates to:
+  /// **'See all appearances'**
+  String get viewAllThemes;
+
   /// No description provided for @security.
   ///
   /// In en, this message translates to:

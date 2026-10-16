@@ -24,13 +24,10 @@ class ThemeCubit extends Cubit<ThemeState> {
     emit(ThemeState(AppThemeMode.fromName(saved)));
   }
 
-  /// Explicit pick from the Settings screen.
+  /// Explicit pick from the theme options sheet or the Settings controls.
   Future<void> setMode(AppThemeMode mode) async {
     if (mode == state.mode) return;
     emit(ThemeState(mode));
     await _preferences.setString(storageKey, mode.name);
   }
-
-  /// Single-tap cycle used by the AppBar toggle: light -> dark -> glass.
-  Future<void> toggle() => setMode(state.mode.next);
 }

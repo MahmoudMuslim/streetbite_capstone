@@ -20,15 +20,6 @@ enum AppThemeMode {
 
   ThemeMode get materialMode => isDark ? ThemeMode.dark : ThemeMode.light;
 
-  /// Next mode when the user taps the single AppBar toggle, so every look is
-  /// discoverable without opening Settings.
-  AppThemeMode get next => switch (this) {
-    light => dark,
-    dark => glassLight,
-    glassLight => glassDark,
-    glassDark => light,
-  };
-
   /// This appearance with the surface style replaced, brightness kept.
   AppThemeMode withGlass(bool glass) => switch ((glass, isDark)) {
     (true, true) => glassDark,

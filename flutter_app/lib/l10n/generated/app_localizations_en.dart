@@ -481,6 +481,24 @@ class AppLocalizationsEn extends AppLocalizations {
       'Frosted, refractive surfaces. Needs a GPU; falls back gracefully on older devices.';
 
   @override
+  String get themeSheetTitle => 'Choose an appearance';
+
+  @override
+  String get themeOptionLightHint => 'Solid surfaces, tuned for daylight';
+
+  @override
+  String get themeOptionDarkHint => 'Solid surfaces that are easy at night';
+
+  @override
+  String get themeOptionGlassLightHint => 'Frosted glass over a light aurora';
+
+  @override
+  String get themeOptionGlassDarkHint => 'Frosted glass over a deep aurora';
+
+  @override
+  String get viewAllThemes => 'See all appearances';
+
+  @override
   String get security => 'Security';
 
   @override
