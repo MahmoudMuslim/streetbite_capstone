@@ -160,7 +160,12 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: Scaffold(
         appBar: _buildAppBar(user),
+        extendBody: true,
+        // The app bar already clears the top inset; `extendBody` hands the
+        // bottom one to the feed so it paints behind the bar and the scroll
+        // padding below keeps the last row reachable.
         body: SafeArea(
+          bottom: false,
           child: BlocBuilder<MealsCubit, MealsState>(
             builder: (context, state) {
               return switch (state) {
@@ -488,7 +493,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 32)),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 32 + Responsive.bottomBarClearance(context),
+            ),
+          ),
         ],
       ),
     );

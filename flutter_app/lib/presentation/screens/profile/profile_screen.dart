@@ -53,6 +53,7 @@ class ProfileScreen extends StatelessWidget {
     if (authState is! AuthAuthenticated) {
       // Defensive: the router never sends an unauthenticated user here.
       return Scaffold(
+        extendBody: true,
         appBar: AppBar(title: Text(context.l10n.profile)),
         body: AppErrorView(messageKey: 'authSessionExpired'),
       );
@@ -114,6 +115,7 @@ class _ProfileViewState extends State<_ProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         title: Text(context.l10n.profile),
         actions: const [LanguageToggleButton(), SizedBox(width: 8)],
@@ -132,6 +134,7 @@ class _ProfileViewState extends State<_ProfileView> {
           context.read<ProfileCubit>().consumeMessage();
         },
         child: SafeArea(
+          bottom: false,
           child: SingleChildScrollView(
             child: Responsive.constrainWidth(
               context,
@@ -139,7 +142,7 @@ class _ProfileViewState extends State<_ProfileView> {
                 padding: EdgeInsets.symmetric(
                   horizontal: Responsive.horizontalPadding(context),
                   vertical: 12,
-                ),
+                ).copyWith(bottom: 12 + Responsive.bottomBarClearance(context)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [

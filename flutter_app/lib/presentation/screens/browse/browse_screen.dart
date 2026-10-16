@@ -33,12 +33,16 @@ class _BrowseScreenState extends State<BrowseScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.browseTitle)),
+      extendBody: true,
+      // The shell's bar is the only bottom chrome, so the inset it publishes is
+      // turned into scroll padding instead of being eaten by a bottom SafeArea.
       body: SafeArea(
+        bottom: false,
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(
             horizontal: Responsive.horizontalPadding(context),
             vertical: 8,
-          ),
+          ).copyWith(bottom: 8 + Responsive.bottomBarClearance(context)),
           child: Responsive.constrainWidth(
             context,
             child: Column(

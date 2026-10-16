@@ -30,16 +30,16 @@ class AppGlassTokens extends ThemeExtension<AppGlassTokens> {
       ? AppColors.glassBorder
       : AppColors.glassBorderLight;
 
-  /// Extra bottom inset (dp) scrollable tab content needs under the Liquid
-  /// Glass theme.
+  /// Bottom clearance (dp, measured from the screen edge) the tab content needs
+  /// under the Liquid Glass theme.
   ///
-  /// The glass shell floats its capsule tab bar *over* the body instead of
-  /// reserving space for it the way a Material `NavigationBar` does, so the
-  /// last row of every tab would otherwise scroll underneath the capsule and
-  /// become unreadable behind the frost. Screens already apply `SafeArea`,
-  /// which covers the system gesture inset; this adds the capsule's own height
-  /// plus breathing room on top of that.
-  static const double bottomBarClearance = 84;
+  /// `GlassScaffold` lays its body out with `Positioned.fill`, so the capsule
+  /// floats *over* the content instead of reserving space for it the way a
+  /// Material `NavigationBar` does. The shell publishes this value as
+  /// `MediaQuery.padding.bottom` — the same channel Material uses — so screens
+  /// can add it as scroll padding: content then runs behind the frost and the
+  /// last row still scrolls fully clear of it.
+  static const double bottomBarClearance = 104;
 
   @override
   AppGlassTokens copyWith({bool? enabled}) =>

@@ -45,6 +45,16 @@ class Responsive {
   static double sectionSpacing(BuildContext context) =>
       isExpanded(context) ? 28 : 20;
 
+  /// Bottom scroll padding that lets the last row of a tab clear the app's
+  /// bottom bar while the body still paints *behind* it.
+  ///
+  /// The shell publishes the bar's clearance as `MediaQuery.padding.bottom`:
+  /// Material does it on its own once `Scaffold.extendBody` is on, the glass
+  /// shell does it explicitly. Screens therefore never hard-code a bar height,
+  /// and a route outside the shell falls back to the plain system inset.
+  static double bottomBarClearance(BuildContext context) =>
+      MediaQuery.paddingOf(context).bottom;
+
   /// Constrains the readable width on tablets so text lines never stretch.
   static Widget constrainWidth(BuildContext context, {required Widget child}) {
     return Center(

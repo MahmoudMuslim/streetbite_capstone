@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme_mode.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_theme_mode.dart';
 import '../blocs/theme/theme_cubit.dart';
 import '../blocs/theme/theme_state.dart';
 import '../extensions/app_theme_mode_l10n.dart';

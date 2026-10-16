@@ -41,6 +41,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         title: Text(context.l10n.ordersTitle),
         actions: [
@@ -52,7 +53,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
           const SizedBox(width: 4),
         ],
       ),
+      // `bottom: false`: the shell publishes the bar's clearance as a bottom
+      // inset, and `_OrderList` turns it into scroll padding so the last order
+      // still clears the chrome while rows paint behind it.
       body: SafeArea(
+        bottom: false,
         child: BlocBuilder<OrdersCubit, OrdersState>(
           builder: (context, state) {
             return switch (state) {
@@ -102,7 +107,7 @@ class _OrderList extends StatelessWidget {
     final padding = EdgeInsets.symmetric(
       horizontal: Responsive.horizontalPadding(context),
       vertical: 8,
-    );
+    ).copyWith(bottom: 8 + Responsive.bottomBarClearance(context));
 
     return Responsive.constrainWidth(
       context,

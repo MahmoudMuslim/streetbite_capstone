@@ -124,17 +124,22 @@ class _MainShellScreenState extends State<MainShellScreen> {
       );
 
       return GlassScaffold(
+        extendBody: true,
         background: const GlassAurora(),
         // `auto` follows the *device* brightness, which can disagree with the
         // in-app theme, so the style is pinned to the active brightness.
         statusBarStyle: isDark
             ? GlassStatusBarStyle.light
             : GlassStatusBarStyle.dark,
-        body: Padding(
-          // The capsule floats over the body, so reserve its height or the
-          // last row of each tab hides behind the frost.
-          padding: const EdgeInsets.only(
-            bottom: AppGlassTokens.bottomBarClearance,
+        // `extendBody` lets the feed run behind the capsule, so the body no
+        // longer reserves room for it. Publishing the capsule's height as the
+        // bottom *padding* is what still lets the last row scroll clear of the
+        // frost — the same channel Material uses for a `NavigationBar`, so the
+        // tabs ask for one value and stay correct under either look.
+        body: MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            padding: MediaQuery.of(context).padding
+                .copyWith(bottom: AppGlassTokens.bottomBarClearance),
           ),
           child: body,
         ),
@@ -155,6 +160,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
 
     return Scaffold(
       body: body,
+      extendBody: true,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).navigationBarTheme.backgroundColor,
