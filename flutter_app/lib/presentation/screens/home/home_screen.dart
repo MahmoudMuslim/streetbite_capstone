@@ -21,6 +21,7 @@ import '../../blocs/meals/meals_cubit.dart';
 import '../../blocs/meals/meals_state.dart';
 import '../../extensions/l10n_extension.dart';
 import '../../widgets/app_error_view.dart';
+import '../../widgets/app_search_field.dart';
 import '../../widgets/cart_badge.dart';
 import '../../widgets/home_feed_skeleton.dart';
 import '../../widgets/hot_offer_card.dart';
@@ -316,26 +317,21 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: EdgeInsets.symmetric(
                 horizontal: Responsive.horizontalPadding(context),
               ),
-              child: TextField(
-                key: const ValueKey('home_search_field'),
+              child: AppSearchField(
                 controller: _searchController,
                 onChanged: _onSearchChanged,
-                textInputAction: TextInputAction.search,
-                decoration: InputDecoration(
-                  hintText: context.l10n.searchHint,
-                  prefixIcon: const Icon(Icons.search_rounded),
-                  prefixIconColor: AppColors.textSecondary,
-                  suffixIcon: _searchController.text.isEmpty
-                      ? null
-                      : IconButton(
-                          key: const ValueKey('home_search_clear'),
-                          onPressed: () {
-                            _searchController.clear();
-                            setState(() {});
-                          },
-                          icon: const Icon(Icons.close_rounded, size: 18),
-                        ),
-                ),
+                hintText: context.l10n.searchHint,
+                fieldKeyName: 'home_search_field',
+                suffixIcon: _searchController.text.isEmpty
+                    ? null
+                    : IconButton(
+                        key: const ValueKey('home_search_clear'),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() {});
+                        },
+                        icon: const Icon(Icons.close_rounded, size: 18),
+                      ),
               ),
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../domain/entities/meal_entity.dart';
 import '../../extensions/l10n_extension.dart';
+import '../../widgets/app_search_field.dart';
 
 /// Opens the full-menu bottom sheet.
 ///
@@ -57,15 +58,12 @@ class _MenuSearchSheetState extends State<MenuSearchSheet> {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-              child: TextField(
-                key: const ValueKey('menu_search_field'),
+              child: AppSearchField(
                 controller: _controller,
                 onChanged: (value) =>
                     setState(() => _query = value.trim().toLowerCase()),
-                decoration: InputDecoration(
-                  hintText: context.l10n.searchHint,
-                  prefixIcon: const Icon(Icons.search_rounded),
-                ),
+                hintText: context.l10n.searchHint,
+                fieldKeyName: 'menu_search_field',
               ),
             ),
             Expanded(

@@ -155,10 +155,21 @@ class AppTheme {
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           minimumSize: const Size.fromHeight(56),
-          backgroundColor: scheme.primary,
-          foregroundColor: Colors.white,
-          disabledBackgroundColor: AppColors.border,
-          disabledForegroundColor: AppColors.textSecondary,
+          // Under glass the CTA is a tinted frosted pane rather than a solid
+          // slab: translucent primary fill + hairline edge over the aurora.
+          backgroundColor: glass
+              ? scheme.primary.withValues(alpha: isDark ? 0.34 : 0.24)
+              : scheme.primary,
+          foregroundColor: glass
+              ? (isDark ? Colors.white : glassText)
+              : Colors.white,
+          disabledBackgroundColor: glass ? glassSurface : AppColors.border,
+          disabledForegroundColor: glass
+              ? glassTextMuted
+              : AppColors.textSecondary,
+          side: glass
+              ? BorderSide(color: scheme.primary.withValues(alpha: 0.55))
+              : null,
           textStyle: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radius),
@@ -168,7 +179,12 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           minimumSize: const Size.fromHeight(56),
-          foregroundColor: isDark ? Colors.white : AppColors.textPrimary,
+          backgroundColor: glass ? glassSurface : null,
+          foregroundColor: glass
+              ? glassText
+              : isDark
+              ? Colors.white
+              : AppColors.textPrimary,
           side: BorderSide(
             color: glass
                 ? glassBorder

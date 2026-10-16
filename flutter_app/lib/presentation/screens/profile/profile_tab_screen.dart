@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_constants.dart';
 import '../../extensions/l10n_extension.dart';
+import '../../widgets/app_surface.dart';
 import '../../widgets/biometric_gate.dart';
 import '../../widgets/profile_gate_button.dart';
 import 'profile_screen.dart';
@@ -30,21 +31,9 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(32),
-          child: Container(
+          child: AppSurface(
+            borderRadius: 28,
             padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 36),
-            decoration: BoxDecoration(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Theme.of(context).cardColor
-                  : Theme.of(context).colorScheme.surfaceContainerLowest,
-              borderRadius: BorderRadius.circular(28),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.07),
-                  blurRadius: 24,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

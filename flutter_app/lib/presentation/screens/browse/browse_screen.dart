@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_categories.dart';
 import '../../../core/constants/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_glass_tokens.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../domain/entities/meal_entity.dart';
 import '../../extensions/l10n_extension.dart';
@@ -104,6 +105,17 @@ class _BrowseScreenState extends State<BrowseScreen> {
   }) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final isGlass = AppGlassTokens.enabledOf(context);
+    final idleIcon = isGlass
+        ? theme.colorScheme.onSurface
+        : AppColors.primaryDark;
+    final idleText = isSelected
+        ? Colors.white
+        : isGlass
+        ? theme.colorScheme.onSurface
+        : isDark
+        ? Colors.white
+        : AppColors.textPrimary;
     return InkWell(
       key: ValueKey('browse_category_${apiCategory ?? 'all'}'),
       onTap: () => setState(() => _selected = isSelected ? null : apiCategory),
@@ -113,39 +125,38 @@ class _BrowseScreenState extends State<BrowseScreen> {
         decoration: BoxDecoration(
           color: isSelected
               ? AppColors.primary
+              : isGlass
+              ? AppGlassTokens.wellColor(context)
               : isDark
               ? AppColors.surfaceDark
               : AppColors.background,
           borderRadius: BorderRadius.circular(18),
-          boxShadow: [
-            BoxShadow(
-              color: isSelected
-                  ? AppColors.primary.withValues(alpha: 0.4)
-                  : Colors.black.withValues(alpha: isDark ? 0 : 0.06),
-              blurRadius: isSelected ? 14 : 10,
-              offset: const Offset(0, 5),
-            ),
-          ],
+          border: isGlass && !isSelected
+              ? Border.all(color: AppGlassTokens.wellBorder(context))
+              : null,
+          boxShadow: isGlass
+              ? null
+              : [
+                  BoxShadow(
+                    color: isSelected
+                        ? AppColors.primary.withValues(alpha: 0.4)
+                        : Colors.black.withValues(alpha: isDark ? 0 : 0.06),
+                    blurRadius: isSelected ? 14 : 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 30,
-              color: isSelected ? Colors.white : AppColors.primaryDark,
-            ),
+            Icon(icon, size: 30, color: isSelected ? Colors.white : idleIcon),
             const SizedBox(height: 8),
             Text(
               context.trKey(labelKey),
               textAlign: TextAlign.center,
               style: theme.textTheme.bodySmall?.copyWith(
                 fontWeight: FontWeight.w700,
-                color: isSelected
-                    ? Colors.white
-                    : isDark
-                    ? Colors.white
-                    : AppColors.textPrimary,
+                color: idleText,
               ),
             ),
           ],
@@ -251,6 +262,7 @@ class _CategoryPeek extends StatelessWidget {
         separatorBuilder: (_, _) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
           final meal = meals[index];
+          final isGlass = AppGlassTokens.enabledOf(context);
           return GestureDetector(
             key: ValueKey('browse_meal_${meal.id}'),
             onTap: () =>
@@ -260,17 +272,24 @@ class _CategoryPeek extends StatelessWidget {
               width: 130,
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: theme.brightness == Brightness.dark
+                color: isGlass
+                    ? AppGlassTokens.wellColor(context)
+                    : theme.brightness == Brightness.dark
                     ? AppColors.surfaceDark
                     : AppColors.background,
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.06),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
+                border: isGlass
+                    ? Border.all(color: AppGlassTokens.wellBorder(context))
+                    : null,
+                boxShadow: isGlass
+                    ? null
+                    : [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.06),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

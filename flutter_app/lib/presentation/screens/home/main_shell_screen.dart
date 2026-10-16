@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
@@ -102,6 +104,23 @@ class _MainShellScreenState extends State<MainShellScreen> {
         selectedIndex: _index,
         onTabSelected: (index) => setState(() => _index = index),
         verticalPadding: 12,
+        // Passing `settings` replaces the package's bar preset wholesale, so
+        // the tuned values are repeated here with one change: in dark glass
+        // the white tint is dropped to a whisper, otherwise the frost over the
+        // dark aurora reads as an opaque grey slab instead of clear glass.
+        settings: LiquidGlassSettings(
+          thickness: 30,
+          blur: 3,
+          chromaticAberration: 0.3,
+          lightIntensity: 0.6,
+          refractiveIndex: 1.59,
+          saturation: 0.7,
+          ambientStrength: 1,
+          lightAngle: 0.75 * math.pi,
+          glassColor: isDark
+              ? const Color(0x14FFFFFF)
+              : const Color(0x3DFFFFFF),
+        ),
       );
 
       return GlassScaffold(
@@ -111,7 +130,14 @@ class _MainShellScreenState extends State<MainShellScreen> {
         statusBarStyle: isDark
             ? GlassStatusBarStyle.light
             : GlassStatusBarStyle.dark,
-        body: body,
+        body: Padding(
+          // The capsule floats over the body, so reserve its height or the
+          // last row of each tab hides behind the frost.
+          padding: const EdgeInsets.only(
+            bottom: AppGlassTokens.bottomBarClearance,
+          ),
+          child: body,
+        ),
         // GlassScaffold does not wrap its bottomBar in a Material, so the tab
         // labels would otherwise inherit MaterialApp's fallback text style —
         // monospace with a yellow double underline. Supply the app's own base
