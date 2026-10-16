@@ -12,6 +12,7 @@ class AppRoutes {
   static const String mealDetails = '/meal-details';
   static const String cart = '/cart';
   static const String orderConfirmation = '/order-confirmation';
+  static const String orderDetails = '/order-details';
   static const String vendorMap = '/vendor-map';
   static const String profile = '/profile';
   static const String settings = '/settings';

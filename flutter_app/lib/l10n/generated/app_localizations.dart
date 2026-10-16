@@ -350,6 +350,24 @@ abstract class AppLocalizations {
   /// **'Add to cart'**
   String get addToCart;
 
+  /// No description provided for @inCartCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} in cart'**
+  String inCartCount(int count);
+
+  /// No description provided for @increaseQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Add one more'**
+  String get increaseQuantity;
+
+  /// No description provided for @decreaseQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove one'**
+  String get decreaseQuantity;
+
   /// No description provided for @addedToCart.
   ///
   /// In en, this message translates to:
@@ -421,6 +439,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Instructions'**
   String get instructions;
+
+  /// No description provided for @noInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'The vendor has not added preparation notes for this dish yet.'**
+  String get noInstructions;
 
   /// No description provided for @price.
   ///
@@ -661,6 +685,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Paid with {method}'**
   String paidWith(String method);
+
+  /// No description provided for @orderDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Order details'**
+  String get orderDetails;
+
+  /// The short reference printed on the receipt header.
+  ///
+  /// In en, this message translates to:
+  /// **'Order {id}'**
+  String orderNumber(String id);
+
+  /// No description provided for @orderPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Being prepared'**
+  String get orderPreparing;
+
+  /// No description provided for @orderDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get orderDelivered;
+
+  /// No description provided for @placedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Placed on {date}'**
+  String placedOn(String date);
+
+  /// No description provided for @orderItemsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Items'**
+  String get orderItemsTitle;
+
+  /// No description provided for @orderLineQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'× {count}'**
+  String orderLineQuantity(int count);
+
+  /// No description provided for @reorder.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder'**
+  String get reorder;
+
+  /// No description provided for @reorderDone.
+  ///
+  /// In en, this message translates to:
+  /// **'This order is back in your cart'**
+  String get reorderDone;
 
   /// No description provided for @current.
   ///

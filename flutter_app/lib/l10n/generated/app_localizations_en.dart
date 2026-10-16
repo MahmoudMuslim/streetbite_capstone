@@ -139,6 +139,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addToCart => 'Add to cart';
 
   @override
+  String inCartCount(int count) {
+    return '$count in cart';
+  }
+
+  @override
+  String get increaseQuantity => 'Add one more';
+
+  @override
+  String get decreaseQuantity => 'Remove one';
+
+  @override
   String addedToCart(String name) {
     return '$name added to your cart';
   }
@@ -178,6 +189,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get instructions => 'Instructions';
+
+  @override
+  String get noInstructions =>
+      'The vendor has not added preparation notes for this dish yet.';
 
   @override
   String get price => 'Price';
@@ -314,6 +329,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String paidWith(String method) {
     return 'Paid with $method';
   }
+
+  @override
+  String get orderDetails => 'Order details';
+
+  @override
+  String orderNumber(String id) {
+    return 'Order $id';
+  }
+
+  @override
+  String get orderPreparing => 'Being prepared';
+
+  @override
+  String get orderDelivered => 'Delivered';
+
+  @override
+  String placedOn(String date) {
+    return 'Placed on $date';
+  }
+
+  @override
+  String get orderItemsTitle => 'Items';
+
+  @override
+  String orderLineQuantity(int count) {
+    return '× $count';
+  }
+
+  @override
+  String get reorder => 'Reorder';
+
+  @override
+  String get reorderDone => 'This order is back in your cart';
 
   @override
   String get current => 'Current';

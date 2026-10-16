@@ -1,4 +1,8 @@
+import 'package:streetbite_capstone/domain/entities/cart_item_entity.dart';
 import 'package:streetbite_capstone/domain/entities/meal_entity.dart';
+import 'package:streetbite_capstone/domain/entities/order_entity.dart';
+import 'package:streetbite_capstone/domain/entities/payment.dart';
+import 'package:streetbite_capstone/domain/usecases/calculate_order_totals.dart';
 
 /// Canned entities shared by the test suite.
 ///
@@ -27,4 +31,43 @@ class TestFixtures {
     count,
     (index) => meal(id: 'meal-$index', name: 'Meal $index'),
   );
+
+  /// A two-line order whose money comes from `CalculateOrderTotals` — the same
+  /// use case the cart and checkout use, so a receipt test can never assert
+  /// against totals the production code would not have produced.
+  static OrderEntity order({
+    String id = 'sb-1001',
+    OrderStatus status = OrderStatus.past,
+    PaymentMethod payment = const CardPayment(),
+    DateTime? placedAt,
+    List<CartItemEntity>? items,
+  }) {
+    final lines =
+        items ??
+        [
+          CartItemEntity(
+            meal: meal(id: 'koshari', name: 'Koshari', price: 12.5),
+            quantity: 2,
+          ),
+          CartItemEntity(
+            meal: meal(id: 'foul', name: 'Foul Medames', price: 6),
+            quantity: 1,
+          ),
+        ];
+    final totals = const CalculateOrderTotals()(
+      CalculateOrderTotalsParams(items: lines),
+    );
+
+    return OrderEntity(
+      id: id,
+      userId: 'u1',
+      items: lines,
+      subtotal: totals.subtotal,
+      deliveryFee: totals.deliveryFee,
+      serviceFee: totals.serviceFee,
+      payment: payment,
+      placedAt: placedAt ?? DateTime(2026, 3, 12, 18, 45),
+      status: status,
+    );
+  }
 }

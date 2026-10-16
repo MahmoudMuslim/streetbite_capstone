@@ -13,7 +13,6 @@ import '../../../domain/entities/user_entity.dart';
 import '../../blocs/auth/auth_cubit.dart';
 import '../../blocs/auth/auth_state.dart';
 import '../../blocs/cart/cart_bloc.dart';
-import '../../blocs/cart/cart_event.dart';
 import '../../blocs/cart/cart_state.dart';
 import '../../blocs/favourites/favourites_cubit.dart';
 import '../../blocs/favourites/favourites_state.dart';
@@ -83,10 +82,6 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Placeholder used only while the router is still settling; the Home screen
   /// is never reachable without an authenticated user.
   static const UserEntity _anonymous = UserEntity(uid: '', email: '');
-
-  void _addToCart(MealEntity meal) {
-    context.read<CartBloc>().add(CartItemAdded(meal));
-  }
 
   Future<void> _toggleFavourite(MealEntity meal) async {
     final isSaved = await context.read<FavouritesCubit>().toggle(
@@ -398,7 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 190,
+                height: 208,
                 child: SemanticId(
                   key: const ValueKey('hot_offers_list'),
                   id: 'hot_offers_list',
@@ -485,7 +480,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           favState is FavouritesLoaded &&
                           favState.contains(meal.id),
                       onTap: () => _openMeal(meal),
-                      onAddToCart: () => _addToCart(meal),
                       onToggleFavourite: () => _toggleFavourite(meal),
                     ),
                   );

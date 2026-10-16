@@ -7,6 +7,8 @@ import '../../../core/constants/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/responsive.dart';
+import '../../../domain/entities/meal_entity.dart';
+import '../../../domain/entities/order_entity.dart';
 import '../../../domain/entities/user_entity.dart';
 import '../../blocs/auth/auth_cubit.dart';
 import '../../blocs/auth/auth_state.dart';
@@ -537,7 +539,12 @@ class _OrderList extends StatelessWidget {
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
-          ...orders.active.map((order) => OrderHistoryTile(order: order)),
+          ...orders.active.map(
+            (order) => OrderHistoryTile(
+              order: order,
+              onTap: () => _openOrder(context, order),
+            ),
+          ),
         ],
         if (orders.past.isNotEmpty) ...[
           const SizedBox(height: 16),
@@ -546,17 +553,31 @@ class _OrderList extends StatelessWidget {
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
-          ...orders.past.map((order) => OrderHistoryTile(order: order)),
+          ...orders.past.map(
+            (order) => OrderHistoryTile(
+              order: order,
+              onTap: () => _openOrder(context, order),
+            ),
+          ),
         ],
       ],
     );
   }
+
+  /// Same push the Orders tab uses — a row means the same thing on both screens.
+  void _openOrder(BuildContext context, OrderEntity order) =>
+      Navigator.of(context)
+          .pushNamed(AppRoutes.orderDetails, arguments: [order]);
 }
 
+/// One saved dish in the favourites strip.
+///
+/// Typed as [MealEntity] rather than `dynamic`: the casts were silencing the
+/// analyzer on a field the caller always fills from `FavouritesLoaded.meals`.
 class _FavouriteThumb extends StatelessWidget {
   const _FavouriteThumb({required this.meal});
 
-  final dynamic meal;
+  final MealEntity meal;
 
   @override
   Widget build(BuildContext context) {
@@ -565,20 +586,25 @@ class _FavouriteThumb extends StatelessWidget {
       borderRadius: 18,
       padding: const EdgeInsets.all(6),
       clipContent: true,
+      // A saved dish that opens nothing is a dead end; the strip shares the
+      // details route the cards on Home use.
+      onTap: () =>
+          Navigator.of(context)
+              .pushNamed(AppRoutes.mealDetails, arguments: [meal]),
       child: SizedBox(
         width: 110,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppNetworkImage(
-              url: meal.thumbnailUrl as String,
+              url: meal.thumbnailUrl,
               width: 98,
               height: 76,
               borderRadius: BorderRadius.circular(12),
             ),
             const SizedBox(height: 6),
             Text(
-              meal.name as String,
+              meal.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.bodySmall,

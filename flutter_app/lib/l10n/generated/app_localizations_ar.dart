@@ -139,6 +139,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addToCart => 'أضف إلى السلة';
 
   @override
+  String inCartCount(int count) {
+    return '$count في السلة';
+  }
+
+  @override
+  String get increaseQuantity => 'أضف قطعة أخرى';
+
+  @override
+  String get decreaseQuantity => 'احذف قطعة';
+
+  @override
   String addedToCart(String name) {
     return 'تمت إضافة $name إلى السلة';
   }
@@ -177,6 +188,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get instructions => 'طريقة التحضير';
+
+  @override
+  String get noInstructions => 'لم يضِف البائع بعد ملاحظات تحضير لهذا الطبق.';
 
   @override
   String get price => 'السعر';
@@ -312,6 +326,39 @@ class AppLocalizationsAr extends AppLocalizations {
   String paidWith(String method) {
     return 'الدفع بـ $method';
   }
+
+  @override
+  String get orderDetails => 'تفاصيل الطلب';
+
+  @override
+  String orderNumber(String id) {
+    return 'طلب رقم $id';
+  }
+
+  @override
+  String get orderPreparing => 'جارٍ التحضير';
+
+  @override
+  String get orderDelivered => 'تم التسليم';
+
+  @override
+  String placedOn(String date) {
+    return 'أُنشئ في $date';
+  }
+
+  @override
+  String get orderItemsTitle => 'الأصناف';
+
+  @override
+  String orderLineQuantity(int count) {
+    return '× $count';
+  }
+
+  @override
+  String get reorder => 'إعادة الطلب';
+
+  @override
+  String get reorderDone => 'أُضيف هذا الطلب إلى سلتك مرة أخرى';
 
   @override
   String get current => 'حالي';

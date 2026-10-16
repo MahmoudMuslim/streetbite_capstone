@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_routes.dart';
 import '../../../core/utils/responsive.dart';
+import '../../../domain/entities/order_entity.dart';
 import '../../extensions/l10n_extension.dart';
 import '../../blocs/auth/auth_cubit.dart';
 import '../../blocs/auth/auth_state.dart';
@@ -109,6 +110,12 @@ class _OrderList extends StatelessWidget {
       vertical: 8,
     ).copyWith(bottom: 8 + Responsive.bottomBarClearance(context));
 
+    // Both blocks share one push helper, so the Orders tab and the Profile
+    // history can never drift into two different ways of opening a receipt.
+    void openOrder(OrderEntity order) =>
+        Navigator.of(context)
+            .pushNamed(AppRoutes.orderDetails, arguments: [order]);
+
     return Responsive.constrainWidth(
       context,
       child: RefreshIndicator(
@@ -123,7 +130,12 @@ class _OrderList extends StatelessWidget {
                 label: context.l10n.current,
                 count: orders.active.length,
               ),
-              ...orders.active.map((order) => OrderHistoryTile(order: order)),
+              ...orders.active.map(
+                (order) => OrderHistoryTile(
+                  order: order,
+                  onTap: () => openOrder(order),
+                ),
+              ),
             ],
             if (orders.past.isNotEmpty) ...[
               _BlockTitle(
@@ -131,7 +143,12 @@ class _OrderList extends StatelessWidget {
                 count: orders.past.length,
                 spacing: 20,
               ),
-              ...orders.past.map((order) => OrderHistoryTile(order: order)),
+              ...orders.past.map(
+                (order) => OrderHistoryTile(
+                  order: order,
+                  onTap: () => openOrder(order),
+                ),
+              ),
             ],
           ],
         ),

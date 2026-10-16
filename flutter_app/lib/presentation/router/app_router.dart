@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../core/constants/app_routes.dart';
 import '../../domain/entities/meal_entity.dart';
+import '../../domain/entities/order_entity.dart';
+import '../../domain/entities/payment.dart';
 import '../screens/auth/login_screen.dart';
 import '../screens/auth/signup_screen.dart';
 import '../screens/cart/cart_screen.dart';
@@ -9,6 +11,7 @@ import '../screens/cart/order_confirmation_screen.dart';
 import '../screens/home/main_shell_screen.dart';
 import '../screens/home/meal_details_screen.dart';
 import '../screens/map/vendor_map_screen.dart';
+import '../screens/orders/order_details_screen.dart';
 import '../screens/profile/profile_screen.dart';
 import '../screens/settings/settings_screen.dart';
 import '../screens/splash/splash_screen.dart';
@@ -70,6 +73,15 @@ class AppRouter {
       case AppRoutes.orderConfirmation:
         return const OrderConfirmationScreen();
 
+      case AppRoutes.orderDetails:
+        // The order entity travels as a route argument, exactly like a meal, so
+        // the receipt opens instantly and never re-reads Firestore.
+        return OrderDetailsScreen(
+          order: args.isEmpty
+              ? _placeholderOrder()
+              : args.first! as OrderEntity,
+        );
+
       case AppRoutes.vendorMap:
         return const VendorMapScreen();
 
@@ -100,3 +112,21 @@ class _MissingMeal extends MealEntity {
         price: 0,
       );
 }
+
+/// Built only if `orderDetails` is requested with no argument.
+///
+/// `id` stays empty on purpose: the screen keys its "nothing to show" branch off
+/// that, so a bad deep link lands on the empty state rather than on a receipt
+/// with a fabricated number and timestamp. It cannot be `const` because an
+/// `OrderEntity` carries a `DateTime`.
+OrderEntity _placeholderOrder() => OrderEntity(
+  id: '',
+  userId: '',
+  items: const [],
+  subtotal: 0,
+  deliveryFee: 0,
+  serviceFee: 0,
+  payment: const CashPayment(),
+  placedAt: DateTime.fromMillisecondsSinceEpoch(0),
+  status: OrderStatus.past,
+);

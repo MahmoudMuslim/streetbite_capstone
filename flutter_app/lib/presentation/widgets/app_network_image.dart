@@ -54,23 +54,34 @@ class AppNetworkImage extends StatelessWidget {
     return Container(
       color: isDark ? AppColors.surfaceDark : AppColors.surface,
       alignment: Alignment.center,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.restaurant_rounded,
-            color: AppColors.textSecondary.withValues(alpha: 0.6),
-            size: 28,
-          ),
-          const SizedBox(height: 6),
-          Text(
-            context.l10n.loading,
-            style: const TextStyle(
-              fontSize: 11,
-              color: AppColors.textSecondary,
-            ),
-          ),
-        ],
+      // This tile is used at anything from a 54px receipt line to a 300px hero,
+      // and the caption is the first thing that no longer fits. Measuring the
+      // box is what stops a yellow overflow stripe appearing inside a thumbnail
+      // every time an image is still loading (or has failed).
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final compact = constraints.maxHeight < 72;
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.restaurant_rounded,
+                color: AppColors.textSecondary.withValues(alpha: 0.6),
+                size: compact ? 20 : 28,
+              ),
+              if (!compact) ...[
+                const SizedBox(height: 6),
+                Text(
+                  context.l10n.loading,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ],
+          );
+        },
       ),
     );
   }

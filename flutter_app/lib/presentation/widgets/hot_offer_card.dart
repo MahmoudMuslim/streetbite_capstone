@@ -5,6 +5,8 @@ import '../../core/utils/string_helpers.dart';
 import '../../domain/entities/meal_entity.dart';
 import 'app_network_image.dart';
 import 'app_surface.dart';
+import 'cart_count_badge.dart';
+import 'cart_line_action.dart';
 
 /// One tile of the horizontal "Hot Offers" strip.
 ///
@@ -49,7 +51,7 @@ class HotOfferCard extends StatelessWidget {
                   ),
                   PositionedDirectional(
                     top: 10,
-                    start: 10,
+                    end: 10,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 9,
@@ -76,6 +78,14 @@ class HotOfferCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  // Same corner the grid cards use for the count, so "the number
+                  // on the artwork" means one thing everywhere. The ribbon moved
+                  // to the trailing corner rather than sharing it.
+                  PositionedDirectional(
+                    top: 10,
+                    start: 10,
+                    child: CartCountBadge(mealId: meal.id),
+                  ),
                 ],
               ),
             ),
@@ -97,33 +107,42 @@ class HotOfferCard extends StatelessWidget {
                   const SizedBox(height: 6),
                   Row(
                     children: [
-                      Flexible(
-                        child: Text(
-                          formatPrice(discounted),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            fontSize: 14,
-                            color: theme.colorScheme.primary,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Flexible(
-                        child: Text(
-                          formatPrice(meal.price),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            fontSize: 11,
-                            color: theme.colorScheme.onSurface.withValues(
-                              alpha: 0.45,
+                      // A Column hands its non-flex children unbounded
+                      // main-axis height, so this column must not use
+                      // Flexible/Expanded — that combination throws here and
+                      // leaves the whole card unpainted.
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              formatPrice(discounted),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                fontSize: 14,
+                                color: theme.colorScheme.primary,
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
-                            decoration: TextDecoration.lineThrough,
-                          ),
+                            Text(
+                              formatPrice(meal.price),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                fontSize: 11,
+                                color: theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.45,
+                                ),
+                                decoration: TextDecoration.lineThrough,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+                      const SizedBox(width: 4),
+                      CartLineAction(meal: meal),
                     ],
                   ),
                 ],

@@ -103,6 +103,7 @@ class _SplashScreenState extends State<SplashScreen>
     final isCompact = Responsive.isCompact(context);
 
     return Scaffold(
+      extendBody: true,
       body: DecoratedBox(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

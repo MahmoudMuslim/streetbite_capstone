@@ -110,12 +110,19 @@ extension L10nX on BuildContext {
   };
 
   /// Resolves a key that needs parameters, e.g. `addedToCart`.
+  ///
+  /// A key missing from this switch does **not** fail compilation — it falls
+  /// through to [trKey] and surfaces as the generic error sentence, which is how
+  /// the checkout button once read "Something went wrong" instead of "Place
+  /// order · $23.14". Any widget that renders text through a *dynamic* key must
+  /// therefore be covered by a test that asserts on the visible sentence.
   String trArgs(String key, Map<String, Object> args) => switch (key) {
     'addedToCart' => l10n.addedToCart(args['name'] as String),
     'removedFromCart' => l10n.removedFromCart(args['name'] as String),
     'signUpSuccessMessage' => l10n.signUpSuccessMessage(args['name'] as String),
     'vendorDistance' => l10n.vendorDistance(args['distance'] as String),
     'paidWith' => l10n.paidWith(args['method'] as String),
+    'placeOrderFor' => l10n.placeOrderFor(args['amount'] as String),
     _ => trKey(key),
   };
 
@@ -126,4 +133,15 @@ extension L10nX on BuildContext {
   String formatNumber(num value) =>
       NumberFormat.decimalPattern(Localizations.localeOf(this).toLanguageTag())
           .format(value);
+
+  /// Formats an order timestamp the way the active locale writes dates.
+  ///
+  /// Locale-aware on purpose: `ar` has to produce Arabic month names and
+  /// Arabic-Indic digits, and a hard-coded `"MMM d, y"` would leak English into
+  /// the receipt. `flutter_localizations` registers the intl date symbols for
+  /// every supported locale, so this never throws for a locale the app can show.
+  String formatOrderDate(DateTime moment) =>
+      DateFormat.yMMMd(Localizations.localeOf(this).toLanguageTag())
+          .add_jm()
+          .format(moment);
 }

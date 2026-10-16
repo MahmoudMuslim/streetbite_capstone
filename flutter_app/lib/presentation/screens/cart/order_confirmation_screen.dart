@@ -37,6 +37,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen>
     final theme = Theme.of(context);
 
     return Scaffold(
+      extendBody: true,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(AppTheme.radius),

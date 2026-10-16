@@ -66,6 +66,7 @@ class CartItemTile extends StatelessWidget {
                 const SizedBox(height: 8),
                 if (showQuantityControls)
                   _QuantityStepper(
+                    mealId: item.meal.id,
                     quantity: item.quantity,
                     onIncrement: onIncrement,
                     onDecrement: onDecrement,
@@ -109,13 +110,19 @@ class CartItemTile extends StatelessWidget {
 }
 
 /// − / quantity / + control used by [CartItemTile].
+///
+/// Deliberately the same tinted pill as the `+ count -` control on the product
+/// cards: one shape means "change how many", whether you are on a card or in
+/// the cart list.
 class _QuantityStepper extends StatelessWidget {
   const _QuantityStepper({
+    required this.mealId,
     required this.quantity,
     this.onIncrement,
     this.onDecrement,
   });
 
+  final String mealId;
   final int quantity;
   final VoidCallback? onIncrement;
   final VoidCallback? onDecrement;
@@ -124,30 +131,40 @@ class _QuantityStepper extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
+      height: 34,
+      padding: const EdgeInsets.symmetric(horizontal: 2),
       decoration: BoxDecoration(
-        border: Border.all(color: theme.dividerColor),
-        borderRadius: BorderRadius.circular(12),
+        color: theme.colorScheme.primary.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(17),
+        border: Border.all(
+          color: theme.colorScheme.primary.withValues(alpha: 0.45),
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _StepButton(
-            icon: Icons.remove_rounded,
-            onTap: onDecrement,
-            buttonKey: ValueKey('cart_decrement_${quantity}_$hashCode'),
-          ),
-          SizedBox(
-            width: 32,
-            child: Text(
-              '$quantity',
-              textAlign: TextAlign.center,
-              style: theme.textTheme.titleSmall,
-            ),
-          ),
+          // `+ count -`, the same reading order as the card and the details
+          // CTA: one control, one shape, wherever the shopper meets it.
           _StepButton(
             icon: Icons.add_rounded,
             onTap: onIncrement,
-            buttonKey: ValueKey('cart_increment_$quantity'),
+            buttonKey: ValueKey('cart_increment_$mealId'),
+          ),
+          ConstrainedBox(
+            constraints: const BoxConstraints(minWidth: 22),
+            child: Text(
+              '$quantity',
+              key: ValueKey('cart_quantity_text_$mealId'),
+              textAlign: TextAlign.center,
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          _StepButton(
+            icon: Icons.remove_rounded,
+            onTap: onDecrement,
+            buttonKey: ValueKey('cart_decrement_$mealId'),
           ),
         ],
       ),
@@ -168,10 +185,24 @@ class _StepButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      key: buttonKey,
-      onTap: onTap,
-      child: SizedBox(width: 36, height: 36, child: Icon(icon, size: 18)),
+    return Material(
+      color: Colors.transparent,
+      shape: const CircleBorder(),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        key: buttonKey,
+        onTap: onTap,
+        customBorder: const CircleBorder(),
+        child: SizedBox(
+          width: 30,
+          height: 30,
+          child: Icon(
+            icon,
+            size: 17,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+      ),
     );
   }
 }

@@ -52,6 +52,16 @@
   "categoriesSeafood": "Seafood",
   "categoriesVegetarian": "Vegetarian",
   "addToCart": "Add to cart",
+  "inCartCount": "{count} in cart",
+  "@inCartCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "increaseQuantity": "Add one more",
+  "decreaseQuantity": "Remove one",
   "addedToCart": "{name} added to your cart",
   "@addedToCart": {
     "placeholders": {
@@ -78,6 +88,7 @@
   "mealDetails": "Meal details",
   "category": "Category",
   "instructions": "Instructions",
+  "noInstructions": "The vendor has not added preparation notes for this dish yet.",
   "price": "Price",
   "mealNotFound": "This meal is no longer available",
   "cart": "Cart",
@@ -146,6 +157,37 @@
       }
     }
   },
+  "orderDetails": "Order details",
+  "orderNumber": "Order {id}",
+  "@orderNumber": {
+    "description": "The short reference printed on the receipt header.",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "orderPreparing": "Being prepared",
+  "orderDelivered": "Delivered",
+  "placedOn": "Placed on {date}",
+  "@placedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemsTitle": "Items",
+  "orderLineQuantity": "× {count}",
+  "@orderLineQuantity": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reorder": "Reorder",
+  "reorderDone": "This order is back in your cart",
   "current": "Current",
   "past": "Past",
   "biometricPromptTitle": "Unlock your profile",

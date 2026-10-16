@@ -48,6 +48,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(title: Text(context.l10n.cart)),
       body: BlocListener<CartBloc, CartState>(
         listener: (context, state) {
@@ -106,6 +107,14 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
+  /// The checkout column, as one scrolling body.
+  ///
+  /// This used to be `Expanded(ListView)` with the summary panel pinned under
+  /// it. That pair of contracts cannot both hold once the panel grows: the
+  /// list is squeezed to a few pixels, the panel is asked to be taller than the
+  /// screen and the payment selector ends up below the fold with no way to
+  /// reach it. One scroll view keeps every part of checkout reachable at any
+  /// height, in any of the four appearances.
   Widget _buildCheckout(
     BuildContext context,
     CartState state,
@@ -122,19 +131,18 @@ class _CartScreenState extends State<CartScreen> {
       ),
     };
 
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.separated(
-            key: const ValueKey('cart_items_list'),
-            padding: const EdgeInsets.fromLTRB(
-              AppTheme.radius,
-              8,
-              AppTheme.radius,
-              8,
-            ),
+    return CustomScrollView(
+      key: const ValueKey('cart_items_list'),
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(
+            AppTheme.radius,
+            8,
+            AppTheme.radius,
+            0,
+          ),
+          sliver: SliverList.separated(
             itemCount: items.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 12),
             itemBuilder: (context, index) => CartItemTile(
               item: items[index],
               onIncrement: () => context.read<CartBloc>().add(
@@ -147,43 +155,46 @@ class _CartScreenState extends State<CartScreen> {
                 CartItemRemoved(items[index].meal.id),
               ),
             ),
+            separatorBuilder: (_, _) => const SizedBox(height: 12),
           ),
         ),
-        OrderSummaryCard(
-          totals: totals,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                context.l10n.paymentMethod,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 12),
-              PaymentMethodSelector(
-                selected: _payment,
-                onChanged: (method) => setState(() => _payment = method),
-              ),
-              const SizedBox(height: 20),
-              FilledButton(
-                key: const ValueKey('place_order_button'),
-                onPressed: _isPlacing ? null : () => _placeOrder(context),
-                child: _isPlacing
-                    ? const SizedBox(
-                        width: 22,
-                        height: 22,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2.4,
-                          color: Colors.white,
+        const SliverToBoxAdapter(child: SizedBox(height: 16)),
+        SliverToBoxAdapter(
+          child: OrderSummaryCard(
+            totals: totals,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  context.l10n.paymentMethod,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 12),
+                PaymentMethodSelector(
+                  selected: _payment,
+                  onChanged: (method) => setState(() => _payment = method),
+                ),
+                const SizedBox(height: 20),
+                FilledButton(
+                  key: const ValueKey('place_order_button'),
+                  onPressed: _isPlacing ? null : () => _placeOrder(context),
+                  child: _isPlacing
+                      ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.4,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(
+                          context.trArgs('placeOrderFor', {
+                            'amount': formatPrice(totals.total),
+                          }),
                         ),
-                      )
-                    : Text(
-                        context.trArgs('placeOrderFor', {
-                          'amount': formatPrice(totals.total),
-                        }),
-                      ),
-              ),
-              const SizedBox(height: 8),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ],

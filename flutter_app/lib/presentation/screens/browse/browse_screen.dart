@@ -6,11 +6,13 @@ import '../../../core/constants/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_glass_tokens.dart';
 import '../../../core/utils/responsive.dart';
+import '../../../core/utils/string_helpers.dart';
 import '../../../domain/entities/meal_entity.dart';
 import '../../extensions/l10n_extension.dart';
 import '../../widgets/app_network_image.dart';
 import '../../blocs/meals/meals_cubit.dart';
 import '../../blocs/meals/meals_state.dart';
+import '../../widgets/cart_count_badge.dart';
 import '../../widgets/section_header.dart';
 
 /// "Browse" tab: the category grid plus the entry point to the Vendor Map.
@@ -259,7 +261,7 @@ class _CategoryPeek extends StatelessWidget {
     }
 
     return SizedBox(
-      height: 140,
+      height: 158,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: meals.length,
@@ -298,11 +300,21 @@ class _CategoryPeek extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AppNetworkImage(
-                    url: meal.thumbnailUrl,
-                    width: 114,
-                    height: 84,
-                    borderRadius: BorderRadius.circular(12),
+                  Stack(
+                    children: [
+                      AppNetworkImage(
+                        url: meal.thumbnailUrl,
+                        width: 114,
+                        height: 84,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      // The count lives on the artwork everywhere else, too.
+                      PositionedDirectional(
+                        top: 6,
+                        start: 6,
+                        child: CartCountBadge(mealId: meal.id),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 6),
                   Text(
@@ -313,6 +325,14 @@ class _CategoryPeek extends StatelessWidget {
                       color: theme.brightness == Brightness.dark
                           ? Colors.white
                           : AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    formatPrice(meal.price),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
                 ],
