@@ -848,6 +848,18 @@ abstract class AppLocalizations {
   /// **'Use password instead'**
   String get usePasswordInstead;
 
+  /// Tooltip and screen-reader label for the round fingerprint button beside the Log In button.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with your fingerprint'**
+  String get signInWithFingerprint;
+
+  /// Shown when the fingerprint button on the password form finds no session to unlock.
+  ///
+  /// In en, this message translates to:
+  /// **'A fingerprint only unlocks an account that is already signed in on this device. Use your password.'**
+  String get biometricSignInUnavailable;
+
   /// No description provided for @darkMode.
   ///
   /// In en, this message translates to:

@@ -290,4 +290,74 @@ void main() {
     expect(lastAuthCubit!.state, isA<AuthAuthenticated>());
     expect(find.text('route:/home'), findsOneWidget);
   });
+
+  /// The fingerprint button can only ever wave aside a password that this
+  /// device already holds, so the three cases below are the whole contract.
+  group('the fingerprint button', () {
+    void stubRestore(UserEntity? user) =>
+        when(() => repository.restoreSession())
+            .thenAnswer((_) async => Right<Failure, UserEntity?>(user));
+
+    testWidgets('sits beside Log In', (tester) async {
+      await pumpLogin(tester);
+
+      expect(
+        find.byKey(const ValueKey('biometric_login_button')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('opens the scan screen for a session opted in to biometrics', (
+      tester,
+    ) async {
+      when(() => repository.biometricSignInEnabled).thenReturn(true);
+      stubRestore(
+        const UserEntity(
+          uid: 'u1',
+          email: 'yasmine@streetbite.app',
+          displayName: 'Yasmine Adel',
+        ),
+      );
+
+      await pumpLogin(tester);
+      await tester.tap(find.byKey(const ValueKey('biometric_login_button')));
+      await tester.pumpAndSettle();
+
+      expect(find.text('route:/biometric-login'), findsOneWidget);
+    });
+
+    testWidgets('explains itself when the device holds no session', (
+      tester,
+    ) async {
+      stubRestore(null);
+
+      await pumpLogin(tester);
+      await tester.tap(find.byKey(const ValueKey('biometric_login_button')));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byKey(const ValueKey('biometric_unavailable_snackbar')),
+        findsOneWidget,
+      );
+      expect(find.text('route:/biometric-login'), findsNothing);
+    });
+
+    testWidgets('explains itself when biometric sign-in is switched off', (
+      tester,
+    ) async {
+      when(() => repository.biometricSignInEnabled).thenReturn(false);
+      stubRestore(const UserEntity(uid: 'u1', email: 'yasmine@streetbite.app'));
+
+      await pumpLogin(tester);
+      await tester.tap(find.byKey(const ValueKey('biometric_login_button')));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byKey(const ValueKey('biometric_unavailable_snackbar')),
+        findsOneWidget,
+      );
+      // The button must not sign anyone in behind the user's back.
+      expect(find.text('route:/home'), findsNothing);
+    });
+  });
 }

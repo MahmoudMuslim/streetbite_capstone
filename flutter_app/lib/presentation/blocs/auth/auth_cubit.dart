@@ -74,6 +74,27 @@ class AuthCubit extends Cubit<AuthState> {
   /// are still valid, only the local check was declined.
   void fallBackToPassword() => emit(const AuthUnauthenticated());
 
+  /// Re-opens the fingerprint gate from the password form.
+  ///
+  /// Returns `false` when there is nothing for a scan to unlock, which is the
+  /// common case: biometric sign-in never replaces credentials, it only waves
+  /// aside the password for a session this device already holds and was told to
+  /// protect. A Login screen reached by signing out genuinely has no session, so
+  /// the caller must say so rather than show a prompt that could never succeed.
+  Future<bool> retryBiometricSignIn() async {
+    emit(const AuthLoading());
+    final result = await _restoreSession(const NoParams());
+    final user = result.fold((_) => null, (user) => user);
+
+    if (user == null || !_biometricSignIn(const NoParams())) {
+      emit(const AuthUnauthenticated());
+      return false;
+    }
+
+    emit(AuthBiometricGate(user));
+    return true;
+  }
+
   Future<void> login({required String email, required String password}) async {
     emit(const AuthLoading());
     final result = await _loginUser(

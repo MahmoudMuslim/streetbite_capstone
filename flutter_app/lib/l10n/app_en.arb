@@ -214,6 +214,14 @@
   },
   "scanToSignIn": "Scan to sign in",
   "usePasswordInstead": "Use password instead",
+  "signInWithFingerprint": "Sign in with your fingerprint",
+  "@signInWithFingerprint": {
+    "description": "Tooltip and screen-reader label for the round fingerprint button beside the Log In button."
+  },
+  "biometricSignInUnavailable": "A fingerprint only unlocks an account that is already signed in on this device. Use your password.",
+  "@biometricSignInUnavailable": {
+    "description": "Shown when the fingerprint button on the password form finds no session to unlock."
+  },
   "darkMode": "Dark mode",
   "lightMode": "Light mode",
   "language": "Language",

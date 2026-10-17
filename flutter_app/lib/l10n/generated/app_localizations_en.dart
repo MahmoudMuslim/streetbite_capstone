@@ -426,6 +426,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get usePasswordInstead => 'Use password instead';
 
   @override
+  String get signInWithFingerprint => 'Sign in with your fingerprint';
+
+  @override
+  String get biometricSignInUnavailable =>
+      'A fingerprint only unlocks an account that is already signed in on this device. Use your password.';
+
+  @override
   String get darkMode => 'Dark mode';
 
   @override

@@ -125,6 +125,8 @@
   "welcomeBack": "مرحبًا بعودتك، {name}",
   "scanToSignIn": "امسح لتسجيل الدخول",
   "usePasswordInstead": "استخدم كلمة المرور بدلًا من ذلك",
+  "signInWithFingerprint": "سجّل الدخول ببصمة الإصبع",
+  "biometricSignInUnavailable": "البصمة تفتح فقط الحسابات المسجَّل دخولها على هذا الجهاز. استخدم كلمة المرور.",
   "darkMode": "الوضع الليلي",
   "lightMode": "الوضع النهاري",
   "language": "اللغة",

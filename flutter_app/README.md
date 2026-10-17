@@ -69,6 +69,12 @@ or failed scan falls back to the password form and deliberately **does not** sig
 the user out: the session is still valid, and logging it out would punish a
 finger that simply slipped.
 
+The round fingerprint button beside **Log In** is that fallback's way back: it
+re-reads the persisted session and, when one exists *and* this device opted in,
+re-opens the gate without typing anything. With nothing to unlock it says so
+instead of showing a prompt that could never pass — biometrics never replace
+credentials here, they only stand aside for a session already on the handset.
+
 The opt-in itself is device state, not account state, so it lives in
 `shared_preferences` behind `GetBiometricSignIn` / `SetBiometricSignIn` — another
 device keeps its own choice. Switching it *on* requires a passed scan first,

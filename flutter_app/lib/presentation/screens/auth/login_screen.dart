@@ -11,6 +11,7 @@ import '../../widgets/app_page_body.dart';
 import '../../widgets/app_text_field.dart';
 import '../../widgets/auth_card.dart';
 import '../../widgets/auth_header.dart';
+import '../../widgets/biometric_login_button.dart';
 import '../../widgets/language_toggle_button.dart';
 import '../../widgets/semantic_id.dart';
 import '../../widgets/theme_toggle_button.dart';
@@ -49,6 +50,31 @@ class _LoginScreenState extends State<LoginScreen> {
       email: _emailController.text,
       password: _passwordController.text,
     );
+  }
+
+  /// Offers the fingerprint gate again from the password form.
+  ///
+  /// The gate is only ever reachable with a session on this device, so a
+  /// rejected attempt is explained rather than left as a dead button.
+  Future<void> _signInWithBiometric() async {
+    FocusScope.of(context).unfocus();
+    final cubit = context.read<AuthCubit>();
+
+    if (!await cubit.retryBiometricSignIn()) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            key: const ValueKey('biometric_unavailable_snackbar'),
+            content: Text(context.l10n.biometricSignInUnavailable),
+          ),
+        );
+      return;
+    }
+
+    if (!mounted) return;
+    Navigator.of(context).pushNamed(AppRoutes.biometricLogin);
   }
 
   @override
@@ -141,24 +167,35 @@ class _LoginScreenState extends State<LoginScreen> {
                         // field submits the form from its trailing action.
                       ),
                       const SizedBox(height: 24),
-                      SemanticId(
-                        key: const ValueKey('login_button'),
-                        id: 'login_button',
-                        label: context.l10n.login,
-                        button: true,
-                        child: FilledButton(
-                          onPressed: isLoading ? null : _submit,
-                          child: isLoading
-                              ? const SizedBox(
-                                  width: 22,
-                                  height: 22,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.4,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : Text(context.l10n.login),
-                        ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: SemanticId(
+                              key: const ValueKey('login_button'),
+                              id: 'login_button',
+                              label: context.l10n.login,
+                              button: true,
+                              child: FilledButton(
+                                onPressed: isLoading ? null : _submit,
+                                child: isLoading
+                                    ? const SizedBox(
+                                        width: 22,
+                                        height: 22,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.4,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Text(context.l10n.login),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          BiometricLoginButton(
+                            label: context.l10n.signInWithFingerprint,
+                            onPressed: isLoading ? null : _signInWithBiometric,
+                          ),
+                        ],
                       ),
                     ],
                   ),

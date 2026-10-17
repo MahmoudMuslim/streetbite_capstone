@@ -420,6 +420,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get usePasswordInstead => 'استخدم كلمة المرور بدلًا من ذلك';
 
   @override
+  String get signInWithFingerprint => 'سجّل الدخول ببصمة الإصبع';
+
+  @override
+  String get biometricSignInUnavailable =>
+      'البصمة تفتح فقط الحسابات المسجَّل دخولها على هذا الجهاز. استخدم كلمة المرور.';
+
+  @override
   String get darkMode => 'الوضع الليلي';
 
   @override
