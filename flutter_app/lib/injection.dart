@@ -30,6 +30,7 @@ import 'domain/repositories/profile_repository.dart';
 import 'domain/repositories/vendor_repository.dart';
 import 'domain/usecases/add_to_cart.dart';
 import 'domain/usecases/calculate_order_totals.dart';
+import 'domain/usecases/get_biometric_sign_in.dart';
 import 'domain/usecases/get_device_info.dart';
 import 'domain/usecases/get_favourites.dart';
 import 'domain/usecases/get_meals.dart';
@@ -43,6 +44,7 @@ import 'domain/usecases/place_order.dart';
 import 'domain/usecases/remove_from_cart.dart';
 import 'domain/usecases/restore_session.dart';
 import 'domain/usecases/save_user_profile.dart';
+import 'domain/usecases/set_biometric_sign_in.dart';
 import 'domain/usecases/signup_user.dart';
 import 'domain/usecases/toggle_favourite.dart';
 import 'presentation/blocs/auth/auth_cubit.dart';
@@ -154,6 +156,12 @@ Future<void> configureDependencies() async {
   sl.registerFactory<LoginUser>(() => LoginUser(sl<AuthRepository>()));
   sl.registerFactory<SignUpUser>(() => SignUpUser(sl<AuthRepository>()));
   sl.registerFactory<LogoutUser>(() => LogoutUser(sl<AuthRepository>()));
+  sl.registerFactory<GetBiometricSignIn>(
+    () => GetBiometricSignIn(sl<AuthRepository>()),
+  );
+  sl.registerFactory<SetBiometricSignIn>(
+    () => SetBiometricSignIn(sl<AuthRepository>()),
+  );
 
   sl.registerFactory<GetMeals>(() => GetMeals(sl<MealRepository>()));
   sl.registerFactory<GetHotOffers>(() => GetHotOffers(sl<MealRepository>()));
@@ -207,6 +215,7 @@ Future<void> configureDependencies() async {
       loginUser: sl<LoginUser>(),
       signUpUser: sl<SignUpUser>(),
       logoutUser: sl<LogoutUser>(),
+      biometricSignIn: sl<GetBiometricSignIn>(),
     ),
   );
   sl.registerLazySingleton<MealsCubit>(

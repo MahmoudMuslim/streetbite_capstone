@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import '../../../core/error/failures.dart';
 import '../../../core/usecase/usecase.dart';
 import '../../../domain/entities/user_entity.dart';
+import '../../../domain/usecases/get_biometric_sign_in.dart';
 import '../../../domain/usecases/login_user.dart';
 import '../../../domain/usecases/logout_user.dart';
 import '../../../domain/usecases/restore_session.dart';
@@ -26,12 +27,14 @@ class AuthCubit extends Cubit<AuthState> {
     required this._loginUser,
     required this._signUpUser,
     required this._logoutUser,
+    required this._biometricSignIn,
   }) : super(const AuthInitial());
 
   final RestoreSession _restoreSession;
   final LoginUser _loginUser;
   final SignUpUser _signUpUser;
   final LogoutUser _logoutUser;
+  final GetBiometricSignIn _biometricSignIn;
 
   /// Restores the persisted session on launch.
   ///
@@ -39,13 +42,37 @@ class AuthCubit extends Cubit<AuthState> {
   /// lands on the Login screen, which is the correct user-visible outcome.
   Future<void> restore() async {
     final result = await _restoreSession(const NoParams());
-    result.fold(
-      (failure) => emit(const AuthUnauthenticated()),
-      (user) => emit(
-        user == null ? const AuthUnauthenticated() : AuthAuthenticated(user),
-      ),
-    );
+    result.fold((failure) => emit(const AuthUnauthenticated()), (user) {
+      if (user == null) {
+        emit(const AuthUnauthenticated());
+        return;
+      }
+
+      // With the opt-in on, a live session is only a *candidate* for
+      // sign-in. Emitting AuthAuthenticated here instead would have made the
+      // fingerprint a decorative prompt on a screen the user had already
+      // passed.
+      emit(
+        _biometricSignIn(const NoParams())
+            ? AuthBiometricGate(user)
+            : AuthAuthenticated(user),
+      );
+    });
   }
+
+  /// The scan passed, so the restored session is now honoured.
+  void confirmBiometricSignIn() {
+    final current = state;
+    if (current is AuthBiometricGate) emit(AuthAuthenticated(current.user));
+  }
+
+  /// The scan was cancelled, failed, or the hardware went away.
+  ///
+  /// Deliberately **not** a sign-out. The agreed policy is that skipping the
+  /// scan drops the user onto the password form, and tearing down the Firebase
+  /// session here would turn one mis-tap into a full re-login — the credentials
+  /// are still valid, only the local check was declined.
+  void fallBackToPassword() => emit(const AuthUnauthenticated());
 
   Future<void> login({required String email, required String password}) async {
     emit(const AuthLoading());

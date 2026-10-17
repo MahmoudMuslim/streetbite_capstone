@@ -13,6 +13,7 @@ import 'package:streetbite_capstone/domain/repositories/favourite_repository.dar
 import 'package:streetbite_capstone/domain/repositories/order_repository.dart';
 import 'package:streetbite_capstone/domain/usecases/add_to_cart.dart';
 import 'package:streetbite_capstone/domain/usecases/calculate_order_totals.dart';
+import 'package:streetbite_capstone/domain/usecases/get_biometric_sign_in.dart';
 import 'package:streetbite_capstone/domain/usecases/get_favourites.dart';
 import 'package:streetbite_capstone/domain/usecases/login_user.dart';
 import 'package:streetbite_capstone/domain/usecases/logout_user.dart';
@@ -62,6 +63,7 @@ void main() {
       loginUser: LoginUser(authRepository),
       signUpUser: SignUpUser(authRepository),
       logoutUser: LogoutUser(authRepository),
+      biometricSignIn: GetBiometricSignIn(authRepository),
     );
     final favouritesCubit = FavouritesCubit(
       getFavourites: GetFavourites(favouriteRepository),

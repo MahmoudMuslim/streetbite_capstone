@@ -4,6 +4,7 @@ import '../../core/constants/app_routes.dart';
 import '../../domain/entities/meal_entity.dart';
 import '../../domain/entities/order_entity.dart';
 import '../../domain/entities/payment.dart';
+import '../screens/auth/biometric_login_screen.dart';
 import '../screens/auth/login_screen.dart';
 import '../screens/auth/signup_screen.dart';
 import '../screens/cart/cart_screen.dart';
@@ -47,6 +48,11 @@ class AppRouter {
 
       case AppRoutes.login:
         return const LoginScreen();
+
+      case AppRoutes.biometricLogin:
+        // No route argument: the gated user is read from the app-wide
+        // `AuthCubit`, which is the single place `UserEntity` becomes known.
+        return const BiometricLoginScreen();
 
       case AppRoutes.signUp:
         return const SignUpScreen();

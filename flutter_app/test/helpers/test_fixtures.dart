@@ -2,6 +2,7 @@ import 'package:streetbite_capstone/domain/entities/cart_item_entity.dart';
 import 'package:streetbite_capstone/domain/entities/meal_entity.dart';
 import 'package:streetbite_capstone/domain/entities/order_entity.dart';
 import 'package:streetbite_capstone/domain/entities/payment.dart';
+import 'package:streetbite_capstone/domain/entities/user_entity.dart';
 import 'package:streetbite_capstone/domain/usecases/calculate_order_totals.dart';
 
 /// Canned entities shared by the test suite.
@@ -31,6 +32,12 @@ class TestFixtures {
     count,
     (index) => meal(id: 'meal-$index', name: 'Meal $index'),
   );
+
+  static UserEntity user({
+    String uid = 'u1',
+    String email = 'yasmine@streetbite.app',
+    String displayName = 'Yasmine Adel',
+  }) => UserEntity(uid: uid, email: email, displayName: displayName);
 
   /// A two-line order whose money comes from `CalculateOrderTotals` — the same
   /// use case the cart and checkout use, so a receipt test can never assert

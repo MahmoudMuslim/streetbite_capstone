@@ -10,6 +10,7 @@ import 'package:streetbite_capstone/core/theme/app_theme.dart';
 import 'package:streetbite_capstone/data/services/biometric_service.dart';
 import 'package:streetbite_capstone/domain/entities/user_entity.dart';
 import 'package:streetbite_capstone/domain/repositories/auth_repository.dart';
+import 'package:streetbite_capstone/domain/usecases/get_biometric_sign_in.dart';
 import 'package:streetbite_capstone/domain/usecases/login_user.dart';
 import 'package:streetbite_capstone/domain/usecases/logout_user.dart';
 import 'package:streetbite_capstone/domain/usecases/restore_session.dart';
@@ -40,6 +41,7 @@ AuthCubit buildCubit() => AuthCubit(
   loginUser: LoginUser(repository),
   signUpUser: SignUpUser(repository),
   logoutUser: LogoutUser(repository),
+  biometricSignIn: GetBiometricSignIn(repository),
 );
 
 /// Sentinel passed to [pumpLogin] to opt into the production behaviour where

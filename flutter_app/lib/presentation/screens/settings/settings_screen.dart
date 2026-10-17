@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -5,8 +7,11 @@ import 'package:get_it/get_it.dart';
 import '../../../core/constants/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/usecase/usecase.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../data/services/biometric_service.dart';
+import '../../../domain/usecases/get_biometric_sign_in.dart';
+import '../../../domain/usecases/set_biometric_sign_in.dart';
 import '../../blocs/locale/locale_cubit.dart';
 import '../../blocs/locale/locale_state.dart';
 import '../../blocs/theme/theme_cubit.dart';
@@ -34,9 +39,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   /// `null` while the platform channel is still answering.
   bool? _biometricsAvailable;
 
+  /// Whether this device should ask for a scan instead of the password.
+  late bool _biometricSignIn;
+
   @override
   void initState() {
     super.initState();
+    _biometricSignIn = GetIt.I<GetBiometricSignIn>()(const NoParams());
     _probeBiometrics();
   }
 
@@ -47,6 +56,50 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final available = await GetIt.I<BiometricService>().isAvailable();
     if (!mounted) return;
     setState(() => _biometricsAvailable = available);
+  }
+
+  /// Turns the opt-in on only after a scan has actually passed.
+  ///
+  /// The switch grants future access to the account *without* a password, so
+  /// letting anybody flip it on from a screen that never proved who they are
+  /// would defeat the feature. Turning it off needs no proof — that direction
+  /// only ever makes sign-in harder.
+  Future<void> _setBiometricSignIn(bool enable) async {
+    if (!enable) {
+      _persistBiometricSignIn(false);
+      return;
+    }
+
+    // Resolved before the await; the OS prompt paints this string.
+    final reason = context.l10n.biometricSignInReason;
+    final result = await GetIt.I<BiometricService>().authenticate(
+      reason: reason,
+    );
+    if (!mounted) return;
+
+    if (!result.isSuccess) {
+      final messageKey = result.messageKey;
+      if (messageKey != null) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              key: const ValueKey('biometric_sign_in_error_snackbar'),
+              content: Text(context.trKey(messageKey)),
+            ),
+          );
+      }
+      return;
+    }
+
+    _persistBiometricSignIn(true);
+  }
+
+  void _persistBiometricSignIn(bool enabled) {
+    setState(() => _biometricSignIn = enabled);
+    unawaited(
+      GetIt.I<SetBiometricSignIn>()(SetBiometricSignInParams(enabled: enabled)),
+    );
   }
 
   @override
@@ -69,7 +122,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   const _AppearanceCard(),
                   const SizedBox(height: 8),
                   _SectionTitle(title: context.l10n.security),
-                  _BiometricCard(available: _biometricsAvailable),
+                  _BiometricCard(
+                    available: _biometricsAvailable,
+                    signInEnabled: _biometricSignIn,
+                    onSignInChanged: _setBiometricSignIn,
+                  ),
                   const SizedBox(height: 8),
                   _SectionTitle(title: context.l10n.general),
                   AppSurface(
@@ -252,13 +309,24 @@ class _Hint extends StatelessWidget {
   }
 }
 
-/// Read-only biometric status: the gate itself lives on the Profile tab, and
-/// reporting the sensor state here is what tells the user why it did or did not
-/// appear.
+/// Biometric security, in two halves.
+///
+/// The upper row reports the sensor state for the Profile gate, which is
+/// read-only by design — the gate itself lives on that tab, and reporting the
+/// sensor here is what tells the user why it did or did not appear. The lower
+/// switch is the cold-start sign-in opt-in, which the device stores rather than
+/// the account: the same user on a tablet with no enrolled finger must not
+/// inherit an opt-in it can never satisfy.
 class _BiometricCard extends StatelessWidget {
-  const _BiometricCard({required this.available});
+  const _BiometricCard({
+    required this.available,
+    required this.signInEnabled,
+    required this.onSignInChanged,
+  });
 
   final bool? available;
+  final bool signInEnabled;
+  final ValueChanged<bool> onSignInChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -267,42 +335,70 @@ class _BiometricCard extends StatelessWidget {
 
     return AppSurface(
       padding: const EdgeInsets.all(18),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            width: 46,
-            height: 46,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.14),
-              borderRadius: BorderRadius.circular(AppTheme.radius - 6),
-            ),
-            child: const Icon(
-              Icons.fingerprint_rounded,
-              color: AppColors.primary,
-            ),
+          Row(
+            children: [
+              Container(
+                width: 46,
+                height: 46,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.14),
+                  borderRadius: BorderRadius.circular(AppTheme.radius - 6),
+                ),
+                child: const Icon(
+                  Icons.fingerprint_rounded,
+                  color: AppColors.primary,
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  l10n.biometricUnlock,
+                  style: theme.textTheme.titleMedium,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          // The hint and the status each get a full-width line. Sharing one row
+          // with the "Available on this device" chip left the text about 100dp
+          // wide on a 360dp phone, which wrapped a one-line caption into a
+          // five-line column and made this card tower over the page.
+          const SizedBox(height: 10),
+          _Hint(text: l10n.biometricUnlockHint),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _StatusChip(
+                key: const ValueKey('biometric_status_chip'),
+                available: available,
+              ),
+            ],
+          ),
+          // A switch that cannot work would be worse than no switch: it promises
+          // a fingerprint every cold start and delivers a password form.
+          if (available ?? false) ...[
+            const SizedBox(height: 20),
+            Row(
               children: [
-                Text(l10n.biometricUnlock, style: theme.textTheme.titleMedium),
-                const SizedBox(height: 4),
-                Text(
-                  l10n.biometricUnlockHint,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
-                    height: 1.4,
+                Expanded(
+                  child: Text(
+                    l10n.biometricSignIn,
+                    style: theme.textTheme.titleMedium,
                   ),
+                ),
+                Switch(
+                  key: const ValueKey('biometric_sign_in_switch'),
+                  value: signInEnabled,
+                  onChanged: onSignInChanged,
                 ),
               ],
             ),
-          ),
-          const SizedBox(width: 10),
-          _StatusChip(
-            key: const ValueKey('biometric_status_chip'),
-            available: available,
-          ),
+            const SizedBox(height: 2),
+            _Hint(text: l10n.biometricSignInHint),
+          ],
         ],
       ),
     );
@@ -335,19 +431,21 @@ class _StatusChip extends StatelessWidget {
     };
 
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 128),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+      constraints: const BoxConstraints(maxWidth: 240),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 20, color: color),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            textAlign: TextAlign.end,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: color,
-              fontWeight: FontWeight.w600,
-              fontSize: 11,
+          Icon(icon, size: 16, color: color),
+          const SizedBox(width: 6),
+          Flexible(
+            child: Text(
+              label,
+              textAlign: TextAlign.end,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: color,
+                fontWeight: FontWeight.w600,
+                fontSize: 11,
+              ),
             ),
           ),
         ],

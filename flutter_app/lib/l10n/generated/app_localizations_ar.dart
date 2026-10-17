@@ -399,6 +399,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get skip => 'تخطي';
 
   @override
+  String get biometricSignIn => 'الدخول بالبصمة';
+
+  @override
+  String get biometricSignInHint =>
+      'استخدم بصمة الإصبع أو الوجه بدل إعادة كتابة كلمة المرور في كل مرة تفتح فيها StreetBite.';
+
+  @override
+  String get biometricSignInReason => 'أكّد هويتك لتسجيل الدخول إلى StreetBite';
+
+  @override
+  String welcomeBack(String name) {
+    return 'مرحبًا بعودتك، $name';
+  }
+
+  @override
+  String get scanToSignIn => 'امسح لتسجيل الدخول';
+
+  @override
+  String get usePasswordInstead => 'استخدم كلمة المرور بدلًا من ذلك';
+
+  @override
   String get darkMode => 'الوضع الليلي';
 
   @override

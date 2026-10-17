@@ -30,6 +30,22 @@ class AuthAuthenticated extends AuthState {
   List<Object?> get props => [user];
 }
 
+/// A session was restored, but this device asked for a scan before it is
+/// honoured.
+///
+/// Kept distinct from [AuthUnauthenticated] because the two look identical to a
+/// user yet differ entirely to the app: here the credentials are already valid
+/// and only a local check stands in the way, so the screen shows the account
+/// name and one button instead of an empty email field.
+class AuthBiometricGate extends AuthState {
+  const AuthBiometricGate(this.user) : super();
+
+  final UserEntity user;
+
+  @override
+  List<Object?> get props => [user];
+}
+
 /// A request is in flight (button shows a spinner, inputs are disabled).
 class AuthLoading extends AuthState {
   const AuthLoading();

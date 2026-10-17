@@ -27,6 +27,18 @@ class AuthLocalDataSource {
 
   static const String _usersKey = 'streetbite_local_users';
   static const String _sessionKey = 'streetbite_local_session';
+  static const String _biometricSignInKey = 'streetbite_biometric_sign_in';
+
+  /// Whether the next cold start should ask for a scan instead of the password.
+  ///
+  /// Lives on-device rather than in Firestore because it is a property of *this
+  /// handset* — the same account on a tablet with no enrolled fingerprint must
+  /// not inherit an opt-in it can never satisfy.
+  bool get biometricSignInEnabled =>
+      _preferences.getBool(_biometricSignInKey) ?? false;
+
+  Future<void> setBiometricSignInEnabled({required bool enabled}) =>
+      _preferences.setBool(_biometricSignInKey, enabled);
 
   List<Map<String, dynamic>> _readUsers() {
     final raw = _preferences.getString(_usersKey);

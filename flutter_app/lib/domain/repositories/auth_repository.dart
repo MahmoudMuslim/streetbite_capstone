@@ -27,6 +27,16 @@ abstract interface class AuthRepository {
 
   Future<void> logout();
 
+  /// Whether a restored session must be confirmed by a biometric scan before
+  /// the app honours it.
+  ///
+  /// Part of the auth contract rather than a settings detail because it changes
+  /// what `restoreSession()` *means*: with the opt-in on, a live session is a
+  /// candidate for sign-in, not sign-in itself.
+  bool get biometricSignInEnabled;
+
+  Future<void> setBiometricSignInEnabled({required bool enabled});
+
   /// Live stream of auth changes (used to keep the router in sync).
   Stream<UserEntity?> authStateChanges();
 }

@@ -66,14 +66,20 @@ class _SplashScreenState extends State<SplashScreen>
   Future<void> _startRestore() async {
     await context.read<AuthCubit>().restore();
     if (!mounted) return;
-    final state = context.read<AuthCubit>().state;
-    setState(
-      () => _pendingRoute = state is AuthAuthenticated
-          ? AppRoutes.home
-          : AppRoutes.login,
-    );
+    setState(() => _pendingRoute = _routeFor(context.read<AuthCubit>().state));
     _tryNavigate();
   }
+
+  /// Where a restored session is sent.
+  ///
+  /// A *gated* session goes to the scan screen, not the password form — landing
+  /// on Login after the device had already accepted the credentials would make
+  /// the whole opt-in invisible.
+  static String _routeFor(AuthState state) => switch (state) {
+    AuthAuthenticated() => AppRoutes.home,
+    AuthBiometricGate() => AppRoutes.biometricLogin,
+    _ => AppRoutes.login,
+  };
 
   /// Navigates only when *both* gates are open — the animation finished and
   /// the session verdict arrived — so the user never sees a half-built screen.

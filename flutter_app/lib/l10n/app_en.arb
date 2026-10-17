@@ -200,6 +200,20 @@
   "biometricLockedOut": "Too many failed attempts. Biometric unlock is locked for now.",
   "useInstead": "Continue without biometrics",
   "skip": "Skip",
+  "biometricSignIn": "Biometric sign-in",
+  "biometricSignInHint": "Use a fingerprint or face scan instead of retyping your password each time you open StreetBite.",
+  "biometricSignInReason": "Verify your identity to sign in to StreetBite",
+  "welcomeBack": "Welcome back, {name}",
+  "@welcomeBack": {
+    "description": "Greeting on the biometric sign-in screen, naming the account whose session was restored.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "scanToSignIn": "Scan to sign in",
+  "usePasswordInstead": "Use password instead",
   "darkMode": "Dark mode",
   "lightMode": "Light mode",
   "language": "Language",

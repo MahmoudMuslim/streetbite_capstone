@@ -812,6 +812,42 @@ abstract class AppLocalizations {
   /// **'Skip'**
   String get skip;
 
+  /// No description provided for @biometricSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric sign-in'**
+  String get biometricSignIn;
+
+  /// No description provided for @biometricSignInHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a fingerprint or face scan instead of retyping your password each time you open StreetBite.'**
+  String get biometricSignInHint;
+
+  /// No description provided for @biometricSignInReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your identity to sign in to StreetBite'**
+  String get biometricSignInReason;
+
+  /// Greeting on the biometric sign-in screen, naming the account whose session was restored.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back, {name}'**
+  String welcomeBack(String name);
+
+  /// No description provided for @scanToSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan to sign in'**
+  String get scanToSignIn;
+
+  /// No description provided for @usePasswordInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Use password instead'**
+  String get usePasswordInstead;
+
   /// No description provided for @darkMode.
   ///
   /// In en, this message translates to:

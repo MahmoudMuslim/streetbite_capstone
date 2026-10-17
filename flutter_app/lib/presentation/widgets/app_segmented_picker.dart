@@ -32,9 +32,14 @@ class AppSegmentedPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     if (AppGlassTokens.enabledOf(context)) {
       return GlassSegmentedControl(
+        // The plugin's default 32dp bar is sized for a label alone. Every
+        // segment here also carries an icon, which the control stacks *above*
+        // the label, so the pair overflowed the pill and painted the yellow
+        // stripes over "English" / "العربية".
+        height: 48,
         segments: [
           for (var i = 0; i < labels.length; i++)
-            GlassSegment(icon: Icon(icons[i], size: 18), label: labels[i]),
+            GlassSegment(icon: Icon(icons[i], size: 16), label: labels[i]),
         ],
         selectedIndex: selectedIndex,
         onSegmentSelected: onSelected,

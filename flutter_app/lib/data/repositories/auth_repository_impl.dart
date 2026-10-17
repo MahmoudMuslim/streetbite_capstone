@@ -147,6 +147,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  bool get biometricSignInEnabled => _local.biometricSignInEnabled;
+
+  @override
+  Future<void> setBiometricSignInEnabled({required bool enabled}) =>
+      _local.setBiometricSignInEnabled(enabled: enabled);
+
+  @override
   Stream<UserEntity?> authStateChanges() {
     final remote = _remote;
     if (remote == null) return Stream<UserEntity?>.value(null);

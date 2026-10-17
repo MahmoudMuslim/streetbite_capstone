@@ -404,6 +404,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get skip => 'Skip';
 
   @override
+  String get biometricSignIn => 'Biometric sign-in';
+
+  @override
+  String get biometricSignInHint =>
+      'Use a fingerprint or face scan instead of retyping your password each time you open StreetBite.';
+
+  @override
+  String get biometricSignInReason =>
+      'Verify your identity to sign in to StreetBite';
+
+  @override
+  String welcomeBack(String name) {
+    return 'Welcome back, $name';
+  }
+
+  @override
+  String get scanToSignIn => 'Scan to sign in';
+
+  @override
+  String get usePasswordInstead => 'Use password instead';
+
+  @override
   String get darkMode => 'Dark mode';
 
   @override
