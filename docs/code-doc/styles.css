@@ -1,0 +1,199 @@
+
+:root{
+  --green:#00C16A; --green-d:#00A85A; --ink:#12141A; --muted:#5A6472;
+  --line:#E4E8EE; --panel:#F6F8FA; --panel2:#EEF2F6; --code:#0B1F17;
+  --amber:#FFB020; --red:#E23D3D;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:#fff; color:var(--ink);
+  font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  display:grid; grid-template-columns:270px 1fr; align-items:start;
+}
+.ar{direction:rtl; text-align:right;
+  font-family:"Noto Naskh Arabic","Geeza Pro","Segoe UI",Tahoma,Arial,sans-serif;
+  font-size:15.5px; line-height:1.95}
+/* ---------- sidebar ---------- */
+nav{position:sticky; top:0; height:100vh; overflow:auto; padding:22px 16px 40px;
+  border-right:1px solid var(--line); background:var(--panel); font-size:13.5px}
+nav .brand{font-weight:800; font-size:17px; letter-spacing:-.3px; color:var(--green-d)}
+nav .brand span{display:block; font-weight:600; font-size:12px; color:var(--muted)}
+nav h3{margin:20px 0 6px; font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted)}
+nav ol{list-style:none; margin:0; padding:0}
+nav li{margin:1px 0}
+nav a{display:block; padding:5px 8px; border-radius:8px; color:var(--ink); text-decoration:none}
+nav a:hover,nav a:focus{background:#fff; color:var(--green-d)}
+nav a b{color:var(--muted); font-weight:600; margin-right:6px; font-variant-numeric:tabular-nums}
+.langbar{display:flex; gap:4px; margin-top:14px}
+.langbar button{flex:1; padding:6px 4px; font-size:12px; border:1px solid var(--line);
+  background:#fff; border-radius:8px; cursor:pointer; color:var(--muted); font-weight:600}
+.langbar button[aria-pressed="true"]{background:var(--green); border-color:var(--green); color:#fff}
+/* ---------- content ---------- */
+main{padding:34px 40px 120px; max-width:1180px}
+header.doc{border-bottom:3px solid var(--green); padding-bottom:20px; margin-bottom:10px}
+header.doc h1{margin:0 0 6px; font-size:31px; letter-spacing:-.6px}
+header.doc .sub{margin:0; color:var(--muted); font-size:14px}
+section{padding-top:14px; margin-top:26px; border-top:1px solid var(--line); scroll-margin-top:16px}
+section:first-of-type{border-top:0}
+h2{font-size:22px; margin:8px 0 2px; letter-spacing:-.3px}
+h2 .num{color:var(--green-d)}
+h3{font-size:16.5px; margin:26px 0 6px}
+h4{font-size:14px; margin:20px 0 4px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em}
+p{margin:.55em 0}
+ul,ol{margin:.4em 0 .8em; padding-left:1.25em}
+.ar ul,.ar ol{padding-left:0; padding-right:1.25em}
+li{margin:.28em 0}
+code{font-family:ui-monospace,"Cascadia Mono",Consolas,monospace; font-size:12.8px;
+  background:var(--panel2); padding:.13em .38em; border-radius:5px}
+a code{color:inherit}
+pre{background:#0E1720; color:#DCE7F1; padding:14px 16px; border-radius:12px; overflow:auto;
+  font-size:12.6px; line-height:1.6; margin:.5em 0 1em}
+pre code{background:none; padding:0; color:inherit; font-size:inherit}
+pre .c{color:#7EA0B8; font-style:italic}
+pre .k{color:#8AD6FF}
+pre .s{color:#B7E77F}
+/* ---------- bilingual grid ---------- */
+.bi{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:0 26px; margin:14px 0 6px}
+.bi>.en{border-right:1px dashed var(--line); padding-right:22px; min-width:0}
+.bi>.ar{min-width:0}
+body[data-lang="en"] .bi{grid-template-columns:minmax(0,1fr)}
+body[data-lang="en"] .bi>.ar,body[data-lang="en"] .t-ar,body[data-lang="en"] .ar{display:none}
+body[data-lang="en"] .bi>.en{border-right:0; padding-right:0}
+body[data-lang="ar"] .bi{grid-template-columns:minmax(0,1fr)}
+body[data-lang="ar"] .bi>.en,body[data-lang="ar"] .t-en{display:none}
+body[data-lang="ar"] .bi>.ar{border-right:0}
+body[data-lang="ar"] .bi>.en+ .ar{padding-right:0}
+body[data-lang="ar"] nav{border-right:0; border-left:1px solid var(--line)}
+body[data-lang="ar"] main{direction:rtl}
+body[data-lang="ar"] main pre,body[data-lang="ar"] main code,body[data-lang="ar"] .tbl{direction:ltr; text-align:left}
+body[data-lang="ar"] .bi>.en{border-right:0}
+/* ---------- blocks ---------- */
+.note,.warn,.key{border-radius:12px; padding:12px 16px; margin:12px 0; border:1px solid var(--line)}
+.key{background:#EAF8F1; border-color:#BEEBD3}
+.note{background:var(--panel)}
+.warn{background:#FFF4E5; border-color:#FBD9A5}
+.note b,.key b,.warn b{display:block; font-size:11.5px; letter-spacing:.07em;
+  text-transform:uppercase; color:var(--muted); margin-bottom:4px}
+.tbl{width:100%; border-collapse:collapse; margin:.6em 0 1.1em; font-size:13.4px}
+.tbl th,.tbl td{border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top}
+.tbl th{background:var(--panel); font-size:12px; letter-spacing:.04em; text-transform:uppercase; color:var(--muted)}
+.tbl td code{white-space:nowrap}
+.tbl tr:nth-child(even) td{background:#FBFCFD}
+.ar .tbl th,.ar .tbl td{text-align:right}
+/* bilingual table cells: English above, Arabic below, in the same cell */
+.tbl .t-ar,.dir .t-ar{display:block; margin-top:5px; padding-top:5px; border-top:1px dashed var(--line);
+  direction:rtl; text-align:right; font-size:13px; line-height:1.8}
+.tbl .t-en,.dir .t-en{display:block}
+.tbl th .t-en,.dir th .t-en{display:inline}
+.tbl th .t-ar,.dir th .t-ar{display:inline; margin:0; padding:0; border:0}
+body[data-lang="both"] th .t-ar::before{content:" / "}
+body[data-lang="en"] .tbl .t-ar,body[data-lang="en"] .dir .t-ar{display:none}
+body[data-lang="ar"] .tbl .t-en,body[data-lang="ar"] .dir .t-en{display:none}
+body[data-lang="ar"] .tbl .t-ar,body[data-lang="ar"] .dir .t-ar{border-top:0; margin-top:0; padding-top:0}
+.dir{width:100%; border-collapse:collapse; font-size:13px; margin:.5em 0 1em}
+.dir th,.dir td{padding:5px 9px; border-bottom:1px solid var(--line); text-align:left}
+.dir th{background:var(--panel); font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted)}
+.dir .n{text-align:right; font-variant-numeric:tabular-nums; color:var(--muted); white-space:nowrap}
+/* ---------- diagrams ---------- */
+.flow{display:flex; flex-wrap:wrap; gap:8px; align-items:stretch; margin:.7em 0 1.1em}
+.flow .st{flex:1 1 150px; background:var(--panel); border:1px solid var(--line);
+  border-radius:11px; padding:10px 12px; font-size:12.8px; position:relative}
+.flow .st b{display:block; font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--green-d)}
+.flow .st.ok{background:#EAF8F1; border-color:#BEEBD3}
+.flow .st.bad{background:#FDECEC; border-color:#F3C4C4}
+.flow .st i{display:block; color:var(--muted); font-style:normal; margin-top:3px; font-size:12px}
+.layers{display:grid; gap:8px; margin:.7em 0 1.1em}
+.layers .ly{border-radius:11px; padding:11px 14px; border:1px solid var(--line); background:var(--panel)}
+.layers .ly b{display:inline-block; min-width:112px; font-size:13.5px}
+.layers .ly span{color:var(--muted); font-size:12.8px}
+.layers .ly.domain{background:#EAF8F1; border-color:#BEEBD3}
+.layers .ly.core{background:#EEF3FB; border-color:#CFE0F5}
+.pill{display:inline-block; background:var(--panel2); border:1px solid var(--line);
+  border-radius:999px; padding:1px 9px; font-size:12px; margin:1px 2px 1px 0; font-family:ui-monospace,Consolas,monospace}
+.kv{display:grid; grid-template-columns:auto 1fr; gap:2px 14px; font-size:13.4px; margin:.4em 0 1em}
+.kv dt{color:var(--muted); font-weight:600}
+.kv dd{margin:0}
+figure{margin:14px 0 20px}
+figcaption{font-size:12.5px; color:var(--muted); margin-top:6px}
+footer{margin-top:40px; padding-top:18px; border-top:3px solid var(--green);
+  font-size:13px; color:var(--muted)}
+.top{position:fixed; right:22px; bottom:22px; background:var(--green); color:#fff;
+  border-radius:10px; padding:8px 12px; text-decoration:none; font-size:13px; font-weight:700}
+@media (max-width:1040px){
+  body{grid-template-columns:1fr}
+  nav{position:static; height:auto; border-right:0; border-bottom:1px solid var(--line)}
+  main{padding:24px 20px 80px}
+  .bi{grid-template-columns:1fr}
+  .bi>.en{border-right:0; padding-right:0; border-bottom:1px dashed var(--line); padding-bottom:8px}
+}
+@media print{
+  nav,.top,.langbar{display:none}
+  body{display:block; font-size:11px}
+  main{max-width:none; padding:0}
+  pre{background:#fff; color:#0E1720; border:1px solid var(--line)}
+  section{page-break-inside:avoid}
+}
+
+/* ---------- headings in both columns ---------- */
+h2 .t-en,h2 .t-ar,h3 .t-en,h3 .t-ar{display:block}
+h2 .t-ar,h3 .t-ar{margin-top:3px}
+h2 .t-ar{font-size:.86em;font-weight:700;color:var(--muted)}
+h3 .t-ar{font-weight:600;color:var(--muted);font-size:14.5px}
+/* ---------- sidebar as a page index ---------- */
+nav .t-ar{display:block;font-size:11.5px;line-height:1.4;color:var(--muted);
+  direction:rtl;font-weight:500}
+nav a.cur{background:#fff;color:var(--green-d);font-weight:700;
+  box-shadow:inset 3px 0 0 var(--green)}
+nav a.cur .t-ar{color:var(--green-d)}
+body[data-lang="ar"] nav a.cur{box-shadow:inset -3px 0 0 var(--green)}
+nav .home{margin-top:12px}
+/* ---------- page chrome ---------- */
+.crumb{margin:0 0 4px;font-size:12px;letter-spacing:.03em;color:var(--muted)}
+.crumb a{color:var(--green-d);text-decoration:none;font-weight:600}
+.crumb .t-ar{font-size:12px}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0;padding:0}
+/* The sidebar rule `nav{...height:100vh;position:sticky;background;...}` leaks onto
+   this <nav class="pager"> too, which stretches the grid row and inflates both buttons.
+   Reset the inherited nav chrome here (.pager out-specifies bare `nav`). */
+.pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:38px 0 8px;
+  position:static;height:auto;overflow:visible;padding:0;border:0;background:none}
+.pager a{border:1px solid var(--line);border-radius:12px;padding:12px 14px;
+  text-decoration:none;color:inherit;background:#fff;
+  display:flex;flex-direction:column;justify-content:center;min-height:56px}
+.pager a:hover{border-color:var(--green)}
+.pager .lbl{display:block;font-size:11px;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--muted);font-weight:700}
+.pager .to{display:block;font-size:13.5px;margin-top:2px}
+.pager .to .t-ar{font-size:12.5px;color:var(--muted);direction:rtl}
+.pager .next{text-align:right}
+body[data-lang="ar"] .pager .next{text-align:left}
+/* also undo the RTL sidebar border that `body[data-lang="ar"] nav` leaks onto .pager */
+body[data-lang="ar"] .pager{border:0}
+.footline{font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);
+  padding-top:10px;margin-top:20px}
+.footline .t-ar{display:block;direction:rtl;margin-top:2px}
+/* ---------- index cards ---------- */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:14px;margin:16px 0 4px}
+.card{display:block;border:1px solid var(--line);border-radius:14px;
+  padding:13px 15px 14px;text-decoration:none;color:inherit;background:#fff}
+.card:hover{border-color:var(--green);box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.card .no{font-size:11.5px;font-weight:800;letter-spacing:.08em;color:var(--green-d)}
+.card .tt .t-en,.card .tt .t-ar{font-size:14.5px;font-weight:700;line-height:1.35;margin-top:1px}
+.card .tt .t-ar{color:var(--muted);font-weight:600;direction:rtl;font-size:13.5px}
+.card ul{list-style:none;margin:9px 0 0;padding:0;font-size:12.2px;color:var(--muted);
+  border-top:1px dashed var(--line);padding-top:7px}
+.card li{margin:1px 0;line-height:1.45}
+.card li .t-ar{direction:rtl;font-size:11.5px;margin-top:-1px}
+.card .more{font-size:11.5px}
+/* Stacking the two languages inside a card is a "both" mode only idea: a bare
+   .card .tt .t-ar{display:block} out-specifies body[data-lang=..] .t-ar{display:none}
+   and would resurrect the hidden column. */
+body[data-lang="both"] .card .tt .t-en,body[data-lang="both"] .card .tt .t-ar,
+body[data-lang="both"] .card li .t-en,body[data-lang="both"] .card li .t-ar,
+body[data-lang="both"] .pager .to .t-ar{display:block}
+@media (max-width:1040px){.pager{grid-template-columns:1fr}}
+@media print{.cards{grid-template-columns:1fr 1fr}.card{border-color:#ccc;
+  box-shadow:none;page-break-inside:avoid}.pager,.crumb{display:none}}
