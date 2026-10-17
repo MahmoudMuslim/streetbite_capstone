@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StreetBite — Full Code &amp; App Documentation / دليل الكود والتطبيق الكامل</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<header class="doc">
+  <h1>StreetBite — the whole app, explained</h1>
+  <p class="sub">Hyperlocal food discovery &amp; ordering · Flutter capstone · 158 hand-written Dart
+  files, 15,491 lines · one page per section, English and Arabic side by side.</p>
+  <p class="sub ar" style="margin-top:8px">تطبيق StreetBite للعثور على الطلبات القريبة وتوصيلها ·
+  مشروع تخرّج بـ Flutter · 158 ملف Dart مكتوبة يدويًا بحجم 15,491 سطرًا · صفحة لكل قسم،
+  والإنجليزية والعربية جنبًا إلى جنب.</p>
+</header>
+<div class="bi"><div class="en">
+  <p>Eighteen pages, one per section, and nothing spans two of them. Part I explains the ideas the
+  code is built on; Part II is the reference extracted mechanically from the tree — every file, every
+  type, every key. The three buttons in the sidebar switch between both columns, English only, or
+  Arabic only, and the choice is remembered for every page you open afterwards.</p>
+</div><div class="ar">
+  <p>ثماني عشرة صفحة، صفحة لكل قسم، ولا قسم يمتد على صفحتين. الجزء الأول يشرح الأفكار التي بُني
+  الكود عليها، والجزء الثاني مرجع مُستخرَج آليًا من الشجرة: كل ملف وكل صنف وكل مفتاح. والأزرار
+  الثلاثة في الشريط الجانبي تختار بين العمودين أو الإنجليزية أو العربية وحدها، ويُحفظ اختيارك لكل
+  صفحة تفتحها بعدها.</p>
+</div></div>
+<h2><span class="t-en">Contents</span><span class="t-ar">المحتويات</span></h2>
+<h2><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h2>
+<div class="cards">
+  <a class="card" href="01-overview.html">
+    <span class="no">§01 · Part I</span>
+    <span class="tt"><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></span>
+    <ul>
+      <li><span class="t-en">User-visible features</span><span class="t-ar">الميزات الظاهرة للمستخدم</span></li>
+      <li><span class="t-en">Engineering goals the code is written against</span><span class="t-ar">أهداف هندسية كُتب الكود على ضوئها</span></li>
+    </ul>
+  </a>
+  <a class="card" href="02-stack.html">
+    <span class="no">§02 · Part I</span>
+    <span class="tt"><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></span>
+    <ul>
+      <li><span class="t-en">Runtime and framework</span><span class="t-ar">وقت التشغيل والإطار</span></li>
+      <li><span class="t-en">Dependencies declared in <code>pubspec.yaml</code></span><span class="t-ar">الاعتماديات المعلنة في <code>pubspec.yaml</code></span></li>
+      <li><span class="t-en">Dev-only dependencies</span><span class="t-ar">اعتماديات التطوير فقط</span></li>
+      <li><span class="t-en">Outside the Flutter project</span><span class="t-ar">خارج مشروع Flutter</span></li>
+    </ul>
+  </a>
+  <a class="card" href="03-architecture.html">
+    <span class="no">§03 · Part I</span>
+    <span class="tt"><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></span>
+    <ul>
+      <li><span class="t-en">Where every file lives</span><span class="t-ar">أين يسكن كل ملف</span></li>
+      <li><span class="t-en">A tap, end to end</span><span class="t-ar">ضغطة واحدة من البداية إلى النهاية</span></li>
+      <li><span class="t-en">SOLID, and where each letter actually shows up</span><span class="t-ar">مبادئ SOLID وأين يظهر كل حرف فعليًا</span></li>
+      <li><span class="t-en">One documented exception to the dependency rule</span><span class="t-ar">استثناء واحد موثق لقاعدة التبعيات</span></li>
+    </ul>
+  </a>
+  <a class="card" href="04-di.html">
+    <span class="no">§04 · Part I</span>
+    <span class="tt"><span class="t-en">Composition root &amp; dependency injection</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></span>
+    <ul>
+      <li><span class="t-en">Registration order</span><span class="t-ar">ترتيب التسجيل</span></li>
+      <li><span class="t-en">The scope chosen for each kind of object — and why</span><span class="t-ar">النطاق المختار لكل نوع من الكائنات — والسبب</span></li>
+      <li><span class="t-en">Boot order in <code>main()</code></span><span class="t-ar">ترتيب الإقلاع في <code>main()</code></span></li>
+      <li><span class="t-en">Firebase bootstrap: a failure that must not be fatal</span><span class="t-ar">تهيئة Firebase: فشل يجب ألا يكون قاتلًا</span></li>
+      <li><span class="t-en">Seeding the QA account</span><span class="t-ar">تهيئة حساب الاختبار</span></li>
+    </ul>
+  </a>
+  <a class="card" href="05-state.html">
+    <span class="no">§05 · Part I</span>
+    <span class="tt"><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></span>
+    <ul>
+      <li><span class="t-en">The eight state objects</span><span class="t-ar">الكائنات الثمانية للحالة</span></li>
+      <li><span class="t-en">Sealed states make impossible screens impossible</span><span class="t-ar">الحالات المختومة تستحيل معها الشاشات المستحيلة</span></li>
+      <li><span class="t-en">Where the providers sit, and why it matters</span><span class="t-ar">أين تتموضع الـ Providers ولماذا يهم ذلك</span></li>
+      <li><span class="t-en">Builder versus Listener</span><span class="t-ar">الفرق بين Builder و Listener</span></li>
+      <li><span class="t-en">Lazy tabs and the one deliberate warm-up</span><span class="t-ar">التبويبات الكسولة وتعبئة واحدة مقصودة</span></li>
+      <li><span class="t-en">Anti-patterns this layer avoids</span><span class="t-ar">أساليب خاطئة تتجنبها هذه الطبقة</span></li>
+    </ul>
+  </a>
+  <a class="card" href="06-errors.html">
+    <span class="no">§06 · Part I</span>
+    <span class="tt"><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></span>
+    <ul>
+      <li><span class="t-en">The three-step contract</span><span class="t-ar">العقد ذو الخطوات الثلاث</span></li>
+      <li><span class="t-en"><code>Either</code> — why a value and not a throw</span><span class="t-ar"><code>Either</code> — لماذا قيمة لا رمية</span></li>
+      <li><span class="t-en">The failure vocabulary</span><span class="t-ar">قاموس الأخطاء</span></li>
+      <li><span class="t-en">Exceptions live below the boundary only</span><span class="t-ar">الاستثناءات تعيش تحت الحدّ فقط</span></li>
+      <li><span class="t-en">Firebase Auth codes are translated, never forwarded</span><span class="t-ar">رموز Firebase Auth تُترجَم ولا تُمرَّر</span></li>
+      <li><span class="t-en">The last three nets</span><span class="t-ar">الشِّباكَ الثلاث الأخيرة</span></li>
+    </ul>
+  </a>
+  <a class="card" href="07-data.html">
+    <span class="no">§07 · Part I</span>
+    <span class="tt"><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></span>
+    <ul>
+      <li><span class="t-en">The five backends</span><span class="t-ar">الخلفيات الخمس</span></li>
+      <li><span class="t-en">The menu: a Factory that chooses a source, not a class</span><span class="t-ar">القائمة: مصنع يختار المصدر لا الصنف</span></li>
+      <li><span class="t-en">Auth: the on-device fallback, and the line it must not cross</span><span class="t-ar">المصادقة: الرجوع المحلي والحدّ الذي لا يُتجاوز</span></li>
+      <li><span class="t-en">Firestore: one gateway, one place where the schema is named</span><span class="t-ar">Firestore: بوابة واحدة، وموضع واحد تُسمَّى فيه المجموعات</span></li>
+      <li><span class="t-en">Offline writes: the honest limitation</span><span class="t-ar">الكتابة بلا اتصال: القيد مذكور بصدقه</span></li>
+      <li><span class="t-en">Money is derived, not fetched</span><span class="t-ar">المال مشتق لا مجلوب</span></li>
+      <li><span class="t-en">Network layer</span><span class="t-ar">طبقة الشبكة</span></li>
+      <li><span class="t-en">Resilience matrix — what a user actually sees</span><span class="t-ar">مصفوفة الصمود — ما يراه المستخدم فعلًا</span></li>
+    </ul>
+  </a>
+  <a class="card" href="08-domain.html">
+    <span class="no">§08 · Part I</span>
+    <span class="tt"><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></span>
+    <ul>
+      <li><span class="t-en">Three contracts, chosen per use case</span><span class="t-ar">ثلاثة عقود، تُختار لكل حالة استخدام</span></li>
+      <li><span class="t-en">Rule 1 · the money</span><span class="t-ar">القاعدة الأولى · المال</span></li>
+      <li><span class="t-en">Rule 2 · one home for cart mutation</span><span class="t-ar">القاعدة الثانية · موطن واحد لتعديل السلة</span></li>
+      <li><span class="t-en">Rule 3 · an order ages on its own</span><span class="t-ar">القاعدة الثالثة · الطلب يَهرَم من ذاته</span></li>
+      <li><span class="t-en">Rule 4 · payment as a strategy, not a flag</span><span class="t-ar">القاعدة الرابعة · الدفع ستراتيجية لا راية</span></li>
+      <li><span class="t-en">Rule 5 · validators speak in keys</span><span class="t-ar">القاعدة الخامسة · دوال التحقق تنطق بمفاتيح</span></li>
+      <li><span class="t-en">Where a rule is <em>not</em> domain, and why that is honest</span><span class="t-ar">قواعد ليست في طبقة المجال — ولماذا يقال ذلك بصدق</span></li>
+    </ul>
+  </a>
+  <a class="card" href="09-theme.html">
+    <span class="no">§09 · Part I</span>
+    <span class="tt"><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></span>
+    <ul>
+      <li><span class="t-en">The four appearances</span><span class="t-ar">المظاهر الأربعة</span></li>
+      <li><span class="t-en">One builder, four themes</span><span class="t-ar">بانٍ واحد وأربع سمات</span></li>
+      <li><span class="t-en">The palette, and the reasoning inside it</span><span class="t-ar">لوحة الألوان والمنطق فيها</span></li>
+      <li><span class="t-en">The glass recipe, and why it is not "premium"</span><span class="t-ar">وصفة الزجاج، ولماذا ليست "premium"</span></li>
+      <li><span class="t-en"><code>AppGlassTokens</code>: a ThemeExtension, not a bloc lookup</span><span class="t-ar"><code>AppGlassTokens</code>: امتداد سمة لا بحث bloc</span></li>
+      <li><span class="t-en">Layout: three breakpoints, one helper</span><span class="t-ar">التخطيط: ثلاث نقاط فصل ومساعد واحد</span></li>
+    </ul>
+  </a>
+  <a class="card" href="10-l10n.html">
+    <span class="no">§10 · Part I</span>
+    <span class="tt"><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></span>
+    <ul>
+      <li><span class="t-en">The generator is configured to stay inside <code>lib/</code></span><span class="t-ar">المولِّد مضبوط ليبقى داخل <code>lib/</code></span></li>
+      <li><span class="t-en"><code>L10nX</code> — the only bridge from key to text</span><span class="t-ar"><code>L10nX</code> — الجسر الوحيد من المفتاح إلى النص</span></li>
+      <li><span class="t-en">Switching language at runtime</span><span class="t-ar">تغيير اللغة أثناء التشغيل</span></li>
+      <li><span class="t-en">Keeping the 178 keys honest</span><span class="t-ar">كيف تبقى المفاتيح الـ178 صادقة</span></li>
+    </ul>
+  </a>
+  <a class="card" href="11-security.html">
+    <span class="no">§11 · Part I</span>
+    <span class="tt"><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></span>
+    <ul>
+      <li><span class="t-en">Biometrics: six outcomes, classified once</span><span class="t-ar">البصمة: ست نتائج، تُصنَّف مرة واحدة</span></li>
+      <li><span class="t-en">The two gates, and what a failed scan does <em>not</em> do</span><span class="t-ar">بوّابتان، وما لا تفعله بصمة فاشلة</span></li>
+      <li><span class="t-en">Prompt flags</span><span class="t-ar">أعلام طلب البصمة</span></li>
+      <li><span class="t-en">What lives on the device</span><span class="t-ar">ما يعيش على الجهاز</span></li>
+      <li><span class="t-en">Secrets and the build</span><span class="t-ar">الأسرار والبناء</span></li>
+      <li><span class="t-en">Permissions, and what the app does with them</span><span class="t-ar">الأذونات وما يفعلها التطبيق</span></li>
+      <li><span class="t-en">Privacy, and one dead-end worth naming</span><span class="t-ar">الخصوصية، وطريق مسدود يستحق الذكر</span></li>
+    </ul>
+  </a>
+  <a class="card" href="12-navigation.html">
+    <span class="no">§12 · Part I</span>
+    <span class="tt"><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></span>
+    <ul>
+      <li><span class="t-en">The twelve routes and what travels on them</span><span class="t-ar">المسارات الاثنا عشر وما يُنقل معها</span></li>
+      <li><span class="t-en">Every screen arrives through the same transition</span><span class="t-ar">كل شاشة تصل عبر الانتقال نفسه</span></li>
+      <li><span class="t-en">The four-tab shell: state that survives a tab switch</span><span class="t-ar">الهيكل ذو التبويبات الأربعة: حالة تنجو من تبديل التبويب</span></li>
+      <li><span class="t-en">Stack discipline: three verbs, used deliberately</span><span class="t-ar">انضباط المكدّس: ثلاثة أفعال مستخدمة عن قصد</span></li>
+      <li><span class="t-en">The checkout handoff, in three pushes</span><span class="t-ar">تسليم الخروج من السلة، في ثلاث دفعات</span></li>
+      <li><span class="t-en">A second address layer for automation</span><span class="t-ar">طبقة عنوان ثانية لأغراض الآلية</span></li>
+    </ul>
+  </a>
+  <a class="card" href="13-testing.html">
+    <span class="no">§13 · Part I</span>
+    <span class="tt"><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></span>
+    <ul>
+      <li><span class="t-en">Layer 1 — 99 tests, and the harness that mirrors production</span><span class="t-ar">الطبقة الأولى — 99 اختبارًا، وبيئة تحاكي الإنتاج</span></li>
+      <li><span class="t-en">Layer 2 — the Appium suite: six cases, one session per class</span><span class="t-ar">الطبقة الثانية — مجموعة Appium: ست حالات وجلسة لكل صنف</span></li>
+      <li><span class="t-en">Layer 3 — the manual pack, and the honesty rule</span><span class="t-ar">الطبقة الثالثة — الحزمة اليدوية وقاعدة الصراحة</span></li>
+      <li><span class="t-en">The defect log — the argument for testing on a device</span><span class="t-ar">سجلّ الأخطاء — حجة الاختبار على جهاز</span></li>
+      <li><span class="t-en">What is deliberately <em>not</em> covered</span><span class="t-ar">ما ليس مُغطًّى <em>عن قصد</em></span></li>
+    </ul>
+  </a>
+  <a class="card" href="14-build.html">
+    <span class="no">§14 · Part I</span>
+    <span class="tt"><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></span>
+    <ul>
+      <li><span class="t-en">The toolchain, pinned</span><span class="t-ar">سلسلة الأدوات مُثبَّتة</span></li>
+      <li><span class="t-en">Gradle tuning that is Windows-specific</span><span class="t-ar">ضبط Gradle خاص بويندوز</span></li>
+      <li><span class="t-en">Firebase, rules, and one stale reference</span><span class="t-ar">Firebase والقواعد ومرجعٌ بائت</span></li>
+      <li><span class="t-en">Assets, icons and the lint gate</span><span class="t-ar">الأصول والأيقونات وبوابة التدقيق</span></li>
+      <li><span class="t-en">From clone to phone</span><span class="t-ar">من الاستنساخ إلى الهاتف</span></li>
+    </ul>
+  </a>
+</div>
+<h2><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h2>
+<div class="cards">
+  <a class="card" href="15-files.html">
+    <span class="no">§15 · Part II</span>
+    <span class="tt"><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></span>
+    <ul>
+      <li><span class="t-en">15.1 · The three files at the top</span><span class="t-ar">15.1 · الملفات الثلاثة في الجذر</span></li>
+      <li><span class="t-en">15.2 · lib/core/ — 17 files</span><span class="t-ar">15.2 · lib/core/ — 17 ملفًا</span></li>
+      <li><span class="t-en">15.3 · lib/data/ — 20 files</span><span class="t-ar">15.3 · lib/data/ — 20 ملفًا</span></li>
+      <li><span class="t-en">15.4 · lib/domain/ — 33 files</span><span class="t-ar">15.4 · lib/domain/ — 33 ملفًا</span></li>
+      <li><span class="t-en">15.5 · lib/l10n/generated/ — 3 files</span><span class="t-ar">15.5 · lib/l10n/generated/ — 3 ملفات</span></li>
+      <li><span class="t-en">15.6 · lib/presentation/blocs/ — 17 files</span><span class="t-ar">15.6 · lib/presentation/blocs/ — 17 ملفًا</span></li>
+      <li><span class="t-en">15.7 · lib/presentation/extensions + router — 6 files</span><span class="t-ar">15.7 · lib/presentation/extensions + router — 6 ملفات</span></li>
+      <li><span class="t-en">15.8 · lib/presentation/screens/ — 17 files, 5,033 lines</span><span class="t-ar">15.8 · lib/presentation/screens/ — 17 ملفًا، 5,033 سطرًا</span></li>
+      <li><span class="t-en">15.9 · lib/presentation/widgets/ — 46 files, 4,004 lines</span><span class="t-ar">15.9 · lib/presentation/widgets/ — 46 ملفًا، 4,004 سطرًا</span></li>
+    </ul>
+  </a>
+  <a class="card" href="16-classes.html">
+    <span class="no">§16 · Part II</span>
+    <span class="tt"><span class="t-en">Class and type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></span>
+    <ul>
+      <li><span class="t-en">16.1 · The two files at the root <i>(2 types, 1 public)</i></span><span class="t-ar">16.1 · الملفان في الجذر <i>(2 نوعًا، 1 عام)</i></span></li>
+      <li><span class="t-en">16.2 · lib/core/ — the vocabulary types <i>(28 types, 28 public)</i></span><span class="t-ar">16.2 · lib/core/ — أصناف المفردات <i>(28 نوعًا، 28 عام)</i></span></li>
+      <li><span class="t-en">16.3 · lib/data/ — models and gateways <i>(23 types, 23 public)</i></span><span class="t-ar">16.3 · lib/data/ — النماذج والبوابات <i>(23 نوعًا، 23 عام)</i></span></li>
+      <li><span class="t-en">16.4 · lib/domain/ — entities, contracts, use cases <i>(48 types, 48 public)</i></span><span class="t-ar">16.4 · lib/domain/ — الكيانات والعقود والحالات <i>(48 نوعًا، 48 عام)</i></span></li>
+      <li><span class="t-en">16.5 · lib/presentation/blocs/ — state types <i>(45 types, 45 public)</i></span><span class="t-ar">16.5 · lib/presentation/blocs/ — أصناف الحالة <i>(45 نوعًا، 45 عام)</i></span></li>
+      <li><span class="t-en">16.6 · lib/presentation/screens/ — screens and their private parts <i>(61 types, 17 public)</i></span><span class="t-ar">16.6 · lib/presentation/screens/ — الشاشات وأجزاؤها الخاصة <i>(61 نوعًا، 17 عام)</i></span></li>
+      <li><span class="t-en">16.7 · lib/presentation/widgets/ — the reusable leaf types <i>(60 types, 45 public)</i></span><span class="t-ar">16.7 · lib/presentation/widgets/ — الأصناف الورقية القابلة لإعادة الاستخدام <i>(60 نوعًا، 45 عام)</i></span></li>
+      <li><span class="t-en">16.8 · lib/presentation/extensions + router <i>(7 types, 6 public)</i></span><span class="t-ar">16.8 · lib/presentation/extensions + الموجّه <i>(7 نوعًا، 6 عام)</i></span></li>
+      <li><span class="t-en">16.9 · What the names tell you</span><span class="t-ar">16.9 · ما تقوله الأسماء</span></li>
+    </ul>
+  </a>
+  <a class="card" href="17-keys.html">
+    <span class="no">§17 · Part II</span>
+    <span class="tt"><span class="t-en">Constants, keys and identifiers</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></span>
+    <ul>
+      <li><span class="t-en">17.1 · <code>AppConstants</code> — the one configuration file</span><span class="t-ar">17.1 · <code>AppConstants</code> — ملف الإعداد الوحيد</span></li>
+      <li><span class="t-en">17.2 · Route names</span><span class="t-ar">17.2 · أسماء المسارات</span></li>
+      <li><span class="t-en">17.3 · What the phone keeps</span><span class="t-ar">17.3 · ما يحفظه الهاتف</span></li>
+      <li><span class="t-en">17.4 · The Firestore schema, as the code actually writes it</span><span class="t-ar">17.4 · مخطط Firestore كما يكتبه الكود فعلًا</span></li>
+      <li><span class="t-en">17.5 · Message keys</span><span class="t-ar">17.5 · مفاتيح الرسائل</span></li>
+      <li><span class="t-en">17.6 · Identifiers the two test layers address</span><span class="t-ar">17.6 · المعرّفات التي تخاطبها طبقتا الاختبار</span></li>
+      <li><span class="t-en">17.7 · Build-time and platform keys</span><span class="t-ar">17.7 · مفاتيح البناء والمنصّة</span></li>
+    </ul>
+  </a>
+  <a class="card" href="18-glossary.html">
+    <span class="no">§18 · Part II</span>
+    <span class="tt"><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></span>
+    <ul>
+      <li><span class="t-en">Architecture</span><span class="t-ar">البنية</span></li>
+      <li><span class="t-en">State and navigation</span><span class="t-ar">الحالة والتنقّل</span></li>
+      <li><span class="t-en">Look and language</span><span class="t-ar">المظهر واللغة</span></li>
+      <li><span class="t-en">Testing</span><span class="t-ar">الاختبار</span></li>
+      <li><span class="t-en">Build and platform</span><span class="t-ar">البناء والمنصّة</span></li>
+    </ul>
+  </a>
+</div>
+
+<footer>
+  <div class="bi"><div class="en">
+    <p><b>How this document was made.</b> Written against commit <code>e07c28b</code> on 2026-10-17, from the
+    source tree of <code>flutter_app/lib/</code> — 158 hand-written Dart files and 15,491 lines — plus
+    <code>android/</code>, <code>pubspec.yaml</code>, <code>test/</code>, <code>automation/</code> and
+    <code>manual_qa/</code>. Every count in Part II is produced by reading those files, not by recalling them;
+    §15 and §16 are generated straight from a machine-extracted inventory of the tree.</p>
+    <p><b>What it deliberately says no to.</b> Where the code disagrees with its own comment, the comment is
+    quoted and the disagreement is named: the collection accessors of §17.4, the intent filter of §12, the
+    missing <code>biometricLockedOut</code> arm of §10 and §17.5, the stale <code>firebase_options.dart</code>
+    reference of §14, and the 34 blocked manual cases of §13. A documentation pass that only repeats
+    doc-comments would have missed all six.</p>
+    <p><b>Switching language.</b> The three buttons in the sidebar show both columns, English only, or Arabic
+    only; the choice is remembered for every page. Code, file paths and identifiers are never translated — an
+    <code>Either&lt;Failure, List&lt;MealEntity&gt;&gt;</code> means the same thing in either language.</p>
+  </div><div class="ar">
+    <p><b>كيف صُنعت هذه الوثيقة.</b> كُتبت عند التزام <code>e07c28b</code> بتاريخ 2026-10-17، من شجرة مصدر
+    <code>flutter_app/lib/</code> — 158 ملف Dart مكتوبة يدويًا و15,491 سطرًا — مع <code>android/</code>
+    و<code>pubspec.yaml</code> و<code>test/</code> و<code>automation/</code> و<code>manual_qa/</code>. وكل عدد
+    في الجزء الثاني مخرج من قراءة تلك الملفات لا من استذكارها؛ و§15 و§16 مولَّدان مباشرة من جرد آلتي للشجرة.</p>
+    <p><b>ما ترفضه الوثيقة بصدق.</b> حيث يخالف الكود تعليقَه نفسه يُنقل التعليق وتُسمَّى المخالفة: أدوات
+    المجموعات في §17.4، وفلتر النوايا في §12، والفرع الناقص <code>biometricLockedOut</code> في §10 و§17.5،
+    والإشارة البالية إلى <code>firebase_options.dart</code> في §14، والحالات الـ34 المحجوبة في §13. وكان تمرين
+    توثيق يكتفي بتكرار التعليقات سيفوّت هذه الست كلها.</p>
+    <p><b>تبديل اللغة.</b> الأزرار الثلاثة في الشريط الجانبي تُظهر العمودين أو الإنجليزية أو العربية وحدها،
+    ويُحفظ الاختيار لكل صفحة. ولا تُترجَم الأكواد ومسارات الملفات ومعرّفات الرموز أبدًا — فـ
+    <code>Either&lt;Failure, List&lt;MealEntity&gt;&gt;</code> يعني الشيء نفسه في اللغتين.</p>
+  </div></div>
+  <p class="ar" style="margin-top:14px">StreetBite · دليل الكود والتطبيق الكامل · 18 قسمًا · بالإنجليزية والعربية جنبًا إلى جنب</p>
+  <p style="margin-top:4px">StreetBite · Full code and app documentation · 18 sections · English and Arabic side by side</p>
+</footer>
+<a class="top" href="#toc">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Theming &amp; layout · StreetBite code documentation · §09</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html" class="cur"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §09 Theming &amp; layout</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part I · Section 09 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الأول · القسم 09 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="theme">
+  <h2><span class="t-en"><span class="num">09</span> · Theming &amp; layout</span><span class="t-ar"><span class="num">09</span> · السمة والتخطيط</span></h2>
+
+  <div class="bi">
+    <div class="en">
+      <p>Appearance is two independent ideas — brightness (light or dark) and surface style (Material or Liquid
+      Glass) — collapsed into one enum of four values so that a single persisted string and a single
+      <code>ThemeCubit</code> state drive both. Glass is not a brightness of its own; it is a rendering layer
+      that exists in <em>both</em> brightnesses, which is why every widget that branches on
+      <code>Brightness</code> keeps working without knowing glass exists.</p>
+    </div>
+    <div class="ar">
+      <p>المظهر فكرتان مستقلتان — السطوع (فاتح أو داكن) وأسلوب السطح (Material أو الزجاج السائل) — مضغوُومتان
+      في تعداد واحد بأربع قيم، فيقود كليهما نصٌّ مخزَّن وحالة واحدة من <code>ThemeCubit</code>. فالزجاج ليس
+      سطوعًا بذاته، بل طبقة رسم توجد في <em>السطوعين</em> جميعًا، ولهذا يظل كل ودجة تتفرّع على
+      <code>Brightness</code> يعمل دون أن يعرف أن الزجاج موجود.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">The four appearances</span><span class="t-ar">المظاهر الأربعة</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th>Value</th>
+      <th><span class="t-en">Brightness</span><span class="t-ar">السطوع</span></th>
+      <th><span class="t-en">Surface</span><span class="t-ar">السطح</span></th>
+      <th><span class="t-en">Members that decide it</span><span class="t-ar">الأعضاء التي تقرره</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>light</code></td><td><span class="t-en">light</span><span class="t-ar">فاتح</span></td><td><span class="t-en">Material</span><span class="t-ar">Material</span></td>
+        <td rowspan="4"><span class="t-en"><code>isDark</code> and <code>isLiquidGlass</code> are the two getters every branch reads. <code>materialMode</code> projects the pair back onto Flutter's <code>ThemeMode</code>. <code>withGlass(bool)</code> swaps the surface and keeps the brightness; <code>withDark(bool)</code> does the opposite — that is what lets the Settings sheet offer two independent switches over one stored value.</span><span class="t-ar">ولكل تفرّع يقرأ <code>isDark</code> و<code>isLiquidGlass</code>. ويعيد <code>materialMode</code> الزوجَين إلى <code>ThemeMode</code> في Flutter. و<code>withGlass(bool)</code> يبدّل السطح ويُبقي السطوع، و<code>withDark(bool)</code> يبدّل السطوع ويُبقي السطح — وهذا ما يتيح لورشة Settings مفتاحين مستقلين على قيمة واحدة مخزَّنة.</span></td></tr>
+      <tr><td><code>dark</code></td><td><span class="t-en">dark</span><span class="t-ar">داكن</span></td><td><span class="t-en">Material</span><span class="t-ar">Material</span></td></tr>
+      <tr><td><code>glassLight</code></td><td><span class="t-en">light</span><span class="t-ar">فاتح</span></td><td><span class="t-en">Liquid Glass</span><span class="t-ar">الزجاج السائل</span></td></tr>
+      <tr><td><code>glassDark</code></td><td><span class="t-en">dark</span><span class="t-ar">داكن</span></td><td><span class="t-en">Liquid Glass</span><span class="t-ar">الزجاج السائل</span></td></tr>
+    </tbody>
+  </table>
+  <div class="bi">
+    <div class="en">
+      <p><code>fromName</code> parses the persisted string and falls back to <code>light</code> on anything
+      unknown, so a rename or a corrupted preference can never brick start-up. It also migrates the pre-1.1
+      value <code>liquidGlass</code>, which used to mean the dark variant.</p>
+    </div>
+    <div class="ar">
+      <p>تُحلَّل السلسلة المخزَّنة بـ<code>fromName</code> وترجع إلى <code>light</code> عند أي قيمة مجهولة، فلا
+      يستطيع تغيير اسم أو تفضيل فاسد أن يُعطِّل الإقلاع. وتُنقل أيضًا قيمة ما قبل 1.1 وهي <code>liquidGlass</code>
+      التي كانت تعني النسخة الداكنة.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">One builder, four themes</span><span class="t-ar">بانٍ واحد وأربع سمات</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>AppTheme</code> exposes four getters — <code>light</code>, <code>dark</code>,
+      <code>liquidGlassLight</code>, <code>liquidGlassDark</code> — and all four call the same private
+      <code>_build(brightness, {glass})</code>. Two constants do most of the visual consistency work:
+      <code>radius = 20</code>, used by cards, buttons, chips, fields and bottom sheets, and
+      <code>maxContentWidth = 720</code> for wide windows.</p>
+      <p>The type scale is tightened rather than re-declared: <code>displaySmall</code>,
+      <code>headlineMedium</code> and <code>headlineSmall</code> go to <code>w800</code> with negative
+      letter-spacing (−0.8, −0.6, −0.5) and line heights of 1.15–1.2, while body text keeps 1.45–1.5. Large
+      Arabic display text is exactly where tight tracking pays off, and the negative values are what stop the
+      Figma headings looking soft in English.</p>
+      <p><code>MutedCaption</code> is an extension on <code>ColorScheme</code> that returns
+      <code>onSurface.withValues(alpha: 0.6)</code>. Its own comment records why it exists: nine widgets were
+      dimming <code>onSurface</code> by hand with the same alpha, and one named shade replaced the repeated
+      magic number.</p>
+    </div>
+    <div class="ar">
+      <p>يكشف <code>AppTheme</code> عن أربع قيم — <code>light</code> و<code>dark</code> و
+      <code>liquidGlassLight</code> و<code>liquidGlassDark</code> — وكلها تستدعي الباني الخاص
+      <code>_build(brightness, {glass})</code>. ويقوم ثابتان بمعظم عمل الاتساق البصري: <code>radius = 20</code>
+     used في البطاقات والأزرار والرقائق والحقول وورش الأسفل، و<code>maxContentWidth = 720</code> للنوافذ الواسعة.</p>
+      <p>وسُلَّم الخطوط مُهذَّب لا مُعاد declaration: فتصير <code>displaySmall</code> و<code>headlineMedium</code>
+      و<code>headlineSmall</code> إلى <code>w800</code> مع تباعد حروف سالب (−0.8 و−0.6 و−0.5) وارتفاعات سطر بين
+      1.15 و1.2، بينما يبقى نص المتن على 1.45–1.5. وهذا التباعد الضيّق هو ما ينفع مع النص العربي الكبير في
+      العناوين، والقيم السالبة هي ما يمنع عناوين Figma من أن تبدو مرتخية في الإنجليزية.</p>
+      <p>و<code>MutedCaption</code> امتداد على <code>ColorScheme</code> يُعيد
+      <code>onSurface.withValues(alpha: 0.6)</code>. ويسجّل تعليقُه سبب وجوده: كانت تسعة ودجات تُخفِّت
+      <code>onSurface</code> يدويًا بنفس الشفافية، فاستبدال ذلك بدرجة مسماة واحدة أزال الرقم المتكرر.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">The palette, and the reasoning inside it</span><span class="t-ar">لوحة الألوان والمنطق فيها</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th><span class="t-en">Group</span><span class="t-ar">المجموعة</span></th>
+      <th><span class="t-en">Tokens</span><span class="t-ar">الرموز</span></th>
+      <th><span class="t-en">Design note recorded in the file</span><span class="t-ar">ملاحظة التصميم المسجلة</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><span class="t-en">Brand</span><span class="t-ar">العلامة</span></td>
+        <td><code>primary 00C16A</code> · <code>primaryDark 00A85A</code> · <code>primarySoft E6F8F0</code></td>
+        <td><span class="t-en">Green carries every CTA, the logo and the selected tab; the soft tint is only for the circular category chips.</span><span class="t-ar">يحمل الأخضر كل أزرار الفعل والشعار والشارة المختارة، أما الدرجة الفاتحة فلرقائق دائرية الفئات فقط.</span></td></tr>
+      <tr><td><span class="t-en">Neutrals</span><span class="t-ar">المحايدات</span></td>
+        <td><code>background</code> · <code>surface</code> · <code>textPrimary 12141A</code> · <code>textSecondary 8A93A3</code> · <code>divider</code> · <code>border</code></td>
+        <td><span class="t-en">Every hex lives here so the light/dark switch is a one-liner; no widget carries a literal colour.</span><span class="t-ar">كل رمز hexadecimal هنا، فيصير تبديل الفاتح والداكن سطرًا واحدًا؛ ولا يحمل أي ودجة لونًا حرفيًا.</span></td></tr>
+      <tr><td><span class="t-en">Elevation</span><span class="t-ar">الرفع</span></td>
+        <td><code>cardShadow</code> — two <code>BoxShadow</code>s, α 0x14 blur 20 offset (0,8) plus α 0x0A blur 2 offset (0,1)</td>
+        <td><span class="t-en">Ambient plus key shadow lifts white cards off the grey canvas. Dark mode deliberately leaves shadows empty and relies on surface contrast instead.</span><span class="t-ar">الظلّان المحيط والرئيسي يرفعان البطاقات البيضاء عن القماش الرمادي. أما الداكن فيترك الظلال فارغة عن قصد ويعتمد تقابل الأسطح.</span></td></tr>
+      <tr><td><span class="t-en">Status</span><span class="t-ar">الحالات</span></td>
+        <td><code>rating FFB020</code> · <code>hotOffer FF5A5F</code> · <code>error E23D3D</code> · <code>success 12B76A</code></td>
+        <td><span class="t-en">Four semantic colours, nothing else — no widget invents its own red.</span><span class="t-ar">أربعة ألوان دلالية لا غير، فلا يخترع أي ودجة أحمره.</span></td></tr>
+      <tr><td><span class="t-en">Glass, dark</span><span class="t-ar">الزجاج الداكن</span></td>
+        <td><code>glassCanvasTop 080D18</code> → <code>glassCanvasBottom 111C2E</code>, aurora green + <code>2E6BFF</code>, <code>glassSurface 0x14FFFFFF</code>, <code>glassPanel 0F1A2B</code></td>
+        <td><span class="t-en">The canvas is deliberately deep and slightly blue: on a flat white backdrop blur is invisible. Sheets and dialogs stay <em>opaque</em> in both glass variants, because a modal has nothing behind it to refract.</span><span class="t-ar">القماش داكن عميق ومائل إلى الزرقة عن قصد: فعلى خلفية بيضاء مسطّحة لا يُرى الضباب. وتبقى الورش والنوافذ <em>معتمَة</em> في نسختَي الزجاج، لأن خلف النافذة الحوارية شيء لا يُكسَر.</span></td></tr>
+      <tr><td><span class="t-en">Glass, light</span><span class="t-ar">الزجاج الفاتح</span></td>
+        <td><code>DCE9F7</code> → <code>EAF3EC</code>, <code>glassSurfaceLight 0x8CFFFFFF</code>, <code>glassPanelLight F5FAFD</code></td>
+        <td><span class="t-en">The same frosted recipe over a pale canvas, so the panels are white-tinted glass and blur still reads on a bright page.</span><span class="t-ar">الوصفة نفسها المُضَبَّبة على قماش فاتح، فتصير الألواح زجاجًا مائلًا إلى البياض ويظل الضباب مرئيًا في صفحة مضيئة.</span></td></tr>
+      <tr><td><span class="t-en">Shimmer</span><span class="t-ar">الوميض</span></td>
+        <td><span class="t-en">three pairs: plain, dark, glass-dark</span><span class="t-ar">ثلاثة أزواج: عادية وداكنة وزجاجية داكنة</span></td>
+        <td><span class="t-en">Glass sits over a bluer canvas than the plain themes, so its skeleton placeholders need their own base and highlight colours — otherwise a loading card looks washed out only in glass mode.</span><span class="t-ar">الزجاج يجلس على قماش أزرق من السمات العادية، فتحتمل هياكل التحميل لونَ أساس ولونَ إبراز خاصين بها — وإلا بدا بطاقة التحميل باهتًا في وضع الزجاج وحده.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">The glass recipe, and why it is not "premium"</span><span class="t-ar">وصفة الزجاج، ولماذا ليست "premium"</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>AppGlassTheme</code> exists for the same reason <code>AppColors</code> does: so every glass
+      surface shares one recipe instead of each widget guessing. One static getter returns
+      <code>GlassThemeData.simple(blur: 12, thickness: 32, quality: GlassQuality.standard, saturation: 1.4)</code>.</p>
+      <p>The comment states the trade-off out loud: <code>standard</code> is chosen over <code>premium</code>
+      because most of the glass in this app sits inside scrollable feeds, where the lightweight shader keeps a
+      list at 60fps on mid-range Android hardware. <code>adaptiveQuality</code> in the wrapping
+      <code>LiquidGlassWidgets.initialize()</code> still promotes individual devices that can afford more.</p>
+    </div>
+    <div class="ar">
+      <p>يوجد <code>AppGlassTheme</code> للسبب الذي يوجد لأجله <code>AppColors</code>: تتشارك كل سطح زجاجي وصفة
+      واحدة بدل أن تخمّن كل ودجة. ويعيد مُشغِّل ثابت واحد <code>GlassThemeData.simple(blur: 12, thickness: 32,
+      quality: GlassQuality.standard, saturation: 1.4)</code>.</p>
+      <p>وينطق التعليق بالمقايضة بصوت عالٍ: اختير <code>standard</code> دون <code>premium</code> لأن معظم الزجاج
+      في هذا التطبيق داخل تدفقات قابلة للتمرير، حيث يحافظ البلاورة الأخفّ على القائمة عند 60 إطارًا في الثانية على
+      عتال أندرويد المتوسط. أما <code>adaptiveQuality</code> في <code>LiquidGlassWidgets.initialize()</code>
+      الغلاف فيرقّي الأجهزة القادرة فرادى.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en"><code>AppGlassTokens</code>: a ThemeExtension, not a bloc lookup</span><span class="t-ar"><code>AppGlassTokens</code>: امتداد سمة لا بحث bloc</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p>It carries exactly one boolean, <code>enabled</code>, and it is a <code>ThemeExtension</code> rather
+      than a <code>context.read&lt;ThemeCubit&gt;()</code> for two stated reasons: <code>core/theme</code> must
+      never depend on <code>presentation</code>, and any widget — including the shared decoration helpers — can
+      then ask <code>Theme.of(context)</code> and stay correct in widget tests that pump a bare
+      <code>MaterialApp</code>. <code>enabledOf(context)</code> defaults to <code>false</code> when a theme
+      omits the extension, so forgetting to register it degrades to plain Material rather than throwing.</p>
+      <p><code>bottomBarClearance = 104</code> is the most load-bearing number in the file. A
+      <code>GlassScaffold</code> lays its body out with <code>Positioned.fill</code>, so the floating capsule
+      paints <em>over</em> the content instead of reserving room for it the way a Material
+      <code>NavigationBar</code> does. The shell therefore publishes 104 as <code>MediaQuery.padding.bottom</code>
+      — the same channel Material uses — and screens add it as scroll padding through
+      <code>Responsive.bottomBarClearance()</code>. The result is the behaviour the design asked for: text runs
+      behind the frost, and the last row still scrolls fully clear of it.</p>
+      <p><code>lerp</code> steps rather than interpolates (<code>t &lt; 0.5</code>), because "is glass on" is not
+      a value you can blend halfway.</p>
+    </div>
+    <div class="ar">
+      <p>يحمل رقمًا واحدًا هو <code>enabled</code> المنطقي، وهو <code>ThemeExtension</code> لا
+      <code>context.read&lt;ThemeCubit&gt;()</code> لسببين مصرَّح بهما: لا يجوز أن تعتمد
+      <code>core/theme</code> على <code>presentation</code>، وليستطيع أي ودجة — بما فيها دوال الزينة المشتركة — أن
+      يسأل <code>Theme.of(context)</code> ويبقى صحيحًا في اختبار ودجات يضخّ <code>MaterialApp</code> مجرّدًا.
+      و<code>enabledOf(context)</code> يفترض <code>false</code> حين تُغفل السمةُ الامتدادَ، فنسيان التسجيل يتدهور
+      إلى Material عادي لا إلى رمي.</p>
+      <p>وأثقل رقم في الملف هو <code>bottomBarClearance = 104</code>. فـ<code>GlassScaffold</code> يفرِد متنه
+      بـ<code>Positioned.fill</code>، فيُرسم الكبسول العائم <em>فوق</em> المحتوى بدل أن يحجز له مكانًا كما يفعل
+      <code>NavigationBar</code> في Material. لذا ينشر الهيكل الرقم 104 في
+      <code>MediaQuery.padding.bottom</code> — القناة نفسها التي تستعملها Material — وتضيفه الشاشات توسيفًا
+      للتمرير عبر <code>Responsive.bottomBarClearance()</code>. والنتيجة هي السلوك الذي طلبه التصميم: النص يجري
+      خلف الضباب، وآخر سطر يظل يمرّ تحته كاملًا.</p>
+      <p>وأما <code>lerp</code> فيقفز ولا يمتزج (<code>t &lt; 0.5</code>)، لأن «هل الزجاج مفعّل» ليست قيمة يمكن
+      مزجها إلى النصف.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Layout: three breakpoints, one helper</span><span class="t-ar">التخطيط: ثلاث نقاط فصل ومساعد واحد</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th>Width</th><th><span class="t-en">Meals grid</span><span class="t-ar">شبكة الأطباق</span></th>
+      <th><span class="t-en">Horizontal padding</span><span class="t-ar">الحشو الأفقي</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><span class="t-en">below 600 (phone)</span><span class="t-ar">دون 600 (هاتف)</span></td><td>2</td><td>20</td></tr>
+      <tr><td><span class="t-en">600 – 899 (large phone / small tablet)</span><span class="t-ar">600 – 899 (هاتف كبير أو لوحي صغير)</span></td><td>3</td><td>24</td></tr>
+      <tr><td><span class="t-en">900 and up (tablet)</span><span class="t-ar">900 فأعلى (لوحي)</span></td><td>4</td><td>32</td></tr>
+    </tbody>
+  </table>
+  <div class="bi">
+    <div class="en">
+      <p>Every screen asks <code>Responsive</code> instead of hard-coding a column count, and each getter
+      documents the <code>MediaQuery</code> breakpoint it reacts to. <code>constrainWidth()</code> wraps readable
+      content in <code>Center</code> + <code>ConstrainedBox(maxWidth: 720)</code> so a line of text never
+      stretches across a tablet. <code>bottomBarClearance()</code> deliberately reads
+      <code>MediaQuery.paddingOf(context).bottom</code> rather than returning a constant, so a route outside the
+      bottom-nav shell falls back to the plain system inset and nothing hard-codes a bar height.</p>
+      <p>The glass renderer gets its backdrop from <code>GlassBackdrop</code>, which paints
+      <code>GlassAurora</code> behind the whole <code>Navigator</code> — one moving gradient for the entire app,
+      not one per screen, which is what makes the frost look like it is refracting something real.</p>
+    </div>
+    <div class="ar">
+      <p>كل شاشة تسأل <code>Responsive</code> بدل أن ترمّز عدد أعمدة ثابتًا، وكل دالة توثّق نقطة فصل
+      <code>MediaQuery</code> التي تستجيب لها. ويلفّ <code>constrainWidth()</code> المحتوى المقروء في
+      <code>Center</code> مع <code>ConstrainedBox(maxWidth: 720)</code> فلا يمتدّ سطر نص عبر لوحي. وتقرأ
+      <code>bottomBarClearance()</code> القيمة من <code>MediaQuery.paddingOf(context).bottom</code> لا من ثابت،
+      عن قصد، فمسار خارج هيكل الشريط السفلي يرجع إلى الحافة النظامية المجردة ولا يرمّز أحد ارتفاع الشريط.</p>
+      <p>ويأخذ مُسرِّع الزجاج خلفيته من <code>GlassBackdrop</code> الذي يرسم <code>GlassAurora</code> وراء
+      <code>Navigator</code> كله — تدرّج متحرك واحد للتطبيق كله لا واحد لكل شاشة، وهذا ما يجعل الضباب يبدو وكأنه
+      يكسر شيئًا حقيقيًا.</p>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+    <a href="08-domain.html"><span class="lbl"><span class="t-en">Previous · §08</span><span class="t-ar">السابق · §08</span></span><span class="to"><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></span></a>
+    <a class="next" href="10-l10n.html"><span class="lbl"><span class="t-en">Next · §10</span><span class="t-ar">التالي · §10</span></span><span class="to"><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#theme">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

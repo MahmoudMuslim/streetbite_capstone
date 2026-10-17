@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Localisation · StreetBite code documentation · §10</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html" class="cur"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §10 Localisation</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part I · Section 10 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الأول · القسم 10 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="l10n">
+  <h2><span class="t-en"><span class="num">10</span> · Localisation</span><span class="t-ar"><span class="num">10</span> · التعريب</span></h2>
+
+  <div class="bi">
+    <div class="en">
+      <p>StreetBite ships two languages, English and Arabic, and the rule that makes it work is a ban: <b>no
+      widget may contain a literal sentence</b>. Text is reached through <code>AppLocalizations</code>, and the
+      domain and data layers hand up <em>keys</em> instead of strings. Arabic is not a translation layer bolted
+      on at the end — the app cannot be used without it, because every message it can show exists in both files
+      or it does not exist at all.</p>
+      <p>Two ARB files, <code>app_en.arb</code> as the template and <code>app_ar.arb</code>, each carrying
+      <b>178 keys</b>. The generated classes (<code>app_localizations.dart</code> 1,202 lines, the two locale
+      subclasses 586 and 596) are excluded from the 158 hand-written file count.</p>
+    </div>
+    <div class="ar">
+      <p>يصدّر StreetBite لغتين، الإنجليزية والعربية، والقاعدة التي تجعل ذلك تعمل هي منع: <b>لا يجوز أن يحمل أي
+      ودجة جملة حرفية</b>. ويوصل إلى النص عبر <code>AppLocalizations</code>، وتُرفع طبقتا المجال والبيانات
+      <em>مفاتيح</em> بدل النصوص. والعربية ليست طبقة ترجمة أُلحقت في النهاية — فلا يُستخدم التطبيق بدونها، لأن
+      كل رسالة يمكن أن تظهر موجودة في الملفين معًا أو غير موجودة أصلًا.</p>
+      <p>ملفا ARB: <code>app_en.arb</code> نموذجًا و<code>app_ar.arb</code>، وفي كل منهما <b>178 مفتاحًا</b>.
+      والأصناف المولَّدة (<code>app_localizations.dart</code> بـ1,202 سطرًا، والصنفين المشتقَّين 586 و596 سطرًا) خارج
+      عدّ الملفات الـ158 المكتوبة يدويًا.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">The generator is configured to stay inside <code>lib/</code></span><span class="t-ar">المولِّد مضبوط ليبقى داخل <code>lib/</code></span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>l10n.yaml</code> points <code>arb-dir</code> at <code>lib/l10n</code> and sets
+      <code>output-dir: lib/l10n/generated</code> — deliberately not the build folder, so the compiled artefacts
+      are visible and reviewable inside the source tree. Two flags matter:
+      <code>nullable-getter: false</code> makes every call site read <code>AppLocalizations.of(context)</code>
+      without a <code>!</code>, because the lookup is guaranteed non-null; and <code>use-escaping: true</code>
+      lets a translation keep a literal brace without it being read as a placeholder, which the money strings
+      need.</p>
+    </div>
+    <div class="ar">
+      <p>يوجّه <code>l10n.yaml</code> مجلد <code>arb-dir</code> إلى <code>lib/l10n</code>، ويضبط
+      <code>output-dir: lib/l10n/generated</code> — لا مجلد البناء، عن قصد — حتى تكون المخرجات مرئية داخل شجرة
+      المصدر وقابلة للمراجعة. وعلمان له أثر: <code>nullable-getter: false</code> يجعل كل موضع يقرأ
+      <code>AppLocalizations.of(context)</code> من غير <code>!</code> لأن البحث مضمون غير خالٍ؛
+      و<code>use-escaping: true</code> يسمح لترجمة أن تحتفظ بمعلاق حرفي من غير أن يُقرأ وسيطًا، وهو ما تحتاجه
+      نصوص المال.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en"><code>L10nX</code> — the only bridge from key to text</span><span class="t-ar"><code>L10nX</code> — الجسر الوحيد من المفتاح إلى النص</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th>Member</th><th>Arms</th>
+      <th><span class="t-en">What it does</span><span class="t-ar">ما يفعله</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>trKey(String key)</code></td><td>66</td>
+        <td><span class="t-en">Resolves a plain message key. Grouped in the source by comment banners into network, validation, Firebase Auth, biometrics, domain, empty states, form labels, categories, device rows and payment labels. Anything unknown falls back to <code>somethingWentWrong</code>, so a typo can never surface raw identifier text to a user.</span><span class="t-ar">يحلّ مفتاح رسالة عادية. ومقسّم في المصدر بلافتات تعليقات إلى: الشبكة، والتحقق، وFirebase Auth، والبصمة، والمجال، والحالات الفارغة، وتسميات النماذج، والفئات، وسطور الجهاز، وتسميات الدفع. وما لا يُعرف يرجع إلى <code>somethingWentWrong</code>، فلا يستطيع خطأ مطبعي أن يعرض معرّفًا خامًا للمستخدم.</span></td></tr>
+      <tr><td><code>trArgs(key, args)</code></td><td>6</td>
+        <td><span class="t-en">Resolves a parameterised key: <code>addedToCart</code>, <code>removedFromCart</code>, <code>signUpSuccessMessage</code>, <code>vendorDistance</code>, <code>paidWith</code>, <code>placeOrderFor</code>. The seven placeholders used across the files are <code>{name} {amount} {count} {date} {distance} {id} {method}</code>.</span><span class="t-ar">يحلّ مفتاحًا ذو وسائط: <code>addedToCart</code> و<code>removedFromCart</code> و<code>signUpSuccessMessage</code> و<code>vendorDistance</code> و<code>paidWith</code> و<code>placeOrderFor</code>. والوسائط السبعة المستعملة في الملفين هي <code>{name} {amount} {count} {date} {distance} {id} {method}</code>.</span></td></tr>
+      <tr><td><code>itemCount(int)</code></td><td>—</td>
+        <td><span class="t-en">Delegates to the ICU plural form <code>orderItemsCount</code>: <code>{count, plural, =1{1 item} other{{count} items}}</code>, so English gets its singular and Arabic gets its own plural rules from the ARB, not from an <code>if</code> in a widget.</span><span class="t-ar">تفوّض إلى صيغة الجمع ICU في <code>orderItemsCount</code>: <code>{count, plural, =1{1 item} other{{count} items}}</code>، فتأخذ الإنجليزية مفردَها وتأخذ العربية جمعَها من ARB لا من <code>if</code> في ودجة.</span></td></tr>
+      <tr><td><code>formatNumber(num)</code></td><td>—</td>
+        <td><span class="t-en"><code>NumberFormat.decimalPattern</code> for the active locale — Arabic-Indic digits when the app is in <code>ar</code>.</span><span class="t-ar"><code>NumberFormat.decimalPattern</code> حسب اللغة الفعّالة — أرقام هندية عربية حين يكون التطبيق على <code>ar</code>.</span></td></tr>
+      <tr><td><code>formatOrderDate(DateTime)</code></td><td>—</td>
+        <td><span class="t-en"><code>DateFormat.yMMMd(locale).add_jm()</code>. Its comment names the reason: a hard-coded <code>"MMM d, y"</code> would leak English into the receipt. <code>flutter_localizations</code> registers the intl date symbols for both locales, so this never throws for a language the app can show.</span><span class="t-ar"><code>DateFormat.yMMMd(locale).add_jm()</code>. ويسمية تعليقُه السبب: صيغة <code>"MMM d, y"</code> الثابتة تسرّب الإنجليزية إلى الإيصال. ويسجّل <code>flutter_localizations</code> رموز intl للتاريخ في اللغتين، فلا ترمي هذه أبدًا في لغة يمكن للتطبيق عرضها.</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn">
+    <b>An honest correction to a doc comment · تصحيح صريح لتعليق في الكود</b>
+    <div class="bi">
+      <div class="en"><p>The comment above <code>trKey</code> says the switch is exhaustive, so wiring a new ARB
+      key is "a compile-time error rather than a runtime surprise". It is not: line 109 ends with
+      <code>_ =&gt; l10n.somethingWentWrong</code>, so an unwired key compiles and falls back at runtime. The
+      comment above <code>trArgs</code> tells the truth and records the scar — a key missing there once made the
+      checkout button read <b>"Something went wrong"</b> instead of "Place order · $23.14". The documented rule
+      that follows is the right one: <em>any widget that renders text through a dynamic key must be covered by a
+      test that asserts on the visible sentence</em>.</p></div>
+      <div class="ar"><p>يقول التعليق فوق <code>trKey</code> إن التبديل مستوفٍ، فربط مفتاح ARB جديد خطأه
+      «خطأ ترجمة لا مفاجأة تشغيل». وهذا غير صحيح: السطر 109 ينتهي بـ<code>_ =&gt; l10n.somethingWentWrong</code>،
+      فأي مفتاح غير مربوط يُصرَّف ويسقط إلى النص الاحتياطي وقت التشغيل. أما التعليق فوق <code>trArgs</code> فيقول الحق
+      ويسجّل الأثر: مفتاحًا ناقصًا هناك جعل زر إتمام الطلب يقرأ <b>«حدث خطأ ما»</b> بدل «اطلب · $23.14».
+      والقاعدة المكتوبة بعده هي الصحيحة: <em>كل ودجة تعرض نصًا عبر مفتاح ديناميكي يجب أن يغطيها اختبار يجزم
+      بالجملة المرئية</em>.</p></div>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Switching language at runtime</span><span class="t-ar">تغيير اللغة أثناء التشغيل</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>LocaleCubit</code> (45 lines) owns one <code>Locale</code>, defaults to <code>en</code>, and
+      persists the language code under <code>streetbite_locale</code>. Its state is fed into
+      <code>MaterialApp.locale</code> inside <code>app.dart</code>, with
+      <code>supportedLocales: AppLocalizations.supportedLocales</code> and the three generated delegates — so
+      changing language re-resolves every string without a restart, and Flutter derives the RTL
+      <code>Directionality</code> from the same value. There is no manual mirroring anywhere.</p>
+      <p><code>setLocale</code> ignores a locale that is not in <code>supportedLocales</code>, and
+      <code>toggle()</code> is what the EN/AR button in every app bar and on the splash screen calls.
+      <code>load()</code> is called once from <code>main()</code>, before the first frame, so the app never opens
+      in English for a split second on an Arabic device.</p>
+    </div>
+    <div class="ar">
+      <p>يمتلك <code>LocaleCubit</code> (45 سطرًا) <code>Locale</code> واحدة، ويفترض <code>en</code>، ويحفظ رمز
+      اللغة تحت <code>streetbite_locale</code>. وتُغذّى حالته في <code>MaterialApp.locale</code> داخل
+      <code>app.dart</code> مع <code>supportedLocales: AppLocalizations.supportedLocales</code> والمفوّضين
+      الثلاثة المولَّدين — فتغيير اللغة يعيد حلّ كل نص دون إعادة إقلاع، ويستنتج Flutter
+      <code>Directionality</code> الأيمن-اليساري من القيمة نفسها. ولا توجد مراآة يدوية في أي موضع.</p>
+      <p>ويتغاضى <code>setLocale</code> عن لغة ليست في <code>supportedLocales</code>، ويستدعي <code>toggle()</code>
+      زرّ EN/AR في كل شريط علوي وعلى شاشة البداية. ويُستدعى <code>load()</code> مرة واحدة من <code>main()</code>
+      قبل الإطار الأول، فلا يفتح التطبيق بالإنجليزية لحظةً على جهاز عربي.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Keeping the 178 keys honest</span><span class="t-ar">كيف تبقى المفاتيح الـ178 صادقة</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p>Two Python helpers exist for exactly this: <code>scripts/check_unused_arb.py</code> reports ARB keys that
+      no Dart file references, and <code>scripts/prune_arb.py</code> removes them from <em>both</em> files so the
+      two locales cannot drift in size. The same scripts are what keep the count of 178 meaningful rather than
+      accumulated — an app that bans literal strings tends to accumulate dead keys faster than it accumulates
+      dead code.</p>
+    </div>
+    <div class="ar">
+      <p>توجد أداتا Python لهذا بالضبط: يُبلّغ <code>scripts/check_unused_arb.py</code> عن مفاتيح ARB لا يشير
+      إليها أي ملف Dart، ويزيل <code>scripts/prune_arb.py</code> هذه المفاتيح من الملفين <em>معًا</em> فلا يتباعَد
+      حجم اللغتين. وهذه السكربتات نفسها هي ما يبقي عدد 178 معنويًا لا متراكمًا — فتطبيق يمنع النصوص الحرفية يميل
+      إلى تكديس المفاتيح الميتة أسرع من تكديسه الكود الميت.</p>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+    <a href="09-theme.html"><span class="lbl"><span class="t-en">Previous · §09</span><span class="t-ar">السابق · §09</span></span><span class="to"><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></span></a>
+    <a class="next" href="11-security.html"><span class="lbl"><span class="t-en">Next · §11</span><span class="t-ar">التالي · §11</span></span><span class="to"><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#l10n">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

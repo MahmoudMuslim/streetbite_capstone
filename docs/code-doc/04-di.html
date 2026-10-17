@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Composition root &amp; dependency injection · StreetBite code documentation · §04</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html" class="cur"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §04 Composition root &amp; dependency injection</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part I · Section 04 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الأول · القسم 04 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="di">
+  <h2><span class="t-en"><span class="num">04</span> · Composition root &amp; dependency injection</span><span class="t-ar"><span class="num">04</span> · جذر التركيب وحقن التبعيات</span></h2>
+
+  <div class="bi">
+    <div class="en">
+      <p><code>lib/injection.dart</code> (390 lines) is the only file in the app that names a concrete
+      implementation. It exposes <code>final GetIt sl = GetIt.instance</code> and one function,
+      <code>configureDependencies()</code>, called once from <code>main()</code> before <code>runApp</code>.
+      It performs <b>45 registrations</b>: 24 lazy singletons, 1 eager singleton, and 20 factories.</p>
+      <p>Everything is registered inside one sequence that tolerates failure, and the order is load-bearing —
+      see the first step below.</p>
+    </div>
+    <div class="ar">
+      <p>ملف <code>lib/injection.dart</code> (390 سطرًا) هو الملف الوحيد في التطبيق الذي يسمي تنفيذًا ملموسًا.
+      يكشف عن <code>final GetIt sl = GetIt.instance</code> ودالة واحدة هي
+      <code>configureDependencies()</code>، وتُستدعى مرة واحدة من <code>main()</code> قبل <code>runApp</code>.
+      ينفذ الملف <b>45 تسجيلًا</b>: 24 مفردة كسولة، ومفردة فورية واحدة، و20 مصنعًا.</p>
+      <p>كل شيء مسجل داخل تسلسل واحد يتحمل الأخطاء، وترتيبه مهم جدًا — راجع أول خطوة أدناه.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Registration order</span><span class="t-ar">ترتيب التسجيل</span></h3>
+  <div class="flow">
+    <div class="st"><b>1</b><span class="t-en"><code>FirestoreService</code> lazySingleton — <em>must</em> come first</span><span class="t-ar"><code>FirestoreService</code> مفردة كسولة — يجب أن تكون الأولى</span></div>
+    <div class="st"><b>2</b><span class="t-en"><code>_initFirebaseSafely()</code></span><span class="t-ar"><code>_initFirebaseSafely()</code></span></div>
+    <div class="st"><b>3</b><span class="t-en">external singletons: Dio, prefs, plugins, FirebaseAuth</span><span class="t-ar">المفردات الخارجية: Dio والتفضيلات والإضافات وFirebaseAuth</span></div>
+    <div class="st"><b>4</b><span class="t-en">data sources</span><span class="t-ar">مصادر البيانات</span></div>
+    <div class="st"><b>5</b><span class="t-en">repositories behind their interfaces</span><span class="t-ar">المستودعات خلف واجهاتها</span></div>
+    <div class="st"><b>6</b><span class="t-en">20 use cases as factories</span><span class="t-ar">20 حالة استخدام كمصانع</span></div>
+    <div class="st ok"><b>7</b><span class="t-en">7 Cubits and the CartBloc as lazy singletons</span><span class="t-ar">سبعة Cubits وCartBloc كمفردات كسولة</span></div>
+    <div class="st ok"><b>8</b><span class="t-en"><code>_seedQaAccount()</code></span><span class="t-ar"><code>_seedQaAccount()</code></span></div>
+  </div>
+
+  <div class="key">
+    <b>Why FirestoreService is registered first · لماذا تُسجَّل FirestoreService أولًا</b>
+    <div class="bi">
+      <div class="en"><p><code>_initFirebaseSafely()</code> resolves <code>sl&lt;FirestoreService&gt;()</code> in
+      order to hand it the Firebase instance. Resolving a type that has not been registered throws out of GetIt
+      and would abort the rest of <code>configureDependencies()</code>, leaving every Cubit unregistered — which
+      then crashes <code>main()</code> on an empty screen. Registering it first turns a fatal ordering mistake
+      into an impossible one.</p></div>
+      <div class="ar"><p>تستدعي <code>_initFirebaseSafely()</code>النوع <code>sl&lt;FirestoreService&gt;()</code>
+      لكي تمنحه نسخة Firebase. واستدعاء نوع لم يُسجل بعد يرمي استثناءً من GetIt ويُجهض بقية
+      <code>configureDependencies()</code>، فتبقى كل الـ Cubits غير مسجلة، ثم ينهار <code>main()</code> على شاشة
+      فارغة. تسجيلها أولًا يحوّل خطأ الترتيب القاتل إلى خطأ مستحيل الحدوث.</p></div>
+    </div>
+  </div>
+
+  <h3><span class="t-en">The scope chosen for each kind of object — and why</span><span class="t-ar">النطاق المختار لكل نوع من الكائنات — والسبب</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th><span class="t-en">Kind</span><span class="t-ar">النوع</span></th>
+      <th>Scope</th>
+      <th><span class="t-en">Reason recorded in the file</span><span class="t-ar">السبب المدون في الملف</span></th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="t-en">External SDKs</span><span class="t-ar">الأدوات الخارجية</span></td>
+        <td><code>lazySingleton</code></td>
+        <td><span class="t-en">They own a connection pool or a platform channel, so a second instance is a bug.</span><span class="t-ar">تملك مجمّع اتصالات أو قناة منصة، لذا وجود نسخة ثانية يعني خطأ.</span></td>
+      </tr>
+      <tr>
+        <td><span class="t-en"><code>SharedPreferences</code></span><span class="t-ar"><code>SharedPreferences</code></span></td>
+        <td><code>registerSingleton</code></td>
+        <td><span class="t-en"><code>SharedPreferences.getInstance()</code> is asynchronous and the cache must be warm before any screen reads it, so it is awaited here and handed over with <code>registerSingleton</code>.</span><span class="t-ar"><code>SharedPreferences.getInstance()</code> غير متزامنة، ويجب أن تكون الذاكرة دافئة قبل أن تقرأها أي شاشة، لذا تُنتظَر هنا وتُمرَّر عبر <code>registerSingleton</code>.</span></td>
+      </tr>
+      <tr>
+        <td><span class="t-en">Data sources</span><span class="t-ar">مصادر البيانات</span></td>
+        <td><code>lazySingleton</code></td>
+        <td><span class="t-en">A cache is only correct if exactly one object holds it.</span><span class="t-ar">الذاكرة المؤقتة صحيحة فقط إذا حملها كائن واحد بالضبط.</span></td>
+      </tr>
+      <tr>
+        <td><span class="t-en">Repositories</span><span class="t-ar">المستودعات</span></td>
+        <td><code>lazySingleton</code> <em>bound to the interface</em></td>
+        <td><span class="t-en">Callers ask for <code>MealRepository</code>, never <code>MealRepositoryImpl</code>, so swapping the implementation is a one-line change here.</span><span class="t-ar">يطلب المستدعون <code>MealRepository</code> ولا يطلبون <code>MealRepositoryImpl</code> أبدًا، فيصبح تبديل التنفيذ تعديل سطر واحد هنا.</span></td>
+      </tr>
+      <tr>
+        <td><span class="t-en">Use cases</span><span class="t-ar">حالات الاستخدام</span></td>
+        <td><code>registerFactory</code></td>
+        <td><span class="t-en">Cheap value objects rebuilt per consumer, which keeps them free of shared mutable state.</span><span class="t-ar">كائنات قيمة رخيصة تُعاد بناءها لكل مستهلك، فتبقى خالية من حالة مشتركة قابلة للتغيير.</span></td>
+      </tr>
+      <tr>
+        <td><span class="t-en">Cubits / Bloc</span><span class="t-ar">Cubits / Bloc</span></td>
+        <td><code>lazySingleton</code></td>
+        <td><span class="t-en">The Home badge and the Cart screen must observe the <em>same</em> <code>CartBloc</code>, otherwise they can disagree for a frame.</span><span class="t-ar">يجب أن تراقب شارة الرئيسية وشاشة السلة <em>نفس</em> نسخة <code>CartBloc</code>، وإلا اختلفتا لإطار واحد.</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <pre><code><span class="c">// data/repositories — the interface is the key, the Impl is an internal detail</span>
+sl.registerLazySingleton&lt;MealRepository&gt;(
+  () =&gt; MealRepositoryImpl(
+    remote: sl&lt;MealRemoteDataSource&gt;(),
+    local: sl&lt;MealLocalDataSource&gt;(),
+  ),
+);
+
+<span class="c">// domain/usecases — one factory per operation</span>
+sl.registerFactory&lt;GetMeals&gt;(() =&gt; GetMeals(sl&lt;MealRepository&gt;()));
+
+<span class="c">// presentation/blocs — a lazySingleton wired from use cases</span>
+sl.registerLazySingleton&lt;CartBloc&gt;(
+  () =&gt; CartBloc(
+    addToCart: sl&lt;AddToCart&gt;(),
+    removeFromCart: sl&lt;RemoveFromCart&gt;(),
+    calculateTotals: sl&lt;CalculateOrderTotals&gt;(),
+    placeOrder: sl&lt;PlaceOrder&gt;(),
+  ),
+);</code></pre>
+
+  <h3><span class="t-en">Boot order in <code>main()</code></span><span class="t-ar">ترتيب الإقلاع في <code>main()</code></span></h3>
+  <div class="bi">
+    <div class="en">
+      <ol>
+        <li><code>WidgetsFlutterBinding.ensureInitialized()</code> — mandatory before any plugin call.</li>
+        <li><code>SystemChrome.setPreferredOrientations</code> — the app is portrait-only, both directions.</li>
+        <li><code>configureDependencies()</code> then <code>_prepareAppState()</code> (loads the persisted
+        appearance and language), inside one <code>try</code> that only <code>debugPrint</code>s.</li>
+        <li><code>LiquidGlassWidgets.initialize()</code> in its own <code>try</code>: a device with no usable
+        GPU loses the glass look but keeps the app.</li>
+        <li><code>_isGraphWired()</code> checks the seven state objects are registered. If not,
+        <code>_StartupFailureApp</code> is rendered — a dependency-free screen that prints
+        <code>flutter clean &amp;&amp; flutter pub get</code> instead of crashing inside <code>runApp</code>,
+        the one place with no safety net.</li>
+        <li><code>runApp(LiquidGlassWidgets.wrap(... StreetBiteApp(...)))</code> with all seven Cubits resolved
+        from <code>sl</code> and passed as constructor arguments.</li>
+      </ol>
+    </div>
+    <div class="ar">
+      <ol>
+        <li><code>WidgetsFlutterBinding.ensureInitialized()</code> — إلزامي قبل أي نداء لإضافة.</li>
+        <li><code>SystemChrome.setPreferredOrientations</code> — التطبيق عمودي الاتجاه فقط وباتجاهيه.</li>
+        <li><code>configureDependencies()</code> ثم <code>_prepareAppState()</code> (الذي يحمّل المظهر واللغة
+        المحفوظَين) داخل <code>try</code> واحد يكتفي بـ <code>debugPrint</code>.</li>
+        <li><code>LiquidGlassWidgets.initialize()</code> في <code>try</code> مستقل: جهاز بلا معالج رسومات
+        صالح يفقد الشكل الزجاجي لكنه يحتفظ بالتطبيق.</li>
+        <li><code>_isGraphWired()</code> تتحقق من تسجيل الكائنات السبعة. وإن لم تُسجَّل يُعرض
+        <code>_StartupFailureApp</code> — شاشة بلا تبعيات تطبع <code>flutter clean &amp;&amp; flutter pub get</code>
+        بدلًا من الانهيار داخل <code>runApp</code>، وهو الموضع الوحيد بلا شبكة أمان.</li>
+        <li><code>runApp(LiquidGlassWidgets.wrap(... StreetBiteApp(...)))</code> بعد استدعاء الـ Cubits
+        السبعة من <code>sl</code> وتمريرها كوسائط بناء.</li>
+      </ol>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Firebase bootstrap: a failure that must not be fatal</span><span class="t-ar">تهيئة Firebase: فشل يجب ألا يكون قاتلًا</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>_initFirebaseSafely()</code> calls <code>Firebase.initializeApp()</code>, then
+      <code>configure(FirebaseFirestore.instance)</code>. Any throw — missing
+      <code>google-services.json</code>, no Play Services, a network error — lands in the <code>catch</code>,
+      which calls <code>configure(null)</code> inside its own <code>try</code> so that even the fallback cannot
+      abort the rest of the graph. With <code>_firestore == null</code> the singleton reports
+      <code>isAvailable == false</code> and every repository transparently uses its local data source.</p>
+      <p>Then <code>_waitForAuthSessionRestore()</code> awaits the first value of
+      <code>FirebaseAuth.instance.userChanges()</code> with a 10-second timeout.
+      <code>initializeApp()</code> returning does <b>not</b> mean Auth is ready: the SDK reloads a saved session
+      from disk asynchronously, so <code>currentUser</code> is briefly <code>null</code>. Reading it inside that
+      window made the app conclude nobody was signed in, start Firestore requests with no token, and receive
+      <code>PERMISSION_DENIED: Missing or insufficient permissions</code> — byte-for-byte identical to the
+      message a wrong security rule produces. A fresh sign-in always worked, because login populates Auth
+      synchronously; only cold restarts failed.</p>
+    </div>
+    <div class="ar">
+      <p>تستدعي <code>_initFirebaseSafely()</code> الدالة <code>Firebase.initializeApp()</code> ثم
+      <code>configure(FirebaseFirestore.instance)</code>. أي رمي — غياب <code>google-services.json</code>، أو
+      عدم وجود خدمة Google Play، أو خطأ شبكة — يستقر في <code>catch</code> التي تستدعي
+      <code>configure(null)</code> داخل <code>try</code> خاص بها حتى لا يُجهض البديل نفسه بقية رسم الشجرة.
+      وعندئذ تكون <code>_firestore == null</code> فتُبلِغ المفردة بـ <code>isAvailable == false</code> وتستخدم كل
+      مستودع مصدره المحلي بشفافية.</p>
+      <p>ثم تنتظر <code>_waitForAuthSessionRestore()</code> أول قيمة من
+      <code>FirebaseAuth.instance.userChanges()</code> بمهلة 10 ثوانٍ. رجوع <code>initializeApp()</code>
+      <b>لا</b> يعني أن المصادقة جاهزة: تُعيد الأداة تحميل الجلسة المحفوظة من القرص بشكل غير متزامن، فيبقى
+      <code>currentUser</code> معادلًا لـ <code>null</code> لحظة قصيرة. والقراءة داخل تلك النافذة تجعل التطبيق
+      يظن أن أحدًا لم يسجل الدخول، فيبدأ طلبات Firestore بلا رمز وصول ويستقبل
+      <code>PERMISSION_DENIED: Missing or insufficient permissions</code> — وهو نص مطابق تمامًا لما تنتجه قاعدة
+      حماية خاطئة. تسجيل الدخول الجديد كان يعمل دائمًا لأن الدخول يملأ المصادقة بشكل متزامن؛ والفشل كان يحدث في
+      الإقلاع البارد فقط.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Seeding the QA account</span><span class="t-ar">تهيئة حساب الاختبار</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>_seedQaAccount()</code> deliberately lives in the composition root: <code>main.dart</code> must
+      never resolve a concrete data-layer class. The account is created in <b>both</b> stores — the on-device
+      store the offline fallback reads, and Firebase Auth that <code>login()</code> talks to first. Seeding only
+      the local store produces a confusing bug where sign-in is rejected even though the account "exists".</p>
+      <p>It is idempotent and non-fatal, and it contains a hard-won detail:
+      <code>createUserWithEmailAndPassword</code> signs the new user in as a side effect, so a sign-out is
+      required — but <em>only</em> when this call actually authenticated someone. An unconditional sign-out ran
+      on every launch and logged the real user out of their own session: the splash restored it, and the
+      composition root destroyed it again.</p>
+    </div>
+    <div class="ar">
+      <p>تسكن <code>_seedQaAccount()</code> في جذر التركيب عن قصد: يجب ألا تستدعي <code>main.dart</code> صنفًا
+      ملموسًا في طبقة البيانات. يُنشأ الحساب في <b>كلا</b> المخزنين — المخزن المحلي الذي يقرأه المسار غير المتصل،
+      وFirebase Auth الذي تتحدث إليه <code>login()</code> أولًا. وتهيئة المخزن المحلي وحده تُنتج خطأً محيرًا
+      يُرفض فيه تسجيل الدخول رغم أن الحساب «موجود».</p>
+      <p>الدالة قابلة للتكرار وغير قاتلة، وفيها تفصيل ثمنه باهظ:
+      <code>createUserWithEmailAndPassword</code> يسجل دخول المستخدم الجديد كتأثير جانبي، لذا يلزم تسجيل خروج —
+      لكن <em>فقط</em> إذا كان هذا النداء هو من سجّل الدخول فعلًا. كان تسجيل الخروج غير المشروط يجري في كل
+      إقلاع ويُخرج المستخدم الحالي من جلسته: تستعيدها شاشة البداية، فيهدمها جذر التركيب من جديد.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>Testability payoff · العائد في الاختبار</b>
+    <div class="bi">
+      <div class="en"><p>Because Cubits receive abstract use cases, a widget test never touches Firebase: it
+      constructs <code>AuthCubit</code> with <code>mocktail</code> doubles and pumps the screen. That is what the
+      15 test files do; none of them needs a running backend.</p></div>
+      <div class="ar"><p>لأن الـ Cubits تستقبل حالات استخدام مجرّدة، لا تلمس اختبارات الـ Widget خدمة Firebase
+      أبدًا: تبني <code>AuthCubit</code> ببدائل <code>mocktail</code> وتعرض الشاشة. هذا ما تفعله ملفات الاختبار
+      الخمسة عشر؛ ولا يحتاج أي منها إلى خادم يعمل.</p></div>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+    <a href="03-architecture.html"><span class="lbl"><span class="t-en">Previous · §03</span><span class="t-ar">السابق · §03</span></span><span class="to"><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></span></a>
+    <a class="next" href="05-state.html"><span class="lbl"><span class="t-en">Next · §05</span><span class="t-ar">التالي · §05</span></span><span class="to"><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#di">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

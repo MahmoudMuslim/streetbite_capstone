@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary · StreetBite code documentation · §18</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html" class="cur"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §18 Glossary</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part II · Section 18 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الثاني · القسم 18 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="glossary">
+  <h2><span class="t-en"><span class="num">18</span> · Glossary</span><span class="t-ar"><span class="num">18</span> · المعجم</span></h2>
+
+  <div class="bi"><div class="en">
+    <p>Every term this document uses in a sense specific to StreetBite, plus the few general ones it assumes.
+    Each entry points back at the section that argues the point, because in this code base a word is defined
+    by the rule attached to it, not by the dictionary.</p>
+  </div><div class="ar">
+    <p>كل مصطلح تستعمله هذه الوثيقة بمعنى خاص بـ StreetBite، مع القليل من المصطلحات العامة التي تفترضها.
+    وكل مدخل يشير إلى القسم الذي يبرهن الفكرة، لأن الكلمة في هذا الكود تُعرَّف بالقاعدة المعلقة عليها لا
+    بالقاموس.</p>
+  </div></div>
+
+  <h3><span class="t-en">Architecture</span><span class="t-ar">البنية</span></h3>
+  <table class="tbl">
+    <thead><tr><th><span class="t-en">Term</span><span class="t-ar">المدخل</span></th>
+      <th><span class="t-en">In this project it means</span><span class="t-ar">معناه في هذا المشروع</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>Clean Architecture</code></td>
+        <td><span class="t-en">Four folders — <code>core</code>, <code>data</code>, <code>domain</code>, <code>presentation</code> — with one legal import direction, enforced by review rather than by a linter (§3).</span>
+        <span class="t-ar">أربعة مجلدات — <code>core</code> و<code>data</code> و<code>domain</code> و<code>presentation</code> — باتجاه استيراد قانوني واحد، يحرص عليه المراجعة لا المُحلِّل (§3).</span></td></tr>
+      <tr><td><code>domain</code> purity</td>
+        <td><span class="t-en">Measured, not claimed: the layer imports zero Flutter, zero Dio, zero <code>cloud_firestore</code>, and one pub package — <code>equatable</code> (§8, §15.4).</span>
+        <span class="t-ar">مقيس لا معلن: فالطبقة لا تستورد Flutter ولا Dio ولا <code>cloud_firestore</code>، وتستورد حزمة pub واحدة هي <code>equatable</code> (§8، §15.4).</span></td></tr>
+      <tr><td>Composition root</td>
+        <td><span class="t-en"><code>lib/injection.dart</code> and its 45 GetIt registrations: the only file allowed to know which implementation backs which contract (§4).</span>
+        <span class="t-ar"><code>lib/injection.dart</code> وتسعة وأربعون تسجيلًا في GetIt: الملف الوحيد المسموح له بمعرفة أي تنفيذ يقف خلف أي عقد (§4).</span></td></tr>
+      <tr><td><code>Either&lt;L, R&gt;</code></td>
+        <td><span class="t-en">The sealed two-case return type every use case answers with: <code>Left</code> is a <code>Failure</code>, <code>Right</code> is data. Chosen over Dart exceptions so a failure has to be handled where it is caught (§6).</span>
+        <span class="t-ar">نوع الإرجاع المغلق بحالتين الذي تجيب به كل حالة استخدام: <code>Left</code> فشل و<code>Right</code> بيانات. واختير بدل استثناءات Dart ليُعالَج الفشل حيث يُمسك (§6).</span></td></tr>
+      <tr><td>Failure</td>
+        <td><span class="t-en">A sealed hierarchy of recoverable errors, each carrying an ARB <code>messageKey</code>. Exceptions never cross a repository boundary (§6, §17.1).</span>
+        <span class="t-ar">هرم مغلق للأخطاء الممكن تجاوزها، يحمل كل منها <code>messageKey</code> من ARB. ولا تعبر الاستثناءات حدّ المستودع (§6، §17.1).</span></td></tr>
+      <tr><td>Use case</td>
+        <td><span class="t-en">One verb, one <code>call()</code>, twenty files in <code>domain/usecases/</code>. A screen talks to these, never to a repository directly (§5, §8).</span>
+        <span class="t-ar">فعل واحد و<code>call()</code> واحد، في عشرين ملفًا تحت <code>domain/usecases/</code>. تكلم هذه الشاشاتُ لا المستودعات مباشرة (§5، §8).</span></td></tr>
+      <tr><td><code>Params</code></td>
+        <td><span class="t-en">The typed argument object a use case takes; <code>NoParams</code> when it takes nothing. The only domain types a screen is allowed to construct by hand (§16.9).</span>
+        <span class="t-ar">كائن الوسيط المُصنَّف الذي تأخذه حالة الاستخدام؛ و<code>NoParams</code> إن لم تأخذ شيئًا. وهي أنواع النطاق الوحيدة التي يُسمح للشاشة بإنشائها يدويًا (§16.9).</span></td></tr>
+      <tr><td>Repository vs <code>…Impl</code></td>
+        <td><span class="t-en">The contract names what can fail; the implementation, in <code>data/repositories/</code>, owns the choice of data source. Nothing imports the Impl (§7, §16.9).</span>
+        <span class="t-ar">العقد يسمّي ما يمكن أن يفشل؛ والتنفيذ في <code>data/repositories/</code> يملك اختيار مصدر البيانات. ولا شيء يستورد التنفيذ (§7، §16.9).</span></td></tr>
+      <tr><td>Entity vs Model</td>
+        <td><span class="t-en">Entity is what the app knows; <code>XModel extends XEntity</code> adds the wire format. The compiler therefore proves a model can stand in for its entity (§8, §16.9).</span>
+        <span class="t-ar">الكيان ما يعرفه التطبيق؛ ويضيف <code>XModel extends XEntity</code> شكل السلك. فيُثبت المترجم أن النموذج يصلح بدل كيانها (§8، §16.9).</span></td></tr>
+      <tr><td>Data source</td>
+        <td><span class="t-en">Eleven of them: Dio for TheMealDB, the two on-device stores, the Firestore gateway, the biometric and photo services. Each knows one system (§7).</span>
+        <span class="t-ar">أحد عشر مصدرًا: Dio لـ TheMealDB، ومتجران على الجهاز، وبوابة Firestore، وخدمتا البصمة والصورة. وكل واحد يعرف نظامًا واحدًا (§7).</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">State and navigation</span><span class="t-ar">الحالة والتنقّل</span></h3>
+  <table class="tbl">
+    <thead><tr><th><span class="t-en">Term</span><span class="t-ar">المدخل</span></th>
+      <th><span class="t-en">In this project it means</span><span class="t-ar">معناه في هذا المشروع</span></th></tr></thead>
+    <tbody>
+      <tr><td>Cubit</td>
+        <td><span class="t-en">Eight of them, all rooted above <code>MaterialApp</code> except <code>ProfileCubit</code>, which is scoped to its own screen so leaving the tab disposes it (§5, §15.6).</span>
+        <span class="t-ar">ثمانية كلها تحت <code>MaterialApp</code> إلا <code>ProfileCubit</code> فيحده شاشة واحدة، فمغادرة التبويب تغلقه (§5، §15.6).</span></td></tr>
+      <tr><td>Bloc</td>
+        <td><span class="t-en">Exactly one: <code>CartBloc</code>. It is a Bloc because checkout is a transaction with events, not a single value swap (§5, §13).</span>
+        <span class="t-ar">واحد بالضبط: <code>CartBloc</code>. وهو Bloc لأن إتمام الطلب معاملة بأحداث لا تبديل قيمة (§5، §13).</span></td></tr>
+      <tr><td>Sealed state</td>
+        <td><span class="t-en">Every <code>*_state.dart</code> opens with <code>sealed class</code>, so a new state that no <code>when</code> arm handles is a compile error (§5, §6).</span>
+        <span class="t-ar">كل <code>*_state.dart</code> يفتتح بـ<code>sealed class</code>، فتكون حالة جديدة بلا فرع <code>when</code> يعالجها خطأ ترجمة (§5، §6).</span></td></tr>
+      <tr><td><code>IndexedStack</code> shell</td>
+        <td><span class="t-en">The four-tab body that keeps every tab alive, so Home keeps its scroll offset and its banner page (§12). Tabs are addressed by index, and the shell is the only thing that knows them (§12).</span>
+        <span class="t-ar">هيكل التبويبات الأربعة الذي يبقي كل تبويب حيًا، فتحتفظ الرئيسية بموضع تمريرها وصفحة بانرها (§12). ويخاطَب التبويب بالدليل لا بالاسم، والهيكل وحده يعرف التبويبات (§12).</span></td></tr>
+      <tr><td><code>onGenerateRoute</code></td>
+        <td><span class="t-en">One switch over twelve route names, with <code>default</code> landing on splash. An unknown or mistyped deep link therefore shows the splash, never a red screen (§12).</span>
+        <span class="t-ar">تبديل واحد على اثني عشر اسم مسار، وفرع <code>default</code> إلى البداية. فالرابط المجهول أو المكتوب خطأً يُظهر شاشة البداية لا الشاشة الحمراء (§12).</span></td></tr>
+      <tr><td>Route arguments</td>
+        <td><span class="t-en">Always a <code>List</code> whose first element is the payload: <code>arguments: [meal]</code>, never <code>arguments: meal</code>. Two screens accept a missing argument and mount a placeholder instead (§12).</span>
+        <span class="t-ar">قائمة دائمًا أول عناصرها الحمولة: <code>arguments: [meal]</code> لا <code>arguments: meal</code>. وشاشتان تقبلان الوسيط الناقص وتُركّبان بديلًا (§12).</span></td></tr>
+      <tr><td><code>AppPageRoute</code></td>
+        <td><span class="t-en">The single <code>PageRouteBuilder</code> every screen arrives through: 320 ms fade with a 0.035 slide, keeping Hero flights alive (§12).</span>
+        <span class="t-ar"><code>PageRouteBuilder</code> الوحيد الذي تصل عبره كل شاشة: تلاشٍ 320 ملّي ثانية مع انزلاق 0.035، فيبقى طيران Hero حيًا (§12).</span></td></tr>
+      <tr><td>Hero</td>
+        <td><span class="t-en">One tag pattern, <code>'meal-image-${meal.id}'</code>, shared by the card, the banner page and the details screen.</span>
+        <span class="t-ar">نمط وسم واحد، <code>'meal-image-${meal.id}'</code>، تتشاركه البطاقة وصفحة البانر وشاشة التفاصيل.</span></td></tr>
+      <tr><td>The biometric gate</td>
+        <td><span class="t-en">Not a screen but a wrapper: tapping the avatar runs <code>BiometricGate</code>, and a failed scan falls back to the password form without signing the user out (§11).</span>
+        <span class="t-ar">ليست شاشة بل غلاف: النقر على الصورة يشغّل <code>BiometricGate</code>، والفحص الفاشل يرجع إلى نموذج الكلمة دون إخراج المستخدم (§11).</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">Look and language</span><span class="t-ar">المظهر واللغة</span></h3>
+  <table class="tbl">
+    <thead><tr><th><span class="t-en">Term</span><span class="t-ar">المدخل</span></th>
+      <th><span class="t-en">In this project it means</span><span class="t-ar">معناه في هذا المشروع</span></th></tr></thead>
+    <tbody>
+      <tr><td>Appearance</td>
+        <td><span class="t-en">Four of them — light, dark, glass light, glass dark — one <code>AppThemeMode</code> enum value each. "Theme" in the Settings UI means this, not brightness (§9).</span>
+        <span class="t-ar">أربعة مظاهر — فاتح وداكن وزجاجي فاتح وزجاجي داكن — لكل منها قيمة في تعداد <code>AppThemeMode</code>. و«السمة» في واجهة الإعدادات تعني هذا لا السطوع (§9).</span></td></tr>
+      <tr><td>Liquid Glass</td>
+        <td><span class="t-en">The refractive look from <code>liquid_glass_widgets</code>: an aurora backdrop behind an opaque Navigator, plus a <code>GlassTabBar</code>. It changes the widget <em>structure</em>, not just the palette (§9, §12).</span>
+        <span class="t-ar">المظهر الانكساري من <code>liquid_glass_widgets</code>: خلفية شفقية خلف Navigator معتّم، و<code>GlassTabBar</code>. وهو يغيّر <em>هيكل</em> الودجات لا اللوحة وحدها (§9، §12).</span></td></tr>
+      <tr><td>Theme extension</td>
+        <td><span class="t-en"><code>AppGlassTokens</code> is a <code>ThemeExtension</code>, which is how a widget asks "is glass on?" without importing a singleton (§9).</span>
+        <span class="t-ar"><code>AppGlassTokens</code> هو <code>ThemeExtension</code>، وبه يسأل الودجت «هل الزجاج مفعّل؟» دون استيراد نظير واحد (§9).</span></td></tr>
+      <tr><td>Bottom clearance</td>
+        <td><span class="t-en">104 px published through <code>MediaQuery.padding.bottom</code> so a floating glass bar costs the scrolling content nothing but its height (§9, §12).</span>
+        <span class="t-ar">104 بكسل تُنشر عبر <code>MediaQuery.padding.bottom</code>، فلا تكلّف الشريط الزجاجي العائم المحتوى المارّ إلا ارتفاعه (§9، §12).</span></td></tr>
+      <tr><td>ARB · <code>.arb</code></td>
+        <td><span class="t-en">The JSON template format Flutter's localiser reads. 178 keys in each of <code>app_en.arb</code> and <code>app_ar.arb</code>; equal counts are enforced by the generator (§10, §17.5).</span>
+        <span class="t-ar">صيغة القوالب JSON التي يقرؤها مُولِّد الترجمة. و178 مفتاحًا في كل من <code>app_en.arb</code> و<code>app_ar.arb</code>؛ وتساوياهما يضمنه المولّد (§10، §17.5).</span></td></tr>
+      <tr><td><code>L10nX</code></td>
+        <td><span class="t-en">The extension that is the only bridge from a message key to a sentence, and the place where the one known missing arm lives (§10, §17.5).</span>
+        <span class="t-ar">الامتداد الذي هو الجسر الوحيد من مفتاح الرسالة إلى الجملة، والموضع الذي فيه الفرع الناقص المعروف (§10، §17.5).</span></td></tr>
+      <tr><td>RTL flip</td>
+        <td><span class="t-en">Handled by Flutter's own directionality: no mirrored stylesheet, no second layout. Icons that must not flip are pinned explicitly (§10).</span>
+        <span class="t-ar">يُعالَج بيد Flutter نفسها عبر الاتجاهية: لا ورقة أنماط معكوسة، ولا تخطيط ثانٍ. والرموز التي لا يجوز قلبها تُثبَّت صراحة (§10).</span></td></tr>
+      <tr><td>Skeleton / shimmer</td>
+        <td><span class="t-en">Placeholder trees that mirror the real layout section for section, swept by a <code>ShimmerScope</code> (§9, §15.9). Named <code>*_skeleton.dart</code>.</span>
+        <span class="t-ar">أشجار بديلة تعكس التخطيط الحقيقي قسمًا قسمًا، ويمسحها <code>ShimmerScope</code> (§9، §15.9). وتُسمّى <code>*_skeleton.dart</code>.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">Testing</span><span class="t-ar">الاختبار</span></h3>
+  <table class="tbl">
+    <thead><tr><th><span class="t-en">Term</span><span class="t-ar">المدخل</span></th>
+      <th><span class="t-en">In this project it means</span><span class="t-ar">معناه في هذا المشروع</span></th></tr></thead>
+    <tbody>
+      <tr><td>Page object</td>
+        <td><span class="t-en">The Java layer of the Appium suite: <code>LoginPage</code> and <code>HomePage</code> hold the locators, <code>BaseTest</code> holds the lifecycle, and a test class adds steps only (§13).</span>
+        <span class="t-ar">طبقة Java في مجموعة Appium: يحمل <code>LoginPage</code> و<code>HomePage</code> العناوين، ويحمل <code>BaseTest</code> دورة الحياة، ولا تضيف صنف الاختبار إلا الخطوات (§13).</span></td></tr>
+      <tr><td><code>resource-id</code></td>
+        <td><span class="t-en">The Android attribute an Appium XPath addresses. Flutter publishes it from <code>Semantics(identifier:)</code>, which is why <code>SemanticId</code> exists (§12, §13, §17.6).</span>
+        <span class="t-ar">سمة أندرويد التي يخاطبها XPath في Appium. وينشرها Flutter من <code>Semantics(identifier:)</code>، وهذا وُجد لأجله <code>SemanticId</code> (§12، §13، §17.6).</span></td></tr>
+      <tr><td><code>explicitChildNodes</code></td>
+        <td><span class="t-en">Set true because Flutter otherwise merges a card's labels into one node and the Add-to-Cart button — with its identifier — disappears from the tree (§12, §17.6).</span>
+        <span class="t-ar">مُفعَّل لأن Flutter يدمج تسميات البطاقة في عقدة واحدة وإلا ويختفي زر الإضافة — ومعرّفه معه — من الشجرة (§12، §17.6).</span></td></tr>
+      <tr><td>mocktail / <code>blocTest</code></td>
+        <td><span class="t-en">The unit layer: abstract repositories are mocked, GetIt is stubbed, and seven <code>blocTest</code> cases drive <code>CartBloc</code> (§13).</span>
+        <span class="t-ar">طبقة الوحدات: تُحاكى المستودعات المجرّدة ويُزيف GetIt، وتقاد <code>CartBloc</code> بسبع حالات <code>blocTest</code> (§13).</span></td></tr>
+      <tr><td>Manual QA workbook</td>
+        <td><span class="t-en">51 generated cases, 17 executed on the phone, 34 left blocked with the reason recorded — not silently passed (§13).</span>
+        <span class="t-ar">51 حالة مولَّدة، نُفِّذ منها 17 على الهاتف، وتُركت 34 محجوبة بسبب مسجَّل — لا نجحت بصمت (§13).</span></td></tr>
+      <tr><td>Defect id <code>SB-1xx</code></td>
+        <td><span class="t-en">The workbook's own numbering; SB-111 is the case that would have shipped, SB-119 the credential finding (§13).</span>
+        <span class="t-ar">ترقيم دفتر الاختبار اليدوي؛ فـ SB-111 هي الحالة التي كانت ستخرج، وSB-119 ملاحظة البيانات (§13).</span></td></tr>
+      <tr><td>Golden test</td>
+        <td><span class="t-en">Absent, and listed as a gap in §13 rather than described as a feature: pixel snapshots would need a CI runner this project does not have.</span>
+        <span class="t-ar">غير موجودة، ومذكورة كفجوة في §13 لا كميزة: لالتقاطات البيكسل تحتاج مشغّل CI لا يملكه هذا المشروع.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">Build and platform</span><span class="t-ar">البناء والمنصّة</span></h3>
+  <table class="tbl">
+    <thead><tr><th><span class="t-en">Term</span><span class="t-ar">المدخل</span></th>
+      <th><span class="t-en">In this project it means</span><span class="t-ar">معناه في هذا المشروع</span></th></tr></thead>
+    <tbody>
+      <tr><td>Android-only</td>
+        <td><span class="t-en">The product is an APK. <code>ios/</code> exists because <code>flutter create</code> wrote it and is reverted when the generator churns it (§14).</span>
+        <span class="t-ar">المنتج APK. ويوجد <code>ios/</code> لأن <code>flutter create</code> كتبه، ويُرجَع حين يُغيّره المولّد (§14).</span></td></tr>
+      <tr><td><code>1.0.0+3</code></td>
+        <td><span class="t-en">Version name plus build number, written once in <code>pubspec.yaml</code> and fed to Gradle through <code>flutter.versionName</code>/<code>versionCode</code> (§14, §17.7).</span>
+        <span class="t-ar">اسم الإصدار ورقم البناء، مكتوبان مرة في <code>pubspec.yaml</code> ويغذّيان Gradle عبر <code>flutter.versionName</code> و<code>versionCode</code> (§14، §17.7).</span></td></tr>
+      <tr><td>compileSdk 36 · targetSdk 35 · minSdk 24</td>
+        <td><span class="t-en">Compile against the newest platform, promise Android 15 behaviour, install from Android 7. Each number's reason is in §14.</span>
+        <span class="t-ar">بناء ضد أحدث منصّة، وسلوك أندرويد 15 الموعود، وتركيب من أندرويد 7. وسبب كل رقم في §14.</span></td></tr>
+      <tr><td>R8 / minification</td>
+        <td><span class="t-en">On for release: 197 MB debug APK to 63 MB release, with a handful of <code>-keep</code> rules for the map and auth plugins (§14).</span>
+        <span class="t-ar">مفعّل في الإصدار: من APK debug بـ197 ميغابايت إلى release بـ63، مع عدة قواعد <code>-keep</code> لإضافتَي الخريطة والمصادقة (§14).</span></td></tr>
+      <tr><td>Debug signing</td>
+        <td><span class="t-en">The release APK is signed with the debug key — honest for a course artefact, and the reason §14 says it must not go to Play.</span>
+        <span class="t-ar">APK الإصدار موقّع بمفتاح التنقيح — وهذا صادق لأجل مقرر، وهو سبب قول §14 إنه لا يُرسل إلى Play.</span></td></tr>
+      <tr><td>Offline fallback</td>
+        <td><span class="t-en"><code>allowOfflineFirebaseFallback</code>: when Firebase cannot be reached the app answers from the on-device store instead of failing (§7, §17.1).</span>
+        <span class="t-ar"><code>allowOfflineFirebaseFallback</code>: عند تعذر الوصول إلى Firebase تجيب الطبقة من متجر الجهاز بدل الفشل (§7، §17.1).</span></td></tr>
+      <tr><td>Vendor map</td>
+        <td><span class="t-en">Five hardcoded street-food vendors in five areas, fed to Google Maps. The blank-map blocker is a cloud-key enablement problem, not app code (§7, §14).</span>
+        <span class="t-ar">خمسة بائعي شارع ثابتين في خمس مناطق تُعطى لخرائط Google. والعائق — الخريطة الفارغة — مسألة تفعيل مفتاح سحابي لا كود التطبيق (§7، §14).</span></td></tr>
+      <tr><td>Demo account</td>
+        <td><span class="t-en"><code>yasmine@streetbite.app</code> / <code>StreetBite123</code>, committed on purpose as the Appium suite's login and the offline store's seed (§13, §17.1).</span>
+        <span class="t-ar"><code>yasmine@streetbite.app</code> / <code>StreetBite123</code>، مُودَع عن قصد لأنه دخول مجموعة Appium وجرعة المتجر المحلي (§13، §17.1).</span></td></tr>
+    </tbody>
+  </table>
+</section>
+<nav class="pager">
+    <a href="17-keys.html"><span class="lbl"><span class="t-en">Previous · §17</span><span class="t-ar">السابق · §17</span></span><span class="to"><span class="t-en">Constants, keys and identifiers</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></span></a>
+    <a class="next" href="index.html"><span class="lbl"><span class="t-en">Back to</span><span class="t-ar">العودة إلى</span></span><span class="to"><span class="t-en">Full index</span><span class="t-ar">الفهرس الكامل</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#glossary">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

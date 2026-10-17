@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>State management · StreetBite code documentation · §05</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html" class="cur"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §05 State management</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part I · Section 05 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الأول · القسم 05 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="state">
+  <h2><span class="t-en"><span class="num">05</span> · State management</span><span class="t-ar"><span class="num">05</span> · إدارة الحالة</span></h2>
+
+  <div class="bi">
+    <div class="en">
+      <p>State lives in eight places, all of them <code>flutter_bloc</code> objects. Seven are registered as lazy
+      singletons and provided once at the root in <code>app.dart</code>; <code>ProfileCubit</code> is the
+      exception — it is created by the Profile screen itself, since nothing outside that screen needs it.
+      Seven are Cubits; exactly one is a Bloc.</p>
+      <p>The choice is reasoned per object, not by habit. A Cubit is right when the transitions are
+      strictly sequential and no event needs an identifier, a debounce, or a concurrency transformer.
+      <code>AuthCubit</code> restores, then logs in or signs up, then logs out — nothing else, so a Bloc
+      would add ceremony without adding capability. <code>CartBloc</code> is a Bloc because checkout is a
+      real transaction that can fail halfway and must keep the items it was built from.</p>
+    </div>
+    <div class="ar">
+      <p>تقع الحالة في ثمانية مواضع، وكلها كائنات <code>flutter_bloc</code>. سبعة منها مسجلة كمفردات كسولة
+      ومهيأة مرة واحدة في الجذر داخل <code>app.dart</code>؛ و<code>ProfileCubit</code> هو الاستثناء — تُنشئه شاشة
+      الملف الشخصي بنفسها لأن شيئًا خارج تلك الشاشة لا يحتاجه. سبعة منها Cubits وواحد منها Bloc بالضبط.</p>
+      <p>الاختيار مدروس لكل كائن وليس بالعادة. الـ Cubit مناسب عندما تكون الانتقالات متتابعة صارمة ولا يحتاج أي
+      حدث إلى معرّف أو تأجيل أو مُحوِّل تزامن. <code>AuthCubit</code> يستعيد الجلسة ثم يسجل الدخول أو ينشئ الحساب
+      ثم يسجل الخروج — لا شيء غير ذلك، لذا كان الـ Bloc سيضيف طقوسًا بلا قدرة. أما <code>CartBloc</code> فهو Bloc
+      لأن إتمام الطلب معاملة حقيقية قد تفشل في منتصفها ويجب أن تحتفظ بالأصناف التي بُنيت منها.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">The eight state objects</span><span class="t-ar">الكائنات الثمانية للحالة</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th>Object</th>
+      <th><span class="t-en">Owns</span><span class="t-ar">يمتلك</span></th>
+      <th><span class="t-en">States / events</span><span class="t-ar">الحالات والاحداث</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>ThemeCubit</code><br><span class="pill">33 lines</span></td>
+        <td><span class="t-en">The appearance preference; persists the mode name to prefs on every change.</span><span class="t-ar">تفضيل المظهر؛ يحفظ اسم الوضع في التفضيلات عند كل تغيير.</span></td>
+        <td><code>ThemeState</code> — one class wrapping <code>AppThemeMode</code></td></tr>
+      <tr><td><code>LocaleCubit</code><br><span class="pill">45 lines</span></td>
+        <td><span class="t-en">Runtime language. <code>locale == null</code> means "follow the device".</span><span class="t-ar">اللغة أثناء التشغيل. <code>locale == null</code> تعني «اتبع لغة الجهاز».</span></td>
+        <td><code>LocaleState</code> — one class, exposes <code>isArabic</code></td></tr>
+      <tr><td><code>AuthCubit</code><br><span class="pill">135 lines</span></td>
+        <td><span class="t-en">The session, the signed-in <code>UserEntity</code>, and whether a biometric gate is open.</span><span class="t-ar">الجلسة و<code>UserEntity</code> المسجل وكون بوابة البصمة مفتوحة.</span></td>
+        <td><span class="t-en"><code>AuthState</code> sealed → <code>AuthInitial</code>, <code>AuthUnauthenticated</code>, <code>AuthAuthenticated</code>, <code>AuthBiometricGate</code>, <code>AuthLoading</code>, <code>AuthSignUpSuccess</code>, <code>AuthFailureState</code></span><span class="t-ar"><code>AuthState</code> مختومة تنتج عنها سبعة أصناف كما هو موضح</span></td></tr>
+      <tr><td><code>MealsCubit</code><br><span class="pill">44 lines</span></td>
+        <td><span class="t-en">The Home feed: banner meals, the grid, the Hot Offers strip.</span><span class="t-ar">تغذية الرئيسية: أطباق الشريط والقائمة والعروض الساخنة.</span></td>
+        <td><span class="t-en"><code>MealsState</code> sealed → <code>MealsInitial</code>, <code>MealsLoading</code>, <code>MealsLoaded</code>, <code>MealsError</code></span><span class="t-ar"><code>MealsState</code> مختومة بأربعة أصناف</span></td></tr>
+      <tr><td><code>CartBloc</code><br><span class="pill">180 lines</span></td>
+        <td><span class="t-en">The basket and the checkout transaction.</span><span class="t-ar">السلة ومعاملة إتمام الطلب.</span></td>
+        <td><span class="t-en"><code>CartEvent</code>: <code>CartItemAdded</code>, <code>CartItemRemoved</code>, <code>CartItemQuantityChanged</code>, <code>CartCleared</code>, <code>CartCheckoutRequested</code>.<br><code>CartState</code>: <code>CartInitial</code>, <code>CartUpdated</code>, <code>CartOrderPlaced</code>, <code>CartFailure</code>.</span><span class="t-ar"><code>CartEvent</code> خمسة احداث، و<code>CartState</code> أربع حالات كما هي مكتوبة بالإنجليزية.</span></td></tr>
+      <tr><td><code>FavouritesCubit</code><br><span class="pill">64 lines</span></td>
+        <td><span class="t-en">Hearted meals, shared by the Profile strip and every heart button.</span><span class="t-ar">الأطباق المفضلة، مشتركة بين شريط الملف الشخصي وكل زر قلب.</span></td>
+        <td><span class="t-en"><code>FavouritesState</code> sealed → initial, loading, loaded, error</span><span class="t-ar"><code>FavouritesState</code> مختومة بأربعة أصناف</span></td></tr>
+      <tr><td><code>OrdersCubit</code><br><span class="pill">30 lines</span></td>
+        <td><span class="t-en">Order history for the Orders tab and the Profile list.</span><span class="t-ar">سجل الطلبات لتبويب الطلبات وقائمة الملف الشخصي.</span></td>
+        <td><span class="t-en"><code>OrdersState</code> sealed → initial, loading, loaded, error</span><span class="t-ar"><code>OrdersState</code> مختومة بأربعة أصناف</span></td></tr>
+      <tr><td><code>ProfileCubit</code><br><span class="pill">68 lines</span></td>
+        <td><span class="t-en">Everything the Profile screen renders: user, device card, photo-upload in-flight, one-shot message.</span><span class="t-ar">كل ما تعرضه شاشة الملف الشخصي: المستخدم وبطاقة الجهاز وحالة رفع الصورة والرسالة أحادية الاستخدام.</span></td>
+        <td><span class="t-en"><code>ProfileState</code> — one class with five fields and <code>copyWith(clearMessage: true)</code></span><span class="t-ar"><code>ProfileState</code> — صنف واحد بخمسة حقول و<code>copyWith(clearMessage: true)</code></span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">Sealed states make impossible screens impossible</span><span class="t-ar">الحالات المختومة تستحيل معها الشاشات المستحيلة</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p>Every multi-state family is a <code>sealed class</code>, so a screen that switches over it gets a
+      compile-time guarantee that all cases are handled — the same argument that made <code>Either</code> the
+      error vehicle. Loading is a real state, not a boolean, which is why the Home feed can show a
+      section-for-section shimmer skeleton (<code>MealsLoading</code>) and then the data
+      (<code>MealsLoaded</code>) without the widget knowing any arithmetic.</p>
+      <p>Each state extends <code>Equatable</code> and declares <code>props</code>, so Bloc rebuilds compare by
+      value. Two <code>MealsLoaded</code> with the same meals emit once, not twice.</p>
+    </div>
+    <div class="ar">
+      <p>كل عائلة متعددة الحالات هي <code>sealed class</code>، لذا أي شاشة تُجري <code>switch</code> عليها تحصل
+      على ضمان وقت التصريف أن جميع الحالات معالَجة — وهي الحجة نفسها التي جعلت <code>Either</code> وسيلة نقل
+      الأخطاء. التحميل حالة حقيقية لا منطقية، وهذا سبب قدرة التغذية الرئيسية على إظهار هيكل لامع قسمًا بقسم
+      (<code>MealsLoading</code>) ثم البيانات (<code>MealsLoaded</code>) دون أن يعرف الـ Widget أي حساب.</p>
+      <p>كل حالة ترث <code>Equatable</code> وتُعلِن <code>props</code>، فتُقارَن إعادةُ البناء بالقيمة. حالتا
+      <code>MealsLoaded</code> بأطباق متطابقة تُطلقان إشعارًا واحدًا لا اثنين.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Where the providers sit, and why it matters</span><span class="t-ar">أين تتموضع الـ Providers ولماذا يهم ذلك</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>app.dart</code> wraps <code>MaterialApp</code> in a <code>MultiBlocProvider</code> that uses
+      <code>BlocProvider&lt;T&gt;.value</code> for those seven — <code>.value</code> because the container owns them
+      and no widget may dispose them. <code>ThemeCubit</code> and <code>LocaleCubit</code> are above
+      <code>MaterialApp</code> and read by <code>BlocBuilder</code> <em>around</em> it, because they change
+      <code>MaterialApp</code>'s own configuration. That is what makes the dark-mode and EN/AR switches instant
+      with no restart and no <code>setState</code> anywhere.</p>
+      <p>The five feature objects are also at the root on purpose: the cart badge in the Home AppBar and the
+      item list on the Cart screen must read the <em>same</em> <code>CartBloc</code>, or they can disagree for
+      a frame.</p>
+    </div>
+    <div class="ar">
+      <p>ملف <code>app.dart</code> يلفّ <code>MaterialApp</code> بـ <code>MultiBlocProvider</code> يستخدم
+      <code>BlocProvider&lt;T&gt;.value</code> للسبعة الجذرية — و<code>.value</code> لأن الحاوية تملكها ولا يحق
+      لأي Widget أن يُتلفها. <code>ThemeCubit</code> و<code>LocaleCubit</code> فوق <code>MaterialApp</code>
+      ويقرأهما <code>BlocBuilder</code> <em>حولها</em>، لأنهما يغيّران إعداد <code>MaterialApp</code> نفسه. وهذا
+      ما يجعل تبديل الوضع الداكن واللغة فوريًا بلا إعادة تشغيل وبلا <code>setState</code> في أي موضع.</p>
+      <p>والكائنات الخمسة الخاصة بالميزات في الجذر أيضًا عن قصد: شارة السلة في شريط الرئيسية وقائمة الأصناف في
+      شاشة السلة يجب أن يقرآ <em>نفس</em> نسخة <code>CartBloc</code>، وإلا اختلفتا لإطار رسم واحد.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Builder versus Listener</span><span class="t-ar">الفرق بين Builder و Listener</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>BlocBuilder</code> rebuilds widgets from state; <code>BlocListener</code> fires side effects.
+      The app keeps them apart: transient messages never live in state that a builder renders.
+      <code>CartUpdated</code> carries <code>lastAdded</code>, <code>lastRemoved</code> and
+      <code>justEmptied</code> purely so a <code>BlocListener</code> can decide whether to show a SnackBar —
+      and the Bloc, not the widget, owns the "was non-empty, now empty" comparison.</p>
+      <p>Because <code>CartUpdated</code> is <code>Equatable</code> on those extra fields, a repeated add of
+      the same meal still produces a distinct state and the message still shows. That is the subtlety the
+      three fields exist for.</p>
+    </div>
+    <div class="ar">
+      <p><code>BlocBuilder</code> يعيد بناء الـ Widgets من الحالة، أما <code>BlocListener</code> فيُطلق
+      التأثيرات الجانبية. يفصل التطبيق بينهما: الرسائل العابرة لا تعيش أبدًا في حالة يعرضها Builder. تحمل
+      <code>CartUpdated</code> الحقول <code>lastAdded</code> و<code>lastRemoved</code> و<code>justEmptied</code>
+      فقط ليقرر <code>BlocListener</code> إن كان لإظهار رسالة — والـ Bloc لا الـ Widget هو من يملك مقارنة «كانت
+      غير فارغة فأصبحت فارغة».</p>
+      <p>ولأن <code>CartUpdated</code> تُطبَّق <code>Equatable</code> على هذه الحقول الزائدة، فإن إضافة نفس الطبق
+      مرتين تُنتج حالتين مختلفتين وتظهر الرسالة مرة أخرى. هذا هو التفصيل الدقيق الذي وُجدت لأجله الحقول الثلاثة.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Lazy tabs and the one deliberate warm-up</span><span class="t-ar">التبويبات الكسولة وتعبئة واحدة مقصودة</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>MainShellScreen</code> keeps an <code>IndexedStack</code> plus a <code>_built</code> set, so a
+      tab is not constructed until the user first opens it. The exception is the Orders tab: because
+      <code>OrdersCubit</code> is a lazy singleton, the shell warms it in a post-frame callback once the Home
+      screen is up, so the history is already in memory by the time the tab is opened. The cart survives a tab
+      switch for the same reason — it lives in the container, not in a tab.</p>
+    </div>
+    <div class="ar">
+      <p>يحتفظ <code>MainShellScreen</code> بـ <code>IndexedStack</code> مع مجموعة <code>_built</code>، فلا
+      يُبنى أي تبويب قبل أن يفتحه المستخدم أول مرة. الاستثناء تبويب الطلبات: لأن <code>OrdersCubit</code> مفردة
+      كسولة، يعبّئها الهيكل في نداء بعد الإطار الأول بمجرد ظهور شاشة الرئيسية، فيكون السجل محمّلًا في الذاكرة
+      حين يُفتح التبويب. وتنجو السلة من التنقل بين التبويبات للسبب نفسه — فهي تعيش في الحاوية لا في تبويب.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Anti-patterns this layer avoids</span><span class="t-ar">أساليب خاطئة تتجنبها هذه الطبقة</span></h3>
+  <div class="bi">
+    <div class="en">
+      <ul>
+        <li>No Cubit talks to a repository; only a use case does.</li>
+        <li>No Bloc stores a <code>BuildContext</code> or a <code>GlobalKey</code>.</li>
+        <li>No widget performs money arithmetic — <code>CalculateOrderTotals</code> is the only formula.</li>
+        <li>No <code>setState</code> is used to mirror a Bloc; local <code>StatefulWidget</code> state is kept
+        to genuine widget concerns (obscure toggles, text controllers, scroll position).</li>
+        <li>No error is swallowed: an <code>AuthFailureState</code> carries a key, and the UI must resolve it.</li>
+      </ul>
+    </div>
+    <div class="ar">
+      <ul>
+        <li>لا يخاطب أي Cubit مستودعًا؛ حالة الاستخدام وحدها تفعل.</li>
+        <li>لا يخزّن أي Bloc <code>BuildContext</code> ولا <code>GlobalKey</code>.</li>
+        <li>لا يجري أي Widget حسابات نقدية — <code>CalculateOrderTotals</code> هي الصيغة الوحيدة.</li>
+        <li>لا يُستخدم <code>setState</code> لمحاكاة Bloc؛ تقتصر حالة <code>StatefulWidget</code> المحلية على
+        شواغل الـ Widget الحقيقية (إظهار كلمة المرور، ومتحكمات النص، ومواضع التمرير).</li>
+        <li>لا يُبتلع أي خطأ: تحمل <code>AuthFailureState</code> مفتاحًا، وعلى الواجهة ترجمته.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+    <a href="04-di.html"><span class="lbl"><span class="t-en">Previous · §04</span><span class="t-ar">السابق · §04</span></span><span class="to"><span class="t-en">Composition root &amp; dependency injection</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></span></a>
+    <a class="next" href="06-errors.html"><span class="lbl"><span class="t-en">Next · §06</span><span class="t-ar">التالي · §06</span></span><span class="to"><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#state">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

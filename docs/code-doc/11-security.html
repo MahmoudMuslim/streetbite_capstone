@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Security &amp; privacy · StreetBite code documentation · §11</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html" class="cur"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §11 Security &amp; privacy</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part I · Section 11 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الأول · القسم 11 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="security">
+  <h2><span class="t-en"><span class="num">11</span> · Security &amp; privacy</span><span class="t-ar"><span class="num">11</span> · الأمان والخصوصية</span></h2>
+
+  <div class="note">
+    <b>Read the frame first · اقرأ الإطار أولًا</b>
+    <div class="bi">
+      <div class="en"><p>StreetBite is a teaching capstone, not a hardened product. This section states what is
+      actually defended, what is deliberately loosened so the app can be demonstrated offline, and what is only
+      a demo. Anything that would need to change before a real release is named as such instead of being
+      described as good.</p></div>
+      <div class="ar"><p>StreetBite مشروع تخرّج تعليمي لا منتج مُحصَّن. تذكُر هذا القسم ما هو مدفوع فعلًا، وما
+      هو مُرخًى عن قصد حتى يُعرض التطبيق دون اتصال، وما هو تجريبي فقط. وكل شيء يجب تغييره قبل إصدار حقيقي مذكور
+      بهذا الاسم، لا بوصفه حسنًا.</p></div>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Biometrics: six outcomes, classified once</span><span class="t-ar">البصمة: ست نتائج، تُصنَّف مرة واحدة</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p>No file in the app imports <code>local_auth</code> except <code>BiometricService</code>. It asks three
+      questions before prompting — <code>isDeviceSupported()</code>, <code>canCheckBiometrics</code>, and
+      <code>getAvailableBiometrics().isNotEmpty</code> — and the third one is the reason the flow works.
+      <code>canCheckBiometrics</code> answers "is this device <em>capable</em>?", which stays true on a handset
+      with a sensor nobody ever enrolled a finger on; offering such a user a prompt guarantees a failure. The
+      enrolled check turns that into a precise message instead.</p>
+      <p><code>local_auth</code> 3.x replaced <code>PlatformException</code> with
+      <code>LocalAuthException</code>, which carries a <code>LocalAuthExceptionCode</code>. Matching on that enum
+      is what makes the mapping exact — the previous implementation substring-matched
+      <code>error.toString()</code>, so a renamed platform code silently degraded to a generic "try again". The
+      switch keeps a <code>default</code> arm on purpose: the plugin documents that new codes can appear without
+      a major version bump.</p>
+    </div>
+    <div class="ar">
+      <p>لا ملف في التطبيق يستورد <code>local_auth</code> غير <code>BiometricService</code>. ويسأل ثلاثة أسئلة قبل
+      الطلب: <code>isDeviceSupported()</code> و<code>canCheckBiometrics</code> و
+      <code>getAvailableBiometrics().isNotEmpty</code>. والثالث هو سبب نجاح المسار: فـ
+      <code>canCheckBiometrics</code> تجيب «هل هذا الجهاز <em>قادر</em>?» — وتبقى صحيحة على هاتف له حساس لم يسجل
+      عليه أحد بصمة قطّ. وعرض طلب على مثل هذا المستخدم يضمن الفشل، فتحويل ذلك إلى رسالة دقيقة هو فعل الفحص
+      الثالث.</p>
+      <p>استبدلت <code>local_auth</code> 3.x الـ<code>PlatformException</code> بـ<code>LocalAuthException</code>
+      الذي يحمل <code>LocalAuthExceptionCode</code>. والمطابقة على هذا التعداد هي ما يجعل الربط دقيقًا؛ كان
+      التطبيق السابق يطابق مقاطع نصية من <code>error.toString()</code>، فيصير رمز معدَّل في صمت إلى «حاول مرة
+      أخرى». ويُبقي التبديل فرع <code>default</code> عن قصد، لأن الإضافة توثّق أن رموزًا جديدة قد تظهر دون ترقية
+      كبرى.</p>
+    </div>
+  </div>
+  <table class="tbl">
+    <thead><tr>
+      <th><span class="t-en">Platform code</span><span class="t-ar">رمز المنصّة</span></th>
+      <th>Outcome</th><th>messageKey</th>
+      <th><span class="t-en">Remedy the user is told</span><span class="t-ar">العلاج المبلَّغ</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>noBiometricHardware</code> · <code>biometricHardwareTemporarilyUnavailable</code></td>
+        <td><code>unavailable</code></td><td><code>biometricNotSupported</code></td>
+        <td><span class="t-en">This handset cannot do it at all.</span><span class="t-ar">هذا الجهاز لا يستطيع ذلك أصلًا.</span></td></tr>
+      <tr><td><code>noCredentialsSet</code> · <code>noBiometricsEnrolled</code></td>
+        <td><code>notEnrolled</code></td><td><code>biometricNotEnrolled</code></td>
+        <td><span class="t-en">Go to Settings and enroll — retrying cannot fix this one.</span><span class="t-ar">اذهب إلى الإعدادات وسجّل بصمتك — إعادة المحاولة لا تصلح هذه.</span></td></tr>
+      <tr><td><code>temporaryLockout</code> · <code>biometricLockout</code></td>
+        <td><code>lockedOut</code></td><td><code>biometricLockedOut</code></td>
+        <td><span class="t-en">Wait the lockout out. See the gap noted below.</span><span class="t-ar">انتظر حتى ينتهي القفل. راجع الفجوة المذكورة أدناه.</span></td></tr>
+      <tr><td><code>userCanceled</code> · <code>systemCanceled</code> · <code>timeout</code></td>
+        <td><code>cancelled</code></td><td><code>biometricCancelled</code></td>
+        <td><span class="t-en">Not an error; the dialog simply offers the alternative again.</span><span class="t-ar">ليس خطأ؛ تعرض الورشة البديل مرة أخرى فحسب.</span></td></tr>
+      <tr><td><span class="t-en">anything else — <code>authInProgress</code>, <code>uiUnavailable</code>, <code>deviceError</code>, <code>unknownError</code>, and future codes</span><span class="t-ar">كل ما عدا ذلك</span></td>
+        <td><code>failure</code></td><td><code>biometricFailed</code></td>
+        <td><span class="t-en">Handled, never thrown.</span><span class="t-ar">معالَج، لا يُرمى أبدًا.</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn">
+    <b>A real gap this audit found · فجوة وجدها هذا الفحص</b>
+    <div class="bi">
+      <div class="en"><p><code>BiometricResult.lockedOut()</code> carries the key <code>biometricLockedOut</code>,
+      and that key <em>is</em> present in both ARB files with the right sentence ("Too many failed attempts.
+      Biometric unlock is locked for now."). But <code>L10nX.trKey</code> has arms for only four biometric keys —
+      failed, notEnrolled, notSupported, cancelled — so a lockout falls through to the default and the user reads
+      "Something went wrong". The behaviour is safe, the message is merely imprecise; wiring the missing arm is a
+      one-line change.</p></div>
+      <div class="ar"><p>يحمل <code>BiometricResult.lockedOut()</code> المفتاح <code>biometricLockedOut</code>،
+      وهذا المفتاح موجود فعلًا في ملفَي ARB بجملة صحيحة («كثير من المحاولات الفاشلة…»). لكن
+      <code>L10nX.trKey</code> فيه أربعة فروع للبصمة فقط: failed وnotEnrolled وnotSupported وcancelled، فيسقط
+      القفل إلى الفرع الافتراضي ويقرأ المستخدم «حدث خطأ ما». والسلوك آمن، والرسالة غير دقيقة فحسب؛ وربط الفرع
+      الناقص تغيير سطر واحد.</p></div>
+    </div>
+  </div>
+
+  <h3><span class="t-en">The two gates, and what a failed scan does <em>not</em> do</span><span class="t-ar">بوّابتان، وما لا تفعله بصمة فاشلة</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>openBiometricGate()</code> is one function used by both gates — the avatar button on Home that
+      guards the Profile screen, and the sign-in screen on a cold start. Its policy: success calls
+      <code>onUnlocked</code>; anything else shows a dialog explaining the reason, with
+      "Continue without biometrics" when <code>bypassAllowed</code> is true. The <code>reason</code> string is
+      read from <code>context</code> <em>before</em> the await, and the result is guarded by
+      <code>context.mounted</code>, because the OS prompt can outlast the widget.</p>
+      <p>The decision that matters most is what a failed scan does to the session.
+      <code>AuthCubit.fallBackToPassword()</code> deliberately does <b>not</b> call <code>signOut()</code>: a
+      rejected fingerprint is a person who could not prove who they are just now, not a person who logged out.
+      The token stays, the password form opens, and the user finishes the sign-in. Opt-in
+      (<code>streetbite_biometric_sign_in</code>) is stored on-device rather than in Firestore because it
+      describes the handset: the same account on a tablet with no enrolled finger must not inherit an opt-in it
+      can never satisfy.</p>
+    </div>
+    <div class="ar">
+      <p><code>openBiometricGate()</code> دالة واحدة تستعملها البوّابتان: زر الصورة على الرئيسية الذي يحرس شاشة
+      الملف الشخصي، وشاشة الدخول عند الإقلاع البارد. وسياستها: النجاح يستدعي <code>onUnlocked</code>، وكل شيء آخر
+      يعرض ورشة تشرح السبب، مع «المتابعة بلا بصمة» حين يكون <code>bypassAllowed</code> صحيحًا. وتُقرَأ سلسلة
+      <code>reason</code> من <code>context</code> <em>قبل</em> <code>await</code>، ويُحرَس الناتج بـ<code>context.mounted</code>
+      لأن طلب نظام التشغيل قد يبقى أطول من عمر الودجة.</p>
+      <p>وأهم قرار هو ما تفعله البصمة الفاشلة بالجلسة. فلا تستدعي <code>AuthCubit.fallBackToPassword()</code>
+      <code>signOut()</code> عن قصد: بصمة مرفوضة شخص لم يستطع إثبات من يكون الآن، لا شخص سجل الخروج. فيبقى الرمز،
+      ويُفتح نموذج كلمة المرور، ويُكمل المستخدم دخوله. وتُخزَّن الموافقة
+      (<code>streetbite_biometric_sign_in</code>) على الجهاز لا في Firestore لأنها تصف الهاتف: الحساب نفسه على لوحي
+      بلا بصمة مسجّلة لا يرث موافقة لا يستطيع الوفاء بها.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Prompt flags</span><span class="t-ar">أعلام طلب البصمة</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>biometricOnly: false</code> keeps a device that has no fingerprint sensor unlockable with its own
+      PIN. <code>persistAcrossBackgrounding: true</code> retries instead of failing when the user switches apps
+      mid-scan. And there is no <code>useErrorDialogs</code> any more — the plugin stopped painting native error
+      dialogs, so every failure mode is classified in <code>BiometricService._classify</code> and shown through
+      the app's own ARB-backed UI. That is an improvement in both directions: the platform's English-only dialog
+      cannot be localised, and this one can.</p>
+    </div>
+    <div class="ar">
+      <p>يبقي <code>biometricOnly: false</code> الجهازَ الذي لا حساس بصمة فيه قابلًا للفتح برقمه السري. ويعيد
+      <code>persistAcrossBackgrounding: true</code> المحاولة بدل الفشل حين يبدّل المستخدم التطبيق أثناء المسح. ولا
+      وجود لـ<code>useErrorDialogs</code> بعد الآن: توقفت الإضافة عن رسم ورش أخطاء أصلية، فتُصنَّف كل حالة فشل في
+      <code>BiometricService._classify</code> وتُعرض في واجهة التطبيق بمفاتيح ARB. وهو تحسّن في الاتجاهين: فلا
+      يمكن تعريب ورشة النظام الإنجليزية، ويمكن تعريب هذه.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">What lives on the device</span><span class="t-ar">ما يعيش على الجهاز</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th><span class="t-en">SharedPreferences key</span><span class="t-ar">مفتاح</span></th>
+      <th><span class="t-en">Contains</span><span class="t-ar">يحتوي</span></th>
+      <th><span class="t-en">Sensitivity</span><span class="t-ar">الحساسية</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>streetbite_local_users</code></td>
+        <td><span class="t-en">The fallback accounts: uid, e-mail, display name, a password digest, a creation timestamp.</span><span class="t-ar">حسابات الرجوع: المعرّف والبريد والاسم المعروض وملخَّص كلمة المرور وتاريخ الإنشاء.</span></td>
+        <td><span class="t-en"><b>The weak point.</b> The digest is FNV-1a with a fixed salt, which is obfuscation, not a key-derivation function. Acceptable only because <code>allowOfflineFirebaseFallback</code> is a demo flag meant to be turned off for a real build — and the file's own comment says exactly that.</span><span class="t-ar"><b>نقطة الضعف.</b> الملخَّص FNV-1a بملح ثابت، وهو تمويه لا دالة اشتقاق مفاتيح. مقبول لأن <code>allowOfflineFirebaseFallback</code> راية تجريبية تُطفَأ في البناء الحقيقي — وهذا ما يقوله تعليق الملف نفسه.</span></td></tr>
+      <tr><td><code>streetbite_local_session</code></td>
+        <td><span class="t-en">Which fallback account is signed in.</span><span class="t-ar">أي حساب رجوع مسجَّل دخوله.</span></td>
+        <td><span class="t-en">Local to the app's own sandbox; no token, no password.</span><span class="t-ar">محلي في صندوق التطبيق؛ بلا رمز ولا كلمة مرور.</span></td></tr>
+      <tr><td><code>streetbite_biometric_sign_in</code></td><td><span class="t-en">A bool.</span><span class="t-ar">منطقي.</span></td>
+        <td><span class="t-en">Device-scoped on purpose.</span><span class="t-ar">خاص بالجهاز عن قصد.</span></td></tr>
+      <tr><td><code>streetbite_locale</code> · <code>streetbite_theme</code></td><td><span class="t-en">Two strings.</span><span class="t-ar">سلسلة.</span></td>
+        <td><span class="t-en">Nothing.</span><span class="t-ar">لا شيء.</span></td></tr>
+      <tr><td><code>streetbite_cache_meals</code> · <code>streetbite_cache_hot_offers</code></td>
+        <td><span class="t-en">The public menu feed as JSON.</span><span class="t-ar">قائمة أطباق عامة بصيغة JSON.</span></td>
+        <td><span class="t-en">Nothing. Same payload any browser can fetch from TheMealDB.</span><span class="t-ar">لا شيء. الحمولة نفسها التي يجلبها أي متصفح من TheMealDB.</span></td></tr>
+      <tr><td><span class="t-en">Firebase Auth session</span><span class="t-ar">جلسة Firebase Auth</span></td>
+        <td><span class="t-en">Managed by the Firebase SDK, not by StreetBite; the app stores nothing of it itself.</span><span class="t-ar">يديرها SDK Firebase لا StreetBite؛ ولا يخزّن التطبيق منها شيئًا.</span></td>
+        <td><span class="t-en">Reads and refreshes are wrapped so an expired token returns the user to the login screen instead of looping.</span><span class="t-ar">القراءات والتحديثات ملفوفة فيُرجِع الرمز منتهي الصلاحية شاشة الدخول بدل الدوران.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">Secrets and the build</span><span class="t-ar">الأسرار والبناء</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p>Three files are gitignored and none of them is in the repository history:
+      <code>android/key.properties</code> (the Maps key), <code>android/app/google-services.json</code>, and
+      <code>ios/Runner/GoogleService-Info.plist</code>. The manifest reads
+      <code>${MAPS_API_KEY}</code>, filtered from <code>key.properties</code> with an empty default, so a fresh
+      clone still builds — it just shows <code>MapErrorBoundary</code> until a key is supplied. The release build
+      type uses <code>signingConfig = debug</code>, which is honest for coursework and wrong for a store
+      submission.</p>
+      <p>The only credential in the repository is deliberate: the seeded QA account
+      <code>yasmine@streetbite.app</code> / <code>StreetBite123</code>, created so the Appium suite and a marker
+      on a fresh clone can sign in without a human. It is the demo fallback account, not a real user.</p>
+    </div>
+    <div class="ar">
+      <p>ثلاثة ملفات مستثناة من git وليس أي منها في تاريخ المستودع: <code>android/key.properties</code> (مفتاح
+      الخرائط)، و<code>android/app/google-services.json</code>، و<code>ios/Runner/GoogleService-Info.plist</code>.
+      ويقرأ البيان <code>${MAPS_API_KEY}</code> المرشَّح من <code>key.properties</code> مع افتراض فارغ، فيبني
+      الاستنساخ الجديد نفسه — ويعرض <code>MapErrorBoundary</code> فقط حتى يُعطى مفتاح. ونوع البناء النهائي يستعمل
+      <code>signingConfig = debug</code>، وهو صدق في مشروع دراسي وخطأ في تسليم متجر.</p>
+      <p>ووحيد بيانات الاعتماد في المستودع مقصود: حساب ضبط الجودة المزروع <code>yasmine@streetbite.app</code> /
+      <code>StreetBite123</code>، أُنشئ حتى يستطيع حزمة Appium ومستخدم على استنساخ جديد الدخول بلا إنسان. وهو حساب
+      الرجوع التجريبي لا مستخدم حقيقي.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Permissions, and what the app does with them</span><span class="t-ar">الأذونات وما يفعلها التطبيق</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th><span class="t-en">Permission</span><span class="t-ar">الإذن</span></th>
+      <th><span class="t-en">Why it is declared</span><span class="t-ar">سبب الإعلان</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>INTERNET</code> · <code>ACCESS_NETWORK_STATE</code></td>
+        <td><span class="t-en">The MealDB feed and Firestore sync. The state permission is what lets the app know to degrade to cache.</span><span class="t-ar">تدفق MealDB ومزامنة Firestore. وإذن الحالة هو ما يعرف التطبيق أنه يتدهور إلى المخزون.</span></td></tr>
+      <tr><td><code>ACCESS_COARSE_LOCATION</code> · <code>ACCESS_FINE_LOCATION</code></td>
+        <td><span class="t-en">Required by the Google Maps SDK. StreetBite never reads a position itself — there is no geolocator dependency, the marker set is the five compiled-in vendors, and <code>myLocationButtonEnabled: false</code> on the map. The manifest comment says coarse is enough because the app shows a distance hint, never turn-by-turn.</span><span class="t-ar">تطلبها SDK خرائط Google. ولا يقرأ StreetBite موقعًا بنفسه — لا إضافة تحديد موقع، والمسامير هي الخمسة المضمنة، و<code>myLocationButtonEnabled: false</code> في الخريطة. ويقول تعليق البيان إن الخشن يكفي لأن التطبيق يعرض تلميح مسافة لا توجيهًا منعطفًا فمنعطف.</span></td></tr>
+      <tr><td><code>USE_BIOMETRIC</code></td>
+        <td><span class="t-en">The gate. Paired with <code>&lt;uses-feature android:name="android.hardware.fingerprint" android:required="false"/&gt;</code>, which is what keeps the APK installable on a device without a sensor.</span><span class="t-ar">للبوابة. مع <code>&lt;uses-feature … android:required="false"&gt;</code> وهو ما يبقي ملف APK قابلًا للتثبيت على جهاز بلا حساس.</span></td></tr>
+      <tr><td><code>READ_MEDIA_IMAGES</code> · <code>READ_EXTERNAL_STORAGE</code></td>
+        <td><span class="t-en">Profile photo from the gallery; the first is the Android 13+ replacement for the second, which is why both are declared.</span><span class="t-ar">صورة الملف الشخصي من المعرض؛ فالأول بدل الثاني منذ أندرويد 13، وسبب إعلان الاثنين.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">Privacy, and one dead-end worth naming</span><span class="t-ar">الخصوصية، وطريق مسدود يستحق الذكر</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p>There is no analytics package, no crash reporter, no advertising ID and no telemetry of any kind: the
+      only outbound traffic is TheMealDB, Firebase Auth and Firestore. Photos are picked and uploaded per the
+      user's action, never read in bulk.</p>
+      <p>One declared affordance does less than it looks like. The manifest registers a
+      <code>VIEW</code> intent filter with <code>android:scheme="streetbite"</code> and the comment calls it
+      <code>streetbite://qa/reset</code>, used by the Appium suite to relaunch with a clean state — but nothing in
+      <code>lib/</code> parses that URI. Its real effect is that Android recreates the activity, so the app
+      restarts from the splash. That is enough for the suite today, but the path is not handled and should not be
+      described as a working deep link.</p>
+    </div>
+    <div class="ar">
+      <p>لا حزمة تحليلات، ولا مراسل أعطال، ولا معرّف إعلاني، ولا قياس عن بُعد على أي نحو: فكل صادِر هو MealDB
+      وFirebase Auth وFirestore. وتُلتقَط الصور وتُرفَع بفعل المستخدم، لا تُقرَأ بالجملة أبدًا.</p>
+      <p>وأداة معلنة واحدة تفعل أقل مما تبدو. يبيان البيان <code>VIEW</code> بمفتاح معرِّف
+      <code>android:scheme="streetbite"</code> ويسمّيه التعليق <code>streetbite://qa/reset</code> تستعمله حزمة
+      Appium لإعادة الإقلاع بحالة نظيفة — لكن لا شيء في <code>lib/</code> يحلّل هذه المعرِّفات. وأثره الحقيقي أن
+      يعيد أندرويد إنشاء النشاط، فيبدأ التطبيق من شاشة البداية. وهذا يكفي الحزمة اليوم، لكن المسار غير معالج
+      فينبغي ألا يُوصف بأنه رابط عميق يعمل.</p>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+    <a href="10-l10n.html"><span class="lbl"><span class="t-en">Previous · §10</span><span class="t-ar">السابق · §10</span></span><span class="to"><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></span></a>
+    <a class="next" href="12-navigation.html"><span class="lbl"><span class="t-en">Next · §12</span><span class="t-ar">التالي · §12</span></span><span class="to"><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#security">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

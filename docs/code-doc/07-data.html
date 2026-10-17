@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data &amp; resilience · StreetBite code documentation · §07</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html" class="cur"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §07 Data &amp; resilience</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part I · Section 07 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الأول · القسم 07 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="data">
+  <h2><span class="t-en"><span class="num">07</span> · Data &amp; resilience</span><span class="t-ar"><span class="num">07</span> · البيانات والصمود</span></h2>
+
+  <div class="bi">
+    <div class="en">
+      <p>StreetBite talks to five different backends at once: a public REST API, a key-value store,
+      Firebase Authentication, Cloud Firestore, and a compiled-in list of five vendors. Only one of them is
+      guaranteed to be reachable on any given launch — so the design rule is not "handle the error" but
+      "<b>always show something</b>". Every read has a defined degraded answer, and every write has a defined
+      outcome when the backend is gone.</p>
+      <p>That rule is why the app is demonstrable on an emulator with no Google Play Services, offline in a
+      train, and against a Firebase project whose rules were misconfigured.</p>
+    </div>
+    <div class="ar">
+      <p>يتواصل StreetBite مع خمسة خلفيات مختلفة في وقت واحد: واجهة REST عامة، ومخزن مفاتيح وقيم، وFirebase
+      Authentication، وCloud Firestore، وقائمة مضمّنة في الكود لخمسة باعة. ولا يُضمَن منها إلا واحد في أي إقلاع،
+      لذا لم تكن قاعدة التصميم «عالِج الخطأ» بل «<b>اعرض شيئًا دائمًا</b>». لكل قراءة جواب معرَّف عند التدهور، ولكل
+      كتابة نتيجة معرَّفلة عندما يغيب الخادم.</p>
+      <p>هذه القاعدة هي سبب قابلية التطبيق للعرض على محاكي بلا خدمات Google Play، وفي وضع عدم الاتصال، وحتى مع
+      مشروع Firebase ضُبطت قواعدُه خطأً.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">The five backends</span><span class="t-ar">الخلفيات الخمس</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th><span class="t-en">Data source</span><span class="t-ar">مصدر البيانات</span></th>
+      <th><span class="t-en">Holds</span><span class="t-ar">يحتفظ بـ</span></th>
+      <th><span class="t-en">When it is unreachable</span><span class="t-ar">عند تعذّر الوصول</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>MealRemoteDataSource</code></td>
+        <td><span class="t-en">The menu and the Hot Offers strip, from TheMealDB.</span><span class="t-ar">قائمة الطعام وشريط العروض الساخنة من TheMealDB.</span></td>
+        <td><span class="t-en">Falls back to the cached JSON. If the cache is empty too → <code>ServerFailure</code> and a Retry panel.</span><span class="t-ar">يرجع إلى JSON المخزَّن. وإن كان المخزون فارغًا أيضًا ← <code>ServerFailure</code> ولوحة إعادة المحاولة.</span></td></tr>
+      <tr><td><code>MealLocalDataSource</code></td>
+        <td><span class="t-en">The whole menu as one JSON string in <code>shared_preferences</code>.</span><span class="t-ar">القائمة كاملة سلسلة JSON واحدة في <code>shared_preferences</code>.</span></td>
+        <td><span class="t-en">Nothing to fall back to — it <em>is</em> the fallback. A corrupt string is treated as "no cache".</span><span class="t-ar">لا شيء يرجع إليه — فهو نفسه الرجوع. والسلسلة الفاسدة تُعامل كـ«لا مخزون».</span></td></tr>
+      <tr><td><code>AuthRemoteDataSource</code></td>
+        <td><span class="t-en">Accounts, and the refresh token behind the persisted session.</span><span class="t-ar">الحسابات، ورمز التحديث وراء الجلسة الدائمة.</span></td>
+        <td><span class="t-en"><code>AuthRepositoryImpl</code> degrades to <code>AuthLocalDataSource</code>, an on-device account store.</span><span class="t-ar">يتدهور <code>AuthRepositoryImpl</code> إلى <code>AuthLocalDataSource</code>، وهو مخزن حسابات على الجهاز.</span></td></tr>
+      <tr><td><code>FirestoreService</code></td>
+        <td><span class="t-en">Profiles, favourites, and orders.</span><span class="t-ar">الملفات الشخصية والمفضّلة والطلبات.</span></td>
+        <td><span class="t-en">Every repository checks <code>isAvailable</code> first and returns its own local answer instead of throwing.</span><span class="t-ar">يتحقق كل مستودع من <code>isAvailable</code> أولًا ويُعيد جوابه المحلي بدل الرمي.</span></td></tr>
+      <tr><td><code>VendorLocalDataSource</code></td>
+        <td><span class="t-en">Five street-food vendors in five cities.</span><span class="t-ar">خمسة باعة شارع في خمس مدن.</span></td>
+        <td><span class="t-en">Cannot fail — it is a compiled-in constant. The map itself can fail, and <code>MapErrorBoundary</code> covers that.</span><span class="t-ar">لا يفشل — فهو ثابت مضمّن. وقد تفشل الخريطة نفسها، ويغطي ذلك <code>MapErrorBoundary</code>.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">The menu: a Factory that chooses a source, not a class</span><span class="t-ar">القائمة: مصنع يختار المصدر لا الصنف</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>MealRepositoryImpl</code> owns an enum — <code>remote</code>, <code>local</code>,
+      <code>remoteThenLocal</code> — and one method, <code>selectDataSource()</code>, that maps an <em>intent</em>
+      onto a <em>strategy</em>. The decision has exactly one home instead of a <code>switch</code> repeated at
+      every call site, and it can be unit-tested on its own. Adding a third backend is one enum value and one
+      branch there; no other file changes.</p>
+      <p><code>defaultSource</code> is <code>remoteThenLocal</code>: try TheMealDB, write the result into the
+      cache, and on <code>NetworkException</code> read the cache instead of showing an error screen. Both
+      <code>getMeals()</code> and <code>getHotOffers()</code> use it.</p>
+      <p>The cache stores the <b>whole list under one key</b>. That is a deliberate trade-off, stated in the
+      file's own comment: TheMealDB returns around fifty small records, so one read is cheaper than fifty, and
+      the payload stays trivially inspectable during QA. Hot Offers get their <em>own</em> key
+      (<code>streetbite_cache_hot_offers</code>) so a failure to cache the offers can never invalidate a good
+      menu cache.</p>
+    </div>
+    <div class="ar">
+      <p>يمتلك <code>MealRepositoryImpl</code> تعدادًا — <code>remote</code> و<code>local</code>
+      و<code>remoteThenLocal</code> — ودالة واحدة هي <code>selectDataSource()</code> تربط <em>نيةً</em>
+      بـ<em>ستراتيجية</em>. فالقرار له موطن واحد بدل <code>switch</code> يتكرر عند كل استدعاء، ويمكن اختبارُه بمفرده
+      باختبار وحدة مستقل. وإضافة خلفية ثالثة هي قيمة للتعداد وفرع هناك فقط، دون تغيير أي ملف آخر.</p>
+      <p><code>defaultSource</code> هو <code>remoteThenLocal</code>: جرّب TheMealDB، ثم اكتب النتيجة في المخزون،
+      وعند <code>NetworkException</code> اقرأ المخزون بدل عرض شاشة خطأ. ويستخدمه كلٌّ من <code>getMeals()</code>
+      و<code>getHotOffers()</code>.</p>
+      <p>يخزّن المخزون <b>القائمة كاملة تحت مفتاح واحد</b>. وهذا مقايضة مقصودة يشرحها تعليق الملف نفسه: يرجع
+      TheMealDB نحو خمسين سجلًّا صغيرًا، فتصير قراءة واحدة أقل كلفة من خمسين، وتبقى الحمولة سهلة الفحص أثناء ضبط
+      الجودة. وتأخذ العروض الساخنة مفتاحها <em>الخاص</em> (<code>streetbite_cache_hot_offers</code>) حتى لا يستطيع
+      إخفاق تخزين العروض إفساد مخزون قائمة سليم.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Auth: the on-device fallback, and the line it must not cross</span><span class="t-ar">المصادقة: الرجوع المحلي والحدّ الذي لا يُتجاوز</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p>Authentication is the most interesting degradation because it is the one place where being helpful and
+      being unsafe are one line apart. <code>AuthRepositoryImpl</code> keeps a flag, <code>_firebaseUsable</code>,
+      and consults <code>_isConnectivityFailure()</code> before switching to
+      <code>AuthLocalDataSource</code>. <b>Only</b> <code>authErrorNetwork</code> and
+      <code>authErrorUnknown</code> count as connectivity.</p>
+      <p>A credential rejection is not connectivity. Falling back for a wrong password would let that password
+      succeed offline — a false pass, and one that would have made the whole Appium suite meaningless.</p>
+      <p>The local store keeps a list of JSON objects under <code>streetbite_local_users</code> and the session
+      under <code>streetbite_local_session</code>. Passwords are never clear text: they pass through a
+      salt-and-hash function built on the FNV-1a constants (offset basis <code>0x811c9dc5</code>, prime
+      <code>0x01000193</code>, masked to 32 bits). Local accounts get an id like <code>local-1725834000123456</code>
+      — microseconds since epoch, so it cannot collide with a Firebase <code>uid</code> — and the seeded QA
+      account gets the fixed id <code>streetbite-demo-uid</code>.</p>
+      <p>The same store also holds the biometric opt-in under <code>streetbite_biometric_sign_in</code>. It is
+      device-local on purpose: the same account on a tablet with no enrolled fingerprint must not inherit an
+      opt-in it can never satisfy.</p>
+    </div>
+    <div class="ar">
+      <p>المصادقة هي أكثر حالات التدهور إثارة لأنها الموضع الذي يفصل فيه سطر واحد بين المفيد وغير الآمن. يحتفظ
+      <code>AuthRepositoryImpl</code> بعلم هو <code>_firebaseUsable</code>، ويستشير
+      <code>_isConnectivityFailure()</code> قبل الانتقال إلى <code>AuthLocalDataSource</code>. و<b>وحدهما</b>
+      <code>authErrorNetwork</code> و<code>authErrorUnknown</code> يُعدّان انقطاع اتصال.</p>
+      <p>أما رفض بيانات الاعتماد فليس انقطاع اتصال. ولو رجعنا عند كلمة مرور خاطئة لنجحت تلك الكلمة أثناء عدم
+      الاتصال — وهي نتيجة خاطئة كانت ستُفقد حزمة Appium معناها كله.</p>
+      <p>يحفظ المخزن المحلي قائمة كائنات JSON تحت <code>streetbite_local_users</code> والجلسة تحت
+      <code>streetbite_local_session</code>. ولا تكون كلمات المرور نصًا صريحًا أبدًا: تمرّ بدالة تمليح وتجزئة
+      مبنية على ثابتي FNV-1a (الأساس <code>0x811c9dc5</code> والعدد الأولي <code>0x01000193</code>، مع قناع إلى
+      32 بت). وتأخذ الحسابات المحلية معرّفًا مثل <code>local-1725834000123456</code> — ميكروثانية منذ الحقبة، فلا
+      يتصادم مع <code>uid</code> في Firebase — بينما يحصل حساب ضبط الجودة المزروع على المعرّف الثابت
+      <code>streetbite-demo-uid</code>.</p>
+      <p>يحمل المخزن نفسه موافقة البصمة تحت <code>streetbite_biometric_sign_in</code>. وهي محلية على الجهاز عن
+      قصد: فالحساب نفسه على لوحي بلا بصمة مسجَّلة لا ينبغي أن يرث موافقة لا يستطيع الوفاء بها أبدًا.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Firestore: one gateway, one place where the schema is named</span><span class="t-ar">Firestore: بوابة واحدة، وموضع واحد تُسمَّى فيه المجموعات</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>FirestoreService</code> is the app's only eager-shared object: a private constructor plus a
+      <code>static final _instance</code> and a <code>factory</code> that returns it, so the class cannot be
+      instantiated from outside its own library. GetIt registers it as a <code>lazySingleton</code>, created on
+      first use and shared for the whole lifecycle.</p>
+      <p>Two things make it more than a pass-through:</p>
+      <ul>
+        <li><b><code>configure(null)</code> is a supported state.</b> When <code>Firebase.initializeApp()</code>
+        fails, the service stays in "local mode": <code>isAvailable</code> is false and every repository answers
+        from its own local logic. Touching the <code>firestore</code> getter anyway throws
+        <code>FirestoreNotAvailableException</code> — loud in a test, invisible to a user.</li>
+        <li><b>Collection names are declared once — in <code>AppConstants</code>, not in these accessors.</b>
+        <code>usersCollection()</code>, <code>ordersCollection(uid)</code> and
+        <code>favouritesCollection(uid)</code> do spell out <code>users/{uid}</code>,
+        <code>orders/{uid}/items</code> and <code>users/{uid}/favourites</code> at
+        <code>firestore_service.dart:62-70</code> — and nothing calls them. The three repository
+        implementations build the same paths from <code>AppConstants.usersCollection</code>,
+        <code>AppConstants.ordersCollection</code> and <code>AppConstants.userFavouritesSubCollection</code>
+        and hand the finished strings to the generic read/write helpers. The schema is still centralised, but
+        the real source of truth is the constants file; these accessors are dead weight kept beside it, and
+        <code>AppConstants.favouritesCollection</code> has no reader either.</li>
+      </ul>
+      <p>Writes use <code>SetOptions(merge: true)</code> rather than <code>set</code>, so a profile update that
+      changes only the display name cannot delete the stored photo URL.</p>
+    </div>
+    <div class="ar">
+      <p><code>FirestoreService</code> هو الكائن الوحيد المشترك مشاركة مبكّرة في التطبيق: مُنشئ خاص مع
+      <code>static final _instance</code> و<code>factory</code> يعيده، فلا يمكن إنشاء الصنف من خارج مكتبة نفسه.
+      ويسجّله GetIt كـ<code>lazySingleton</code>، فيُنشأ عند أول استعمال ويشترك فيه طوال العمر التشغيلي.</p>
+      <p>وأمران يجعلانها أكثر من مجرد غلاف رقيق للمكتبة:</p>
+      <ul>
+        <li><b><code>configure(null)</code> حالة مدعومة.</b> عند فشل <code>Firebase.initializeApp()</code> تبقى
+        الخدمة في «الوضع المحلي»: <code>isAvailable</code> خاطئة، ويجيب كل مستودع من منطقه المحلي. ولمس
+        <code>firestore</code> رغم ذلك يرمي <code>FirestoreNotAvailableException</code> — صاخبًا في اختبار، خفيًّا
+        عن مستخدم.</li>
+        <li><b>أسماء المجموعات معلنة مرة واحدة — في <code>AppConstants</code> لا في هذه الأدوات.</b>
+        فإن <code>usersCollection()</code> و<code>ordersCollection(uid)</code>
+        و<code>favouritesCollection(uid)</code> تكتب فعلًا <code>users/{uid}</code>
+        و<code>orders/{uid}/items</code> و<code>users/{uid}/favourites</code> في
+        <code>firestore_service.dart:62-70</code> — ولا يستدعيها أحد. فتنفيذات المستودعات الثلاثة تبني
+        المسارات نفسها من <code>AppConstants.usersCollection</code>
+        و<code>AppConstants.ordersCollection</code> و<code>AppConstants.userFavouritesSubCollection</code>
+        وتمنح السلاسل الجاهزة لدوال القراءة والكتابة العامة. فالمخطط ما زال مركزيًا، لكن مصدر الحقيقة هو ملف
+        الثوابت؛ وهذه الأدوات وزن ميت بجانبه، و<code>AppConstants.favouritesCollection</code> بلا قارئ أيضًا.</li>
+      </ul>
+      <p>وتستخدم الكتابات <code>SetOptions(merge: true)</code> لا <code>set</code> المجردة، فلا يمكن لتحديث ملف
+      شخصي يغيّر الاسم المعروض وحده أن يمحو رابط الصورة المخزَّن.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Offline writes: the honest limitation</span><span class="t-ar">الكتابة بلا اتصال: القيد مذكور بصدقه</span></h3>
+  <div class="note">
+    <b>Read this before calling it a queue · اقرأ هذا قبل تسميته طابورًا</b>
+    <div class="bi">
+      <div class="en"><p>When Firestore is unavailable, <code>OrderRepositoryImpl.placeOrder()</code> returns
+      <code>Right(order.id)</code> without writing anything, and <code>getOrderHistory()</code> returns
+      <code>Right([])</code>. The intent is explicit in the code comment: the checkout flow completes and the user
+      is not blocked by a backend outage. The consequence is equally real — <b>there is no outbox</b>. An order
+      placed offline is accepted, confirmed on screen with an id, and then never reaches the server. Reading
+      history offline shows an empty list, not stale data, so the Orders tab renders its empty state rather than
+      an error. Fixing this properly means a pending-writes table plus a replay on reconnect; that is out of
+      scope for V1 and is recorded here rather than hidden.</p></div>
+      <div class="ar"><p>عند تعذّر Firestore تُعيد <code>OrderRepositoryImpl.placeOrder()</code> قيمة
+      <code>Right(order.id)</code> دون كتابة شيء، وتُعيد <code>getOrderHistory()</code> قيمة <code>Right([])</code>.
+      والنية مصرَّح بها في تعليق الكود: يكتمل مسار إتمام الطلب ولا يتعطل المستخدم بانقطاع الخادم. والنتيجة حقيقية
+      بالقدر نفسه — <b>فلا يوجد صندوق صادر</b>. فالطلب المُنشأ أثناء عدم الاتصال يُقبل، ويُؤكَّد على الشاشة
+      بمعرّف، ثم لا يصل إلى الخادم أبدًا. والقراءة بلا اتصال تُظهر قائمة فارغة لا بيانات قديمة، فيعرض تبويب
+      الطلبات حالته الفارغة لا خطأه. والإصلاح الصحيح يحتاج جدول كتابات معلَّقة مع إعادة إرسال عند عودة الاتصال؛
+      وهو خارج نطاق النسخة الأولى، وقد ذُكر هنا بدل إخفائه.</p></div>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Money is derived, not fetched</span><span class="t-ar">المال مشتق لا مجلوب</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p>TheMealDB is a recipe API and has no prices. <code>MealModel.fromJson</code> therefore derives one
+      deterministically from the meal id: <code>(699 + (seed % 1800)) / 100</code>, which puts every dish between
+      <b>$6.99 and $24.99</b>. The same meal always costs the same thing on every launch and on every device, so
+      cart totals are reproducible and testable — which is why a unit test can assert an exact total instead of a
+      range. <code>AppConstants.baseMealPrice = 8.99</code> is the separate fallback used when a meal has no
+      usable id at all.</p>
+    </div>
+    <div class="ar"><p>TheMealDB واجهة وصفات ولا أسعار لديها. لذا يشتقّ <code>MealModel.fromJson</code> سعرًا
+      حتميًّا من معرّف الطبق: <code>(699 + (seed % 1800)) / 100</code>، وهو يضع كل طبق بين <b>‎$6.99 و$24.99</b>.
+      فيبقى سعر الطبق نفسه في كل إقلاع وعلى كل جهاز، فتصير مجاميع السلة قابلة للتكرار والاختبار — ولهذا يستطيع
+      اختبار الوحدة أن يجزم بمجموع دقيق لا بمدى. أما <code>AppConstants.baseMealPrice = 8.99</code> فهو الرجوع
+      المنفصل عند انعدام معرّف صالح للطبق.</p></div>
+  </div>
+
+  <h3><span class="t-en">Network layer</span><span class="t-ar">طبقة الشبكة</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>DioClient</code> is a thin wrapper registered once, because a second instance would open a second
+      connection pool. All transport concerns live inside it — three timeouts of 20 seconds, JSON response type,
+      and one interceptor that turns every <code>DioException</code> into a <code>NetworkException</code> with a
+      human-readable reason: <code>timeout</code>, <code>offline</code>, <code>badCertificate</code>,
+      <code>cancelled</code>, or <code>status_&lt;code&gt;</code> for a bad response, which keeps the status code
+      on the exception for diagnostics. A malformed URL can still slip past the interceptor, so
+      <code>getJson()</code> has a final catch that unwraps <code>error.error</code> if it is already a
+      <code>NetworkException</code> and wraps it if it is not.</p>
+      <p>One honest gap: <code>_fetch()</code> catches <code>SerializationException</code> only in the
+      <code>remoteThenLocal</code> branch. The <code>remote</code> branch would let one escape — harmless today,
+      since no call site uses <code>remote</code>, but it is the place to look first if a third source is ever
+      added.</p>
+    </div>
+    <div class="ar">
+      <p><code>DioClient</code> غلاف رفيع مسجَّل مرة واحدة، لأن إنشاء مثال ثانٍ يفتح مجمِّع اتصالات ثانٍ. وكل
+      شؤون النقل داخله: ثلاث مهل كل واحدة عشرون ثانية، ونوع استجابة JSON، ومعترِض واحد يحوّل كل
+      <code>DioException</code> إلى <code>NetworkException</code> بسبب مفهوم للبشر: <code>timeout</code> أو
+      <code>offline</code> أو <code>badCertificate</code> أو <code>cancelled</code>، أو
+      <code>status_&lt;code&gt;</code> لاستجابة سيئة، مع حفظ رمز الحالة على الاستثناء للتشخيص. ورابط مشوَّه قد
+      يفلت من المعترِض، فوضعت <code>getJson()</code> التقاطًا أخيرًا يفكّ <code>error.error</code> إن كان
+      <code>NetworkException</code> أصلًا ويلفّه إن لم يكن.</p>
+      <p>وفجوة واحدة نقولها بصدق: يلتقط <code>_fetch()</code> الـ<code>SerializationException</code> في فرع
+      <code>remoteThenLocal</code> وحده، أما فرع <code>remote</code> فيدعه يفلت — وهو غير ضار اليوم لأن لا أحد
+      يستعمل <code>remote</code>، لكنه أول موضع يُنظر فيه إن أُضيف مصدر ثالث.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Resilience matrix — what a user actually sees</span><span class="t-ar">مصفوفة الصمود — ما يراه المستخدم فعلًا</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th><span class="t-en">Scenario</span><span class="t-ar">السيناريو</span></th>
+      <th><span class="t-en">On screen</span><span class="t-ar">على الشاشة</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><span class="t-en">Airplane mode, cache warm</span><span class="t-ar">وضع الطيران، والمخزون ممتلئ</span></td>
+        <td><span class="t-en">Full Home feed from the cache. No error shown anywhere.</span><span class="t-ar">القائمة كاملة من المخزون. ولا خطأ في أي موضع.</span></td></tr>
+      <tr><td><span class="t-en">Airplane mode, first launch ever</span><span class="t-ar">وضع الطيران، وأول إقلاع</span></td>
+        <td><span class="t-en"><code>AppErrorView</code> with <code>failureNetwork</code> and a Retry button. Sign-up still works via the local store.</span><span class="t-ar"><code>AppErrorView</code> بـ<code>failureNetwork</code> وزر إعادة. وما زال إنشاء الحساب يعمل بالمخزن المحلي.</span></td></tr>
+      <tr><td><span class="t-en">Firebase project unreachable</span><span class="t-ar">تعذّر الوصول إلى مشروع Firebase</span></td>
+        <td><span class="t-en">Login and Sign Up transparently use the on-device store; the seeded QA account is available.</span><span class="t-ar">يستخدم الدخول وإنشاء الحساب المخزن المحلي بشفافية؛ ويكون حساب ضبط الجودة المزروع متاحًا.</span></td></tr>
+      <tr><td><span class="t-en">Firestore reads a corrupt menu cache</span><span class="t-ar">—</span></td>
+        <td><span class="t-en">Not Firestore — but a corrupt cache is caught in <code>_readCache()</code> and reported as "no cache", so the feed degrades instead of crashing.</span><span class="t-ar">ليس Firestore، لكن المخزون الفاسد يُلْتقَط في <code>_readCache()</code> ويُعامَل كأنه «لا مخزون»، فيتدهور التدفق بدل أن ينهار.</span></td></tr>
+      <tr><td><span class="t-en">Maps SDK key invalid</span><span class="t-ar">مفتاح خرائط غير صالح</span></td>
+        <td><span class="t-en">Only the map area is replaced by <code>MessagePanel</code>; Browse, Cart and Orders keep working. This is live defect SB-119 — see <a href="13-testing.html#testing">§13</a>.</span><span class="t-ar">تُستبدَل منطقة الخريطة وحدها بـ<code>MessagePanel</code>، وتبقى شاشات التصفح والسلة والطلبات عاملة. وهو العيب الحيّ SB-119 — راجع <a href="13-testing.html#testing">§13</a>.</span></td></tr>
+      <tr><td><span class="t-en">Biometric hardware locked out</span><span class="t-ar">قفل الجهاز عن البصمة</span></td>
+        <td><span class="t-en"><code>AuthCubit.fallBackToPassword()</code> — the password form, with <b>no</b> <code>signOut()</code>, so the session survives. See <a href="11-security.html#security">§11</a>.</span><span class="t-ar"><code>AuthCubit.fallBackToPassword()</code> — نموذج كلمة المرور، <b>دون</b> <code>signOut()</code>، فتبقى الجلسة. راجع <a href="11-security.html#security">§11</a>.</span></td></tr>
+    </tbody>
+  </table>
+</section>
+<nav class="pager">
+    <a href="06-errors.html"><span class="lbl"><span class="t-en">Previous · §06</span><span class="t-ar">السابق · §06</span></span><span class="to"><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></span></a>
+    <a class="next" href="08-domain.html"><span class="lbl"><span class="t-en">Next · §08</span><span class="t-ar">التالي · §08</span></span><span class="to"><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#data">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

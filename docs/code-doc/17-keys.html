@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Constants, keys and identifiers · StreetBite code documentation · §17</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html" class="cur"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §17 Constants, keys and identifiers</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part II · Section 17 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الثاني · القسم 17 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="constants">
+  <h2><span class="t-en"><span class="num">17</span> · Constants, keys and identifiers</span><span class="t-ar"><span class="num">17</span> · الثوابت والمفاتيح والمعرّفات</span></h2>
+
+  <div class="bi"><div class="en">
+    <p>Part I explains what a value <em>does</em>. This section is where you look a value <em>up</em>: every
+    literal the app keys itself on, in one table per family, each verified against the file that reads it.
+    Six families cover the app — configuration constants, route names, on-device preference keys, the
+    Firestore schema, message keys, and the widget identifiers the test layers address.</p>
+    <p>Everything here was re-read from source for this document, including the two places where the source
+    contradicts its own comment. Those are called out rather than smoothed over.</p>
+  </div><div class="ar">
+    <p>يفسر الجزء الأول ما <em>تفعله</em> القيمة. وهذا القسم هو الموضع الذي تبحث فيه عن القيمة نفسها: كل حرفي
+    يبني التطبيق عليه مفتاحًا، في جدول لكل عائلة، وكل سطر فيه مقروء من الملف الذي يقرأه فعلًا. وست عائلات
+    تغطي التطبيق — ثوابت الإعداد، وأسماء المسارات، ومفاتيح التفضيلات على الجهاز، ومخطط Firestore، ومفاتيح
+    الرسائل، ومعرّفات الودجات التي تخاطبها طبقتا الاختبار.</p>
+    <p>وأُعيد قراءة كل ما هنا من المصدر لأجل هذه الوثيقة، بما في ذلك الموضعان اللذان يُناقض فيهما الكود
+    تعليقَه نفسه. وهذان مذكوران كما هما لا ملسعان.</p>
+  </div></div>
+
+  <h3><span class="t-en">17.1 · <code>AppConstants</code> — the one configuration file</span><span class="t-ar">17.1 · <code>AppConstants</code> — ملف الإعداد الوحيد</span></h3>
+  <div class="bi"><div class="en">
+    <p>Twenty-one <code>static const</code> members and nothing else: no methods, no state, a private
+    constructor so nobody can instantiate it. The dartdoc's own reason for existing is that everything which
+    "could otherwise be a magic value scattered through the code base lives here".</p>
+  </div><div class="ar">
+    <p>واحد وعشرون عضوًا <code>static const</code> ولا شيء غير ذلك: لا دوال ولا حالة، ومُنشئ خاص كي لا يستطيع
+    أحد إنشاء مثيل منه. والسبب الذي يذكره توثيق الملف لنفسه أن كل ما "كان يمكن أن يبقى قيمة سحرية مبعثرة في
+    الكود" يسكن هنا.</p>
+  </div></div>
+  <table class="tbl">
+    <thead><tr><th><span class="t-en">Constant</span><span class="t-ar">الثابت</span></th>
+      <th><span class="t-en">Value</span><span class="t-ar">القيمة</span></th>
+      <th><span class="t-en">What it governs · where it is read</span><span class="t-ar">ماذا يضبط · وأين يُقرأ</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>appName</code></td><td><code>'StreetBite'</code></td>
+        <td><span class="t-en">The <code>MaterialApp</code> title and the Profile footer word. Also the Android label.</span>
+        <span class="t-ar">عنوان <code>MaterialApp</code> والكلمة في تذييل الملف الشخصي. وهو أيضًا تسمية أندرويد.</span></td></tr>
+      <tr><td><code>baseUrl</code></td><td><code>'https://www.themealdb.com/api/'</code></td>
+        <td><span class="t-en">The only REST host the app talks to.</span><span class="t-ar">مضيف REST الوحيد الذي يحدثه التطبيق.</span></td></tr>
+      <tr><td><code>mealsEndpoint</code></td><td><code>'json/v1/1/search.php?s='</code></td>
+        <td><span class="t-en">Empty search = the whole menu, first page. Feeds Home and Browse.</span>
+        <span class="t-ar">بحث فارغ = القائمة كلها من الصفحة الأولى. يغذي الرئيسية والتصفح.</span></td></tr>
+      <tr><td><code>hotOffersEndpoint</code></td><td><code>'json/v1/1/filter.php?c=Beef'</code></td>
+        <td><span class="t-en">The "Hot Offers" strip is literally TheMealDB's <i>Beef</i> category — there is no offers API.</span>
+        <span class="t-ar">شريط «العروض الساخنة» هو فئة <i>ال لحم</i> في TheMealDB حرفيًا — فلا وجود لواجهة عروض.</span></td></tr>
+      <tr><td><code>cacheMealsKey</code></td><td><code>'streetbite_cache_meals'</code></td>
+        <td><span class="t-en">SharedPreferences slot for the full menu JSON. Written by <code>meal_local_data_source.dart</code>.</span>
+        <span class="t-ar">خانة SharedPreferences لـ JSON القائمة كاملة. يكتبها <code>meal_local_data_source.dart</code>.</span></td></tr>
+      <tr><td><code>cacheHotOffersKey</code></td><td><code>'streetbite_cache_hot_offers'</code></td>
+        <td><span class="t-en">Same, for the strip.</span><span class="t-ar">المثل لشريط العروض.</span></td></tr>
+      <tr><td><code>usersCollection</code></td><td><code>'users'</code></td>
+        <td><span class="t-en">Top-level Firestore collection, read by the profile and favourites repositories.</span>
+        <span class="t-ar">مجموعة علوية في Firestore، يقرأها مستودعا الملف الشخصي والمفضّلات.</span></td></tr>
+      <tr><td><code>ordersCollection</code></td><td><code>'orders'</code></td>
+        <td><span class="t-en">Top-level Firestore collection whose document id <em>is</em> the uid.</span>
+        <span class="t-ar">مجموعة علوية في Firestore معرّف مستندها <em>هو</em> المعرّف المحلي للمستخدم.</span></td></tr>
+      <tr><td><code>favouritesCollection</code></td><td><code>'favourites'</code></td>
+        <td><span class="t-en"><b>No reader.</b> The favourites path is built from <code>usersCollection</code> + <code>userFavouritesSubCollection</code> instead.</span>
+        <span class="t-ar"><b>بلا قارئ.</b> فمسار المفضّلات يُبنى من <code>usersCollection</code> زائد <code>userFavouritesSubCollection</code>.</span></td></tr>
+      <tr><td><code>userFavouritesSubCollection</code></td><td><code>'favourites'</code></td>
+        <td><span class="t-en">Sub-collection under <code>users/{uid}</code>. Read four times by <code>favourite_repository_impl.dart</code>.</span>
+        <span class="t-ar">مجموعة فرعية تحت <code>users/{uid}</code>. يقرأها <code>favourite_repository_impl.dart</code> أربع مرات.</span></td></tr>
+      <tr><td><code>networkTimeout</code></td><td><code>Duration(seconds: 20)</code></td>
+        <td><span class="t-en">All three Dio timeouts — connect, send, receive — from one value, so no request can hang a screen longer than 20 s.</span>
+        <span class="t-ar">المهل الثلاث في Dio — الاتصال والإرسال والاستقبال — من قيمة واحدة، فلا يتوقف طلب شاشة أطول من 20 ثانية.</span></td></tr>
+      <tr><td><code>orderActiveWindow</code></td><td><code>Duration(minutes: 45)</code></td>
+        <td><span class="t-en">The whole order-lifecycle rule. <code>OrderEntity.statusAt</code> compares against it; two widget/unit test files pin the boundary, so a change here is a deliberate, reviewed change.</span>
+        <span class="t-ar">قاعدة دورة حياة الطلب كلها. وهي ما تقارن به <code>OrderEntity.statusAt</code>؛ وملفا اختبار يثبّتان الحد، فأي تغيير هنا تغيير مقصود ومراجع.</span></td></tr>
+      <tr><td><code>allowOfflineFirebaseFallback</code></td><td><code>true</code></td>
+        <td><span class="t-en">The switch that decides whether an unreachable Firebase becomes a silent local demo or a surfaced failure. Read once, in <code>auth_repository_impl.dart:36</code>.</span>
+        <span class="t-ar">المفتاح الذي يقرّر هل يصبح Firebase غير القابل للوصول عرضًا محليًا صامتًا أم فشلًا معلنًا. يُقرأ مرة واحدة في <code>auth_repository_impl.dart:36</code>.</span></td></tr>
+      <tr><td><code>demoUserEmail</code><br><code>demoUserPassword</code><br><code>demoUserName</code></td>
+        <td><code>yasmine@streetbite.app</code><br><code>StreetBite123</code><br><code>Yasmine Adel</code></td>
+        <td><span class="t-en">Seeded into the on-device store on first launch so the app and the Appium suite always have a valid account. These are <b>deliberately committed</b> — they are QA fixtures, not credentials for any real account. Read by <code>auth_local_data_source.dart</code> and by the seed in <code>injection.dart:288</code>.</span>
+        <span class="t-ar">يُزرع في متجر الجهاز عند أول إقلاع ليوجد دائمًا حساب صالح للتطبيق ولمجموعة Appium. وهذه <b>مُودَعة عن قصد</b> — فهي أدوات اختبار لا بيانات دخول حساب حقيقي. يقرأها <code>auth_local_data_source.dart</code> والزرع في <code>injection.dart:288</code>.</span></td></tr>
+      <tr><td><code>vendorCount</code></td><td><code>5</code></td>
+        <td><span class="t-en">Trims the hardcoded vendor seed to five markers (<code>vendor_local_data_source.dart:89</code>) so the map and the count in §7 cannot drift apart.</span>
+        <span class="t-ar">يقتطع زرع البائعين الثابت إلى خمس نقاط (<code>vendor_local_data_source.dart:89</code>) فلا يتباعد الخريطة والعدد الوارد في §7.</span></td></tr>
+      <tr><td><code>baseMealPrice</code></td><td><code>8.99</code></td>
+        <td><span class="t-en">Not the price of a meal. <code>MealModel.priceForId()</code> derives a deterministic price in the $6.99–$24.99 band from the meal id's character codes; this constant is only the answer for an <b>empty</b> id, i.e. the placeholder meal of §12.</span>
+        <span class="t-ar">ليس سعر طبق. فـ<code>MealModel.priceForId()</code> تشتق سعرًا حتميًا في نطاق 6.99–24.99 دولار من رموز معرّف الطبق؛ وهذا الثابت هو الجواب عن معرّف <b>فارغ</b> فقط، أي الطبق البديل في §12.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">17.2 · Route names</span><span class="t-ar">17.2 · أسماء المسارات</span></h3>
+  <div class="bi"><div class="en">
+    <p>Twelve names, all of them strings the app compares against in exactly one place — the
+    <code>onGenerateRoute</code> switch. Four tab indices sit beside them because the shell is addressed by
+    index, not by name.</p>
+  </div><div class="ar">
+    <p>اثنا عشر اسمًا، وكلها سلاسل لا يقارن بها التطبيق إلا في موضع واحد — تبديل <code>onGenerateRoute</code>.
+    وأربعة مؤشرات تبويبات تجاورها لأن الهيكل يُخاطب بالدليل لا بالاسم.</p>
+  </div></div>
+  <table class="tbl">
+    <thead><tr><th><span class="t-en">Constant</span><span class="t-ar">الثابت</span></th>
+      <th><span class="t-en">Path</span><span class="t-ar">المسار</span></th>
+      <th><span class="t-en">Screen</span><span class="t-ar">الشاشة</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>AppRoutes.splash</code></td><td><code>/</code></td><td><span class="t-en">Splash — also the <code>default</code> arm of the switch.</span><span class="t-ar">البداية — وهي فرع <code>default</code> في التبديل.</span></td></tr>
+      <tr><td><code>login</code></td><td><code>/login</code></td><td><span class="t-en">Sign in.</span><span class="t-ar">الدخول.</span></td></tr>
+      <tr><td><code>biometricLogin</code></td><td><code>/biometric-login</code></td><td><span class="t-en">Fingerprint / face gate.</span><span class="t-ar">بوابة البصمة أو الوجه.</span></td></tr>
+      <tr><td><code>signUp</code></td><td><code>/signUp</code></td><td><span class="t-en">Account creation. The one camelCase route in an otherwise kebab-case set.</span><span class="t-ar">إنشاء الحساب. وهو المسار الوحيد المكتوب بـ<code>camelCase</code> في مجموعة كلها <code>kebab-case</code>.</span></td></tr>
+      <tr><td><code>home</code></td><td><code>/home</code></td><td><span class="t-en">The four-tab shell.</span><span class="t-ar">هيكل التبويبات الأربعة.</span></td></tr>
+      <tr><td><code>mealDetails</code></td><td><code>/meal-details</code></td><td><span class="t-en">One meal, takes <code>[MealEntity]</code>.</span><span class="t-ar">طبق واحد، يأخذ <code>[MealEntity]</code>.</span></td></tr>
+      <tr><td><code>cart</code></td><td><code>/cart</code></td><td><span class="t-en">Cart and checkout.</span><span class="t-ar">السلة وإتمام الطلب.</span></td></tr>
+      <tr><td><code>orderConfirmation</code></td><td><code>/order-confirmation</code></td><td><span class="t-en">Receipt after a placed order, takes <code>[OrderEntity]</code>.</span><span class="t-ar">الإيصال بعد طلب مُنفَّذ، يأخذ <code>[OrderEntity]</code>.</span></td></tr>
+      <tr><td><code>orderDetails</code></td><td><code>/order-details</code></td><td><span class="t-en">A past order, takes <code>[OrderEntity]</code>.</span><span class="t-ar">طلب منتهٍ، يأخذ <code>[OrderEntity]</code>.</span></td></tr>
+      <tr><td><code>vendorMap</code></td><td><code>/vendor-map</code></td><td><span class="t-en">Nearby Vendors.</span><span class="t-ar">البائعون القريبون.</span></td></tr>
+      <tr><td><code>profile</code></td><td><code>/profile</code></td><td><span class="t-en">Behind the biometric gate.</span><span class="t-ar">خلف بوابة البصمة.</span></td></tr>
+      <tr><td><code>settings</code></td><td><code>/settings</code></td><td><span class="t-en">Appearance, language, security.</span><span class="t-ar">المظهر واللغة والأمان.</span></td></tr>
+      <tr><td><code>tabHome · tabBrowse · tabOrders · tabProfile</code></td><td><code>0 · 1 · 2 · 3</code></td>
+        <td><span class="t-en">Shell indices. <code>MainShellScreen.ordersTabIndex</code> repeats the value 2 rather than importing this — the constant and the field are the same number written twice.</span>
+        <span class="t-ar">أدلة الهيكل. و<code>MainShellScreen.ordersTabIndex</code> يعيد كتابة القيمة 2 بدل استيراد هذا — فالثابت والحقل عدد واحد مكتوب مرتين.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">17.3 · What the phone keeps</span><span class="t-ar">17.3 · ما يحفظه الهاتف</span></h3>
+  <div class="bi"><div class="en">
+    <p>Seven SharedPreferences keys, all under the <code>streetbite_</code> prefix. Three live as private
+    fields of the data source that owns them, two as a public <code>storageKey</code> on their Cubit (so a
+    widget test can assert on the same literal), and two in <code>AppConstants</code>. None is
+    encrypted — <code>shared_preferences</code> is a plain XML file, which is exactly why §11 says the
+    biometric opt-in is device-local convenience and not a security boundary.</p>
+  </div><div class="ar">
+    <p>سبعة مفاتيح SharedPreferences، كلها تحت بادئة <code>streetbite_</code>. ثلاثة تعيش كحقول خاصة في مصدر
+    البيانات الذي يملكها، واثنان كـ<code>storageKey</code> عام على الدالة الحاكمة (فيستطيع اختبار ودجة أن
+    يجزم بالحرفي نفسه)، واثنان في <code>AppConstants</code>. ولا واحد منها مشفَّر — فـ<code>shared_preferences</code>
+    ملف XML صريح، وهذا هو سبب قول §11 إن خيار البصمة راحة محلية على الجهاز لا حدّ أمان.</p>
+  </div></div>
+  <table class="tbl">
+    <thead><tr><th><span class="t-en">Key</span><span class="t-ar">المفتاح</span></th>
+      <th><span class="t-en">Value shape</span><span class="t-ar">شكل القيمة</span></th>
+      <th><span class="t-en">Owner</span><span class="t-ar">المالك</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>streetbite_cache_meals</code></td><td><span class="t-en">JSON array of <code>MealModel.toJson()</code>.</span><span class="t-ar">مصفوفة JSON من <code>MealModel.toJson()</code>.</span></td><td><code>meal_local_data_source.dart</code></td></tr>
+      <tr><td><code>streetbite_cache_hot_offers</code></td><td><span class="t-en">Same shape, strip only.</span><span class="t-ar">الشكل نفسه، لشريط العروض وحده.</span></td><td><code>meal_local_data_source.dart</code></td></tr>
+      <tr><td><code>streetbite_local_users</code></td><td><span class="t-en">JSON array of user maps, passwords as FNV-1a digests (§11).</span><span class="t-ar">مصفوفة JSON من خرائط المستخدمين، وكلمات المرور بصمتَي FNV-1a (§11).</span></td><td><code>auth_local_data_source.dart:28</code></td></tr>
+      <tr><td><code>streetbite_local_session</code></td><td><span class="t-en">JSON map of the one signed-in user.</span><span class="t-ar">خريطة JSON للمستخدم المسجَّل الآن.</span></td><td><code>auth_local_data_source.dart:29</code></td></tr>
+      <tr><td><code>streetbite_biometric_sign_in</code></td><td><span class="t-en">A <code>bool</code>, written by the Settings switch.</span><span class="t-ar">قيمة <code>bool</code> يكتبها مفتش الإعدادات.</span></td><td><code>auth_local_data_source.dart:30</code></td></tr>
+      <tr><td><code>streetbite_locale</code></td><td><span class="t-en"><code>'en'</code> or <code>'ar'</code> — the <code>languageCode</code> only.</span><span class="t-ar"><code>'en'</code> أو <code>'ar'</code> — رمز اللغة وحده.</span></td><td><code>locale_cubit.dart:16</code></td></tr>
+      <tr><td><code>streetbite_theme_mode</code></td><td><span class="t-en">The <code>name</code> of an <code>AppThemeMode</code> enum value (§9).</span><span class="t-ar">اسم <code>name</code> لقيمة من تعداد <code>AppThemeMode</code> (§9).</span></td><td><code>theme_cubit.dart:16</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">17.4 · The Firestore schema, as the code actually writes it</span><span class="t-ar">17.4 · مخطط Firestore كما يكتبه الكود فعلًا</span></h3>
+  <table class="tbl">
+    <thead><tr><th><span class="t-en">Path</span><span class="t-ar">المسار</span></th>
+      <th><span class="t-en">Written by</span><span class="t-ar">كاتبه</span></th>
+      <th><span class="t-en">Notes</span><span class="t-ar">ملاحظات</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>users/{uid}</code></td><td><code>profile_repository_impl.dart</code></td>
+        <td><span class="t-en">One document per account: display name, email, photo URL, biometric flag. Writes always merge.</span>
+        <span class="t-ar">مستند لكل حساب: الاسم المعروض والبريد ورابط الصورة وخيار البصمة. والكتابات تدمج دائمًا.</span></td></tr>
+      <tr><td><code>users/{uid}/favourites/{mealId}</code></td><td><code>favourite_repository_impl.dart</code></td>
+        <td><span class="t-en">The document id is the meal id, so a heart is idempotent by construction — toggling twice cannot create two rows.</span>
+        <span class="t-ar">معرّف المستند هو معرّف الطبق، فوضع القلب متكرر الأثر ببنائه — والنقر مرتين لا ينشئ سطرين.</span></td></tr>
+      <tr><td><code>orders/{uid}/items/{orderId}</code></td><td><code>order_repository_impl.dart</code></td>
+        <td><span class="t-en">Unusual and worth reading twice: the <em>user</em> is the document under a top-level <code>orders</code> collection, and their orders are its <code>items</code> sub-collection. <code>OrderModel.itemsSubCollection</code> names the last segment.</span>
+        <span class="t-ar">غير مألوف ويقرأ مرتين: <em>المستخدم</em> هو المستند تحت مجموعة <code>orders</code> العلوية، وطلباته مجموعتها الفرعية <code>items</code>. ويسمّي <code>OrderModel.itemsSubCollection</code> القطعة الأخيرة.</span></td></tr>
+    </tbody>
+  </table>
+  <div class="warn">
+    <b>Schema residues · بقايا المخطط</b>
+    <div class="bi"><div class="en">
+      <p><code>FirestoreService</code> declares three collection accessors — <code>usersCollection()</code>,
+      <code>ordersCollection(uid)</code>, <code>favouritesCollection(uid)</code> at
+      <code>firestore_service.dart:62-70</code> — under a comment that calls them "the only place collection
+      paths are written down". Nothing calls them: the repositories assemble the same paths from
+      <code>AppConstants</code> and pass finished strings to the generic helpers. The schema is centralised
+      either way, but in the constants file, and the comment overstates what those three methods are for.
+      <code>AppConstants.favouritesCollection</code> is the same story with zero readers.</p>
+      <p>The analyzer cannot see this: the class is used, so its public members look used too. Deleting the
+      three accessors is safe and would make the comment true; it has not been done as part of writing this
+      document because removing code is a change, not a correction of prose.</p>
+    </div><div class="ar">
+      <p>يُصرّح <code>FirestoreService</code> ثلاث أدوات للمجموعات — <code>usersCollection()</code>
+      و<code>ordersCollection(uid)</code> و<code>favouritesCollection(uid)</code> في
+      <code>firestore_service.dart:62-70</code> — تحت تعليق يسمّيها «الموضع الوحيد الذي تُكتب فيه مسارات
+      المجموعات». ولا يستدعيها أحد: فالمستودعات تبني المسارات نفسها من <code>AppConstants</code> وتمنح
+      السلاسل الجاهزة لدوال الكتابة والقراءة العامة. فالمخطط مركزي على أي حال، لكن في ملف الثوابت، والتعليق
+      يبالغ في ما لهذه الثلاث. و<code>AppConstants.favouritesCollection</code> قصته نفسها بصفر قارئ.</p>
+      <p>ولا يستطيع المُحلِّل أن يرى هذا: فالصنف مستعمل، فتبدو أعضاؤه العامة مستعملة معه. وحذف الأدوات الثلاث
+      آمن ويجعل التعليق صادقًا؛ ولم يُفعَل أثناء كتابة هذه الوثيقة لأن حذف الكود تغيير لا تصحيح نص.</p>
+    </div></div>
+  </div>
+
+  <h3><span class="t-en">17.5 · Message keys</span><span class="t-ar">17.5 · مفاتيح الرسائل</span></h3>
+  <div class="bi"><div class="en">
+    <p>178 keys in each of <code>app_en.arb</code> and <code>app_ar.arb</code>, generated into
+    <code>lib/l10n/generated/</code> (§10). The rule the code follows is that <em>nothing below the
+    presentation layer returns a sentence</em>: <code>Failure</code> carries a <code>messageKey</code>,
+    <code>Validators</code> return one, and <code>L10nX</code> is the only place a key becomes text. A key
+    that exists in one file and not the other is a compile-time error, which is why both files have exactly
+    the same count.</p>
+  </div><div class="ar">
+    <p>178 مفتاحًا في كل من <code>app_en.arb</code> و<code>app_ar.arb</code>، تُولَّد إلى
+    <code>lib/l10n/generated/</code> (§10). والقاعدة التي يمشي عليها الكود أن <em>لا شيء تحت طبقة العرض يرجع
+    جملة</em>: فـ<code>Failure</code> يحمل <code>messageKey</code>، و<code>Validators</code> ترجع واحدًا،
+    و<code>L10nX</code> الموضع الوحيد الذي يتحول فيه المفتاح إلى نص. والمفتاح الموجود في ملف وغائب عن الآخر
+    خطأ ترجمة، وهذا سبب تساوي عدد المفاتيح في الملفين.</p>
+  </div></div>
+  <div class="note">
+    <b>The one documented gap · الفجوة المذكورة الوحيدة</b>
+    <div class="bi"><div class="en"><p><code>L10nX.trKey</code> maps failure keys to getters by hand, and the
+    arm for <code>biometricLockedOut</code> is missing, so that failure falls through to the generic
+    "something went wrong" sentence. §10 records it; it is a one-line fix and is deliberately not patched
+    here.</p></div><div class="ar"><p>يُرسم <code>L10nX.trKey</code> مفاتيح الفشل إلى دوال قراءة يدويًا، وفرع
+    <code>biometricLockedOut</code> ناقص، فيسقط ذلك الفشل إلى الجملة العامة «حدث خطأ ما». ويسجّل §10 هذا؛
+    وهو إصلاح سطر واحد وتركه هنا مقصود.</p></div></div>
+  </div>
+
+  <h3><span class="t-en">17.6 · Identifiers the two test layers address</span><span class="t-ar">17.6 · المعرّفات التي تخاطبها طبقتا الاختبار</span></h3>
+  <div class="bi"><div class="en">
+    <p>Two mechanisms, two audiences, and they are usually declared together on the same widget (§12, §13).</p>
+    <p><b><code>ValueKey</code> — 74 distinct literals.</b> Dart only: invisible to the device, used by
+    <code>find.byKey</code> in widget tests. Naming is <em>thing_action_surface</em>, e.g.
+    <code>details_open_cart_button</code>, <code>cart_emptied_snackbar</code>,
+    <code>biometric_sign_in_switch</code>.</p>
+    <p><b><code>SemanticId</code> — 9 static identifiers plus 3 generated ones.</b> Published to Android as
+    the accessibility node's <code>resource-id</code>, which is what the Appium XPath addresses:
+    <code>login_button</code>, <code>go_to_sign_up_button</code>, <code>biometric_login_button</code>,
+    <code>use_password_button</code>, <code>open_cart_button</code>, <code>hot_offers_list</code>,
+    <code>open_map_button</code>, <code>save_favourite_button</code>, <code>reorder_button</code>. The
+    generated ones carry the meal id: <code>add_to_cart_button_&lt;mealId&gt;</code> and
+    <code>cart_line_quantity_&lt;mealId&gt;</code>, with <code>cart_line_quantity_text_&lt;mealId&gt;</code>
+    as the matching <code>ValueKey</code> — that last one is a Dart key only, so Appium cannot see it.</p>
+  </div><div class="ar">
+    <p>آليتان، وجمهوران، وغالبًا ما يُعلان معًا على الودجة نفسها (§12، §13).</p>
+    <p><b><code>ValueKey</code> — أربعة وسبعون حرفيًا مميزًا.</b> لدارت وحدها: خفي على الجهاز، ويستعمله
+    <code>find.byKey</code> في اختبارات الودجة. وتسميته <em>شيء_فعل_موضع</em> مثل
+    <code>details_open_cart_button</code> و<code>cart_emptied_snackbar</code> و<code>biometric_sign_in_switch</code>.</p>
+    <p><b><code>SemanticId</code> — تسعة معرّفات ثابتة وثلاثة مولَّدة.</b> تُنشر إلى أندرويد كـ<code>resource-id</code>
+    عقدة الوصول، وهو ما يخاطبه XPath في Appium: <code>login_button</code>، <code>go_to_sign_up_button</code>،
+    <code>biometric_login_button</code>، <code>use_password_button</code>، <code>open_cart_button</code>،
+    <code>hot_offers_list</code>، <code>open_map_button</code>، <code>save_favourite_button</code>،
+    <code>reorder_button</code>. والمولَّدة تحمل معرّف الطبق: <code>add_to_cart_button_&lt;mealId&gt;</code>
+    و<code>cart_line_quantity_&lt;mealId&gt;</code>، مع <code>cart_line_quantity_text_&lt;mealId&gt;</code>
+    مقابلًا لها من <code>ValueKey</code> — والأخيرة مفتاح لدارت فقط، فلا يراها Appium.</p>
+  </div></div>
+
+  <h3><span class="t-en">17.7 · Build-time and platform keys</span><span class="t-ar">17.7 · مفاتيح البناء والمنصّة</span></h3>
+  <table class="tbl">
+    <thead><tr><th><span class="t-en">Name</span><span class="t-ar">الاسم</span></th>
+      <th><span class="t-en">Where</span><span class="t-ar">الموضع</span></th>
+      <th><span class="t-en">State</span><span class="t-ar">حالته</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>MAPS_API_KEY</code></td><td><span class="t-en">manifest placeholder, defaulting to empty</span><span class="t-ar">وسيط في البيان، افتراضه فارغ</span></td>
+        <td><span class="t-en">Supplied from <code>android/key.properties</code>, which is gitignored. An empty key is what produces the blank map of the known blocker, not a crash.</span>
+        <span class="t-ar">يؤتى من <code>android/key.properties</code> وهو خارج git. والمفتاح الفارغ هو ما يعطي الخريطة الفارغة في العائق المعروف، لا انهيارًا.</span></td></tr>
+      <tr><td><code>key.properties</code></td><td><span class="t-en">android/, committed only as <code>.example</code></span><span class="t-ar">في android/، ومُودَع كنموذج <code>.example</code> فقط</span></td>
+        <td><span class="t-en">Holds the Maps key. Never commit the real file.</span><span class="t-ar">يحمل مفتاح الخرائط. لا تودع الملف الحقيقي أبدًا.</span></td></tr>
+      <tr><td><code>google-services.json</code></td><td><span class="t-en">android/app/</span><span class="t-ar">في android/app/</span></td>
+        <td><span class="t-en">Gitignored, and its absence is why the Gradle plugin is applied conditionally (§14). Firebase is initialised with no explicit options — the plugin's generated resources are the only config path.</span>
+        <span class="t-ar">خارج git، وغيابه هو سبب تطبيق إضافة Gradle بشرط (§14). ويهيَّأ Firebase بلا وسائط صريحة — فموارد الإضافة المولَّدة هي مسار الإعداد الوحيد.</span></td></tr>
+      <tr><td><code>streetbite://</code></td><td><span class="t-en">intent-filter scheme in the manifest</span><span class="t-ar">مخطط في فلتر النوايا بالبيان</span></td>
+        <td><span class="t-en">Commented as <code>streetbite://qa/reset</code> for the Appium suite, with no Dart, Kotlin or Java code that parses it (§12).</span>
+        <span class="t-ar">معلَّق عليه أنه <code>streetbite://qa/reset</code> لمجموعة Appium، بلا كود Dart أو Kotlin أو Java يحلله (§12).</span></td></tr>
+      <tr><td><code>1.0.0+3</code></td><td><span class="t-en">pubspec <code>version:</code></span><span class="t-ar">حقل <code>version:</code> في pubspec</span></td>
+        <td><span class="t-en">The only place the number is written; <code>flutter.versionName</code>/<code>versionCode</code> feed it to Gradle.</span>
+        <span class="t-ar">الموضع الوحيد المكتوب فيه الرقم؛ ويغذّيه <code>flutter.versionName</code> و<code>versionCode</code> إلى Gradle.</span></td></tr>
+      <tr><td><code>assets/images/</code></td><td><span class="t-en">pubspec <code>assets:</code></span><span class="t-ar">حقل <code>assets:</code> في pubspec</span></td>
+        <td><span class="t-en">Declared folder. <code>assets/icon/</code> exists beside it and is <em>not</em> declared — launcher icons are consumed by the build, not bundled as runtime assets.</span>
+        <span class="t-ar">المجلد المعلن. و<code>assets/icon/</code> موجود بجانبه و<em>غير</em> معلن — فأيقونات الإقلاع تستعملها العملية ولا تُحزم موارد وقت تشغيل.</span></td></tr>
+    </tbody>
+  </table>
+</section>
+<nav class="pager">
+    <a href="16-classes.html"><span class="lbl"><span class="t-en">Previous · §16</span><span class="t-ar">السابق · §16</span></span><span class="to"><span class="t-en">Class and type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></span></a>
+    <a class="next" href="18-glossary.html"><span class="lbl"><span class="t-en">Next · §18</span><span class="t-ar">التالي · §18</span></span><span class="to"><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#constants">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

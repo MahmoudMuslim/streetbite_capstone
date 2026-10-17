@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What the app is · StreetBite code documentation · §01</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html" class="cur"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §01 What the app is</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part I · Section 01 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الأول · القسم 01 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="overview">
+  <h2 class="t-en"><span class="num">01</span> · What the app is</h2>
+  <h2 class="t-ar"><span class="num">01</span> · ما هو هذا التطبيق</h2>
+
+  <div class="bi">
+    <div class="en">
+      <p><b>StreetBite</b> is a hyperlocal food-discovery and ordering app. It shows the dishes you can order
+      near you, lets you build a basket, check out with a payment strategy, and read the order back as a receipt.
+      It ships as an Android APK and is written as a <em>Clean Architecture</em> capstone project, so every
+      feature is traceable from a widget down to a use case.</p>
+      <h4>User-visible features</h4>
+      <ul>
+        <li><b>Splash</b> — brand mark, language switch, and a session restore that runs in parallel with a
+        minimum display time.</li>
+        <li><b>Login / Sign Up</b> — Firebase Authentication with declarative form validation and a circular
+        fingerprint shortcut beside the primary button.</li>
+        <li><b>Biometric sign-in</b> — a dedicated screen that auto-scans on a cold start when this device
+        opted in; a failed scan drops you to the password form without signing you out.</li>
+        <li><b>Home feed</b> — featured-meal <code>PageView</code> banner, category chips, a searchable
+        <code>GridView</code> of meals, and a horizontal <b>Hot Offers</b> strip.</li>
+        <li><b>Meal details</b> — instructions, favourite heart, and the add-to-cart stepper.</li>
+        <li><b>Browse</b> tab — the category grid plus the entry point to the vendor map.</li>
+        <li><b>Cart</b> — quantity steppers per line, a live money summary, payment choice, then checkout
+        that writes the order to Cloud Firestore.</li>
+        <li><b>Order confirmation</b>, then the <b>Orders</b> tab split into <em>Current</em> and <em>Past</em>,
+        each row opening a full receipt.</li>
+        <li><b>Nearby Vendors</b> — a Google Map with five seeded street-food markers.</li>
+        <li><b>Profile</b> — behind a biometric gate: avatar upload, favourites strip, order history,
+        device-information card, logout.</li>
+        <li><b>Settings</b> — four appearances (light, dark, glass light, glass dark), language, and the
+        biometric sign-in toggle.</li>
+      </ul>
+      <h4>Engineering goals the code is written against</h4>
+      <ul>
+        <li>Layered Clean Architecture with the dependency rule pointing inwards only.</li>
+        <li>SOLID demonstrated on purpose (<code>PaymentMethod</code>, <code>FirestoreService</code>,
+        <code>UseCase</code>, repository interfaces).</li>
+        <li>No unhandled exception anywhere — failures are values, see <a href="06-errors.html#errors">§06</a>.</li>
+        <li>Zero hard-coded UI text — every string is an ARB key, see <a href="10-l10n.html#l10n">§10</a>.</li>
+        <li>Runs and is testable with no network, no Firebase project, and no Google Play Services.</li>
+        <li>Fully localised EN/AR with right-to-left layout, switchable at runtime.</li>
+      </ul>
+    </div>
+    <div class="ar">
+      <p>تطبيق <b>StreetBite</b> هو تطبيق محلي لاكتشاف الطعام وطلبه. يعرض الأطباق التي يمكنك طلبها بالقرب منك،
+      ثم يتيح لك بناء سلة الشراء وإتمام الدفع بأحد أساليب الدفع، وقراءة الطلب الذي أنشأته في شكل إيصال.
+      يُصدَّر كملف APK لأندرويد، وقد كُتب كمشروع تخرّج بتطبيق <b>المعمارية النظيفة</b> (Clean Architecture)،
+      وهذا يعني أن كل ميزة يمكن تتبّعها من الـ Widget نزولًا حتى Use Case.</p>
+      <h4>الميزات الظاهرة للمستخدم</h4>
+      <ul>
+        <li><b>شاشة البداية (Splash)</b> — العلامة التجارية ومبدّل اللغة واستعادة الجلسة في توازٍ مع
+        حدٍّ أدنى لمدة العرض.</li>
+        <li><b>تسجيل الدخول / إنشاء حساب</b> — عبر Firebase Authentication مع تحقّق declarative من الحقول
+        وزرّ دائري للبصمة بجوار الزر الأساسي.</li>
+        <li><b>الدخول بالبصمة</b> — شاشة مخصّصة تبدأ المسح تلقائيًا عند التشغيل البارد إذا كان هذا الجهاز
+        قد اختار تفعيلها؛ وفشل المسح ينقلك إلى نموذج كلمة المرور دون تسجيل خروجك.</li>
+        <li><b>التغذية الرئيسية</b> — شريط <code>PageView</code> للأطباق المميّزة، وشرائح التصنيفات،
+        و<code>GridView</code> قابلة للبحث، وشريط أفقي <b>للعروض الساخنة</b>.</li>
+        <li><b>تفاصيل الطبق</b> — طريقة التحضير، وقلب المفضّلة، ومُبدّل الكمية للإضافة إلى السلة.</li>
+        <li><b>تبويب تصفّح</b> — شبكة التصنيفات مع نقطة الدخول إلى خريطة المطاعم.</li>
+        <li><b>السلة</b> — مُبدّل كمية لكل سطر، وملخّص مبلغ حيّ، واختيار الدفع، ثم إتمام طلب يكتب السند في
+        Cloud Firestore.</li>
+        <li><b>تأكيد الطلب</b>، ثم تبويب <b>الطلبات</b> مقسوم إلى <em>حالية</em> و<em>سابقة</em>، وكل صف
+        يفتح إيصالًا كاملًا.</li>
+        <li><b>مطاعم قريبة</b> — خريطة Google Maps بخمس علامات مُ جهَّزة مسبقًا لأكشاك طعام شارع.</li>
+        <li><b>الملف الشخصي</b> — خلف بوابة البصمة: رفع الصورة، وشريط المفضّلات، وسجل الطلبات، وبطاقة
+        معلومات الجهاز، وتسجيل الخروج.</li>
+        <li><b>الإعدادات</b> — أربع مظاهر (فاتح، داكن، زجاجي فاتح، زجاجي داكن)، واللغة، ومفتاح الدخول بالبصمة.</li>
+      </ul>
+      <h4>أهداف هندسية كُتب الكود على ضوئها</h4>
+      <ul>
+        <li>معمارية طبقية مع قاعدة التبعيات التي تشير إلى الداخل فقط.</li>
+        <li>تطبيق مقصود لمبادئ SOLID (<code>PaymentMethod</code>، و<code>FirestoreService</code>،
+        و<code>UseCase</code>، وواجهات المستودعات).</li>
+        <li>لا وجود لأي استثناء غير معالَج — الأخطاء قيم وليس استثناءات، راجع <a href="06-errors.html#errors">§06</a>.</li>
+        <li>صفر نصوص مكتوبة داخل الواجهة — كل نص هو مفتاح في ملفات ARB، راجع <a href="10-l10n.html#l10n">§10</a>.</li>
+        <li>يعمل وقابل للاختبار بلا شبكة وبلا مشروع Firebase وبلا خدمة Google Play.</li>
+        <li>تعريب وت الترجمة بالكامل مع اتجاه من اليمين إلى اليسار وتبديل أثناء التشغيل.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="key">
+    <b>Scope of this document · نطاق هذا المستند</b>
+    <div class="bi">
+      <div class="en"><p><b>Part I</b> explains the design: why the layers are split the way they are, how a tap
+      becomes a Firestore write, and what each subsystem guarantees. <b>Part II</b> is a mechanical reference —
+      every one of the 158 Dart files, all 274 top-level declarations, and every shared constant and key —
+      generated from the source tree on the day this document was written, so the counts are exact.</p></div>
+      <div class="ar"><p><b>القسم الأول</b> يشرح التصميم: لماذا انقسمت الطبقات بهذه الصورة، وكيف تتحوّلة ضغطة
+      أصبع إلى كتابة في Firestore، وما الذي يضمنه كل نظام فرعي. <b>القسم الثاني</b> مرجع آلي — كل ملف من ملفات
+      Dart الـ158، وجميع التعريفات العلوية الـ274، وكل ثابت ومفتاح مشترك — وقد وُلِّد من شجرة
+      المصدر في يوم كتابة هذا المستند، لذا الأعداد دقيقة.</p></div>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+    <a href="index.html"><span class="lbl"><span class="t-en">Back to</span><span class="t-ar">العودة إلى</span></span><span class="to"><span class="t-en">Full index</span><span class="t-ar">الفهرس الكامل</span></span></a>
+    <a class="next" href="02-stack.html"><span class="lbl"><span class="t-en">Next · §02</span><span class="t-ar">التالي · §02</span></span><span class="to"><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#overview">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

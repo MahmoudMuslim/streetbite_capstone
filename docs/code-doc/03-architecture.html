@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture · StreetBite code documentation · §03</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html" class="cur"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §03 Architecture</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part I · Section 03 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الأول · القسم 03 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="architecture">
+  <h2><span class="t-en"><span class="num">03</span> · Architecture</span><span class="t-ar"><span class="num">03</span> · المعمارية</span></h2>
+
+  <div class="bi">
+    <div class="en">
+      <p>The app is split into four layers. The <b>dependency rule</b> is the whole point: an import arrow may
+      only point inwards. <code>presentation</code> may know <code>domain</code>, <code>domain</code> may know
+      <code>core</code>, and <code>data</code> implements <code>domain</code> interfaces.
+      <code>domain</code> contains <b>zero</b> <code>package:flutter</code> imports — verified across all 33 of
+      its files — which is what lets the business rules run in a plain Dart VM with no widget tree.</p>
+    </div>
+    <div class="ar">
+      <p>ينقسم التطبيق إلى أربع طبقات. <b>قاعدة التبعيات</b> هي الفكرة كلها: سهم الاستيراد يشير إلى الداخل فقط.
+      يحق لـ <code>presentation</code> أن تعرف <code>domain</code>، ويحق لـ <code>domain</code> أن تعرف
+      <code>core</code>، وتُنفذ طبقة <code>data</code> واجهاتِ <code>domain</code>. لا تحتوي
+      <code>domain</code> على <b>أي</b> استيراد من <code>package:flutter</code> — وهو أمر مُتحقَّق منه في ملفاتها
+      الـ33 جميعًا — وهذا ما يسمح لقواعد العمل بأن تعمل في مفسر Dart عادي بلا شجرة Widgets.</p>
+    </div>
+  </div>
+
+  <div class="layers">
+    <div class="ly"><b>presentation/</b>
+      <span class="t-en">Widgets, screens, Blocs/Cubits, router, theme glue. Knows states and use cases, nothing else.</span>
+      <span class="t-ar">الـ Widgets والشاشات و Blocs/Cubits والموجّه ووصلات الثيم. تعرف الحالات وحالات الاستخدام فقط.</span></div>
+    <div class="ly domain"><b>domain/</b>
+      <span class="t-en">Entities, repository <em>interfaces</em>, 20 use cases. Pure Dart — no Flutter, no Firebase, no Dio.</span>
+      <span class="t-ar">الكيانات و<em>واجهات</em> المستودعات و20 حالة استخدام. Dart خالصة: بلا Flutter ولا Firebase ولا Dio.</span></div>
+    <div class="ly"><b>data/</b>
+      <span class="t-en">Models, data sources, repository implementations, the Firestore and biometric services. Owns every SDK import.</span>
+      <span class="t-ar">النماذج ومصادر البيانات وتطبيقات المستودعات وخدمتا Firestore والبصمة. تملك كل استدعاءات SDK.</span></div>
+    <div class="ly core"><b>core/</b>
+      <span class="t-en">Cross-cutting primitives: <code>Either</code>, <code>Failure</code>, <code>UseCase</code>, constants, the Dio wrapper, theme, validators.</span>
+      <span class="t-ar">أدوات عرضية مشتركة: <code>Either</code> و<code>Failure</code> و<code>UseCase</code> والثوابت ولفّة Dio والثيم ودوال التحقق.</span></div>
+  </div>
+
+  <h3><span class="t-en">Where every file lives</span><span class="t-ar">أين يسكن كل ملف</span></h3>
+  <table class="dir">
+    <thead><tr>
+      <th>Directory</th><th>Files</th><th>Lines</th>
+      <th><span class="t-en">Responsibility</span><span class="t-ar">المسؤولية</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>lib/</code> root</td><td class="n">3</td><td class="n">650</td>
+        <td><span class="t-en"><code>main.dart</code> boot, <code>injection.dart</code> graph, <code>app.dart</code> root widget.</span><span class="t-ar"><code>main.dart</code> للإقلاع، و<code>injection.dart</code> لرسم الشجرة، و<code>app.dart</code> الـ Widget الجذري.</span></td></tr>
+      <tr><td><code>core/constants</code></td><td class="n">3</td><td class="n">177</td>
+        <td><span class="t-en">App name, endpoints, route names, the seven categories.</span><span class="t-ar">اسم التطبيق ونقاط النهاية وأسماء المسارات والتصنيفات السبعة.</span></td></tr>
+      <tr><td><code>core/error</code></td><td class="n">3</td><td class="n">143</td>
+        <td><span class="t-en"><code>Either</code>, the <code>Failure</code> hierarchy, low-level exceptions.</span><span class="t-ar"><code>Either</code> وسلّم <code>Failure</code> والاستثناءات منخفضة المستوى.</span></td></tr>
+      <tr><td><code>core/network</code></td><td class="n">1</td><td class="n">92</td>
+        <td><span class="t-en">The only place Dio is imported.</span><span class="t-ar">المكان الوحيد لاستيراد Dio.</span></td></tr>
+      <tr><td><code>core/theme</code></td><td class="n">5</td><td class="n">608</td>
+        <td><span class="t-en">Palette, four <code>ThemeData</code>s, glass tokens, the appearance enum.</span><span class="t-ar">اللوحة وأربعة <code>ThemeData</code> ورموز الزجاج وعدّد المظاهر.</span></td></tr>
+      <tr><td><code>core/usecase</code></td><td class="n">1</td><td class="n">43</td>
+        <td><span class="t-en"><code>UseCase</code>, <code>SyncUseCase</code>, <code>Params</code>, <code>NoParams</code>.</span><span class="t-ar">عقود حالات الاستخدام ومعلماتها.</span></td></tr>
+      <tr><td><code>core/utils</code></td><td class="n">3</td><td class="n">154</td>
+        <td><span class="t-en">Validators, responsive breakpoints, string helpers.</span><span class="t-ar">التحقق من الحقول والنقاط المتجاوبة ومساعدي النصوص.</span></td></tr>
+      <tr><td><code>data/datasources</code></td><td class="n">6</td><td class="n">619</td>
+        <td><span class="t-en">MealDB HTTP, the prefs caches, Firebase Auth, the Firestore singleton, the vendor seed.</span><span class="t-ar">HTTP للأطباق وذاكرة التفضيلات ومصادقة Firebase ومفردة Firestore وبذرة المطاعم.</span></td></tr>
+      <tr><td><code>data/models</code></td><td class="n">7</td><td class="n">601</td>
+        <td><span class="t-en">JSON and Firestore mapping onto entities.</span><span class="t-ar">الربط بين JSON وFirestore والكيانات.</span></td></tr>
+      <tr><td><code>data/repositories</code></td><td class="n">6</td><td class="n">570</td>
+        <td><span class="t-en">Implement the domain interfaces and choose remote versus local.</span><span class="t-ar">تنفذ واجهات Domain وتختار المصدر البعيد أو المحلي.</span></td></tr>
+      <tr><td><code>data/services</code></td><td class="n">1</td><td class="n">142</td>
+        <td><span class="t-en"><code>BiometricService</code> around <code>local_auth</code>.</span><span class="t-ar"><code>BiometricService</code> فوق <code>local_auth</code>.</span></td></tr>
+      <tr><td><code>domain/entities</code></td><td class="n">8</td><td class="n">402</td>
+        <td><span class="t-en">Meal, user, order, cart line, favourite, vendor, device info, payment.</span><span class="t-ar">الطبق والمستخدم والطلب وسطر السلة والمفضلة والمطعم ومعلومات الجهاز والدفع.</span></td></tr>
+      <tr><td><code>domain/repositories</code></td><td class="n">6</td><td class="n">123</td>
+        <td><span class="t-en">Six abstract interfaces, no implementation at all.</span><span class="t-ar">ست واجهات مجردة بلا أي تنفيذ.</span></td></tr>
+      <tr><td><code>domain/usecases</code></td><td class="n">19</td><td class="n">665</td>
+        <td><span class="t-en">20 use cases across 19 files, each with its <code>Params</code> object.</span><span class="t-ar">عشرون حالة استخدام في تسعة عشر ملفًا، ولكل واحدة كائن <code>Params</code> خاص بها.</span></td></tr>
+      <tr><td><code>presentation/blocs</code></td><td class="n">17</td><td class="n">1055</td>
+        <td><span class="t-en">Eight folders: auth, cart, favourites, locale, meals, orders, profile, theme.</span><span class="t-ar">ثمانية مجلدات: المصادقة والسلة والمفضلة واللغة والأطباق والطلبات والملف الشخصي والمظهر.</span></td></tr>
+      <tr><td><code>presentation/extensions</code></td><td class="n">4</td><td class="n">230</td>
+        <td><span class="t-en">Localization bridge, snack helper, cart quantity, appearance names.</span><span class="t-ar">جسر الترجمة ومساعد الرسائل وكمية السلة وأسماء المظاهر.</span></td></tr>
+      <tr><td><code>presentation/router</code></td><td class="n">2</td><td class="n">180</td>
+        <td><span class="t-en"><code>onGenerateRoute</code> and the shared page transition.</span><span class="t-ar">مولد المسارات للانتقال المشترك بين الصفحات.</span></td></tr>
+      <tr><td><code>presentation/screens</code></td><td class="n">17</td><td class="n">5033</td>
+        <td><span class="t-en">Every full page and every tab.</span><span class="t-ar">كل صفحة كاملة وكل تبويب.</span></td></tr>
+      <tr><td><code>presentation/widgets</code></td><td class="n">46</td><td class="n">4004</td>
+        <td><span class="t-en">The design system: surfaces, cards, skeletons, badges, toggles, glass parts.</span><span class="t-ar">نظام التصميم: الأسطح والبطاقات وهياكل التحميل والشارات والمفاتيح وأجزاء الزجاج.</span></td></tr>
+      <tr><td><code>l10n</code> + generated</td><td class="n">2 + 3</td><td class="n">2384</td>
+        <td><span class="t-en">Two ARB catalogs (178 keys each) and the three generated Dart getters files.</span><span class="t-ar">كتالوجا ARB (178 مفتاحًا في كل منهما) وملفات Dart المولدة الثلاثة.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">A tap, end to end</span><span class="t-ar">ضغطة واحدة من البداية إلى النهاية</span></h3>
+  <div class="bi">
+    <div class="en"><p>Pressing <b>+</b> on a meal card is the shortest path through all four layers, so it is
+      the clearest way to watch the rule work:</p></div>
+    <div class="ar"><p>الضغط على <b>+</b> في بطاقة طبق هو أقصر مسار عبر الطبقات الأربع، وهي أوضح طريقة لمشاهدة
+      القاعدة وهي تعمل:</p></div>
+  </div>
+  <div class="flow">
+    <div class="st"><b>1 · widget</b><span class="t-en"><code>CartLineAction</code> tap handler</span><span class="t-ar">معالج الضغط في <code>CartLineAction</code></span></div>
+    <div class="st"><b>2 · event</b><span class="t-en"><code>CartBloc.add(CartItemAdded(meal))</code></span><span class="t-ar"><code>CartBloc.add(CartItemAdded(meal))</code></span></div>
+    <div class="st"><b>3 · use case</b><span class="t-en"><code>AddToCart(AddToCartParams(…))</code> — synchronous, pure</span><span class="t-ar"><code>AddToCart</code> — متزامنة ونقية</span></div>
+    <div class="st"><b>4 · totals</b><span class="t-en"><code>CalculateOrderTotals</code> rebuilds the money</span><span class="t-ar"><code>CalculateOrderTotals</code> تعيد حساب المبلغ</span></div>
+    <div class="st ok"><b>5 · state</b><span class="t-en"><code>emit(CartUpdated(items, totals, lastAdded))</code></span><span class="t-ar"><code>emit(CartUpdated(…))</code></span></div>
+    <div class="st ok"><b>6 · UI</b><span class="t-en"><code>BlocBuilder</code> repaints badge, list and summary; <code>BlocListener</code> shows one SnackBar</span><span class="t-ar">يُعيد <code>BlocBuilder</code> رسم الشارة والقائمة والملخص، ويعرض <code>BlocListener</code> رسالة واحدة</span></div>
+  </div>
+  <div class="bi">
+    <div class="en">
+      <p>Checkout continues the same chain into the data layer:
+      <code>CartCheckoutRequested</code> → <code>PlaceOrder</code> → <code>OrderRepository</code> (interface) →
+      <code>OrderRepositoryImpl</code> → <code>FirestoreService.writeToSubCollection()</code>. The Bloc never
+      imports Firestore and never learns a collection path: the only place
+      <code>orders/{uid}/items</code> is spelled out is the <a href="07-data.html#data">gateway</a>.</p>
+    </div>
+    <div class="ar">
+      <p>ويستمر إتمام الطلب في السلسلة نفسها إلى طبقة البيانات: <code>CartCheckoutRequested</code> ثم
+      <code>PlaceOrder</code> ثم <code>OrderRepository</code> (واجهة) ثم <code>OrderRepositoryImpl</code> ثم
+      <code>FirestoreService.writeToSubCollection()</code>. لا يستورد الـ Bloc Firestore أبدًا ولا يعرف اسم أي
+      مجموعة، والمكان الوحيد الذي يُكتب فيه المسار <code>orders/{uid}/items</code> هو
+      <a href="07-data.html#data">بوابة Firestore</a>.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">SOLID, and where each letter actually shows up</span><span class="t-ar">مبادئ SOLID وأين يظهر كل حرف فعليًا</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th>Principle</th>
+      <th><span class="t-en">Concrete evidence in this codebase</span><span class="t-ar">الدليل الملموس في هذا المشروع</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><b>SRP</b> — single responsibility</td>
+        <td><span class="t-en"><code>CalculateOrderTotals</code> only does arithmetic; <code>CartBloc</code> only orchestrates; <code>AuthLocalDataSource</code> only reads and writes prefs.</span><span class="t-ar"><code>CalculateOrderTotals</code> تحسب فقط، و<code>CartBloc</code> تنسق فقط، و<code>AuthLocalDataSource</code> تقرأ التفضيلات وتكتبها فقط.</span></td></tr>
+      <tr><td><b>OCP</b> — open for extension, closed for modification</td>
+        <td><span class="t-en">A new payment method is a new class implementing <code>PaymentMethod</code>; the checkout screen and the order model do not change.</span><span class="t-ar">أسلوب دفع جديد يعني صنفًا جديدًا ينفذ <code>PaymentMethod</code> دون تعديل شاشة الطلب ولا نموذج الطلب.</span></td></tr>
+      <tr><td><b>LSP</b> — Liskov substitution</td>
+        <td><span class="t-en"><code>CashPayment</code> and <code>CardPayment</code> are interchangeable behind the interface; <code>OrderModel</code> rehydrates either from one <code>type</code> field.</span><span class="t-ar">يمكن تبديل <code>CashPayment</code> و<code>CardPayment</code> خلف الواجهة، ويعيد <code>OrderModel</code> بناء أيهما من حقل <code>type</code> واحد.</span></td></tr>
+      <tr><td><b>ISP</b> — interface segregation</td>
+        <td><span class="t-en"><code>PaymentMethod</code> exposes three getters and one method. Every repository interface has between two and four members.</span><span class="t-ar">تكشف <code>PaymentMethod</code> عن ثلاثة مجتلبات ودالة واحدة، وكل واجهة مستودع بين عضوين وأربعة أعضاء.</span></td></tr>
+      <tr><td><b>DIP</b> — dependency inversion</td>
+        <td><span class="t-en">Every Cubit and Bloc takes abstract use cases in its constructor, and <code>injection.dart</code> is the only file that names a concrete class.</span><span class="t-ar">كل Cubit وBloc يستقبل حالات استخدام مجردة في بنائه، و<code>injection.dart</code> هو الملف الوحيد الذي يسمي صنفًا ملموسًا.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">One documented exception to the dependency rule</span><span class="t-ar">استثناء واحد موثق لقاعدة التبعيات</span></h3>
+  <div class="warn">
+    <b>presentation → data</b>
+    <div class="bi">
+      <div class="en"><p>Three files — <code>biometric_gate.dart:4</code>,
+      <code>biometric_login_screen.dart:7</code> and <code>settings_screen.dart:12</code> — import
+      <code>data/services/biometric_service.dart</code> to read the <code>BiometricResult</code> variants
+      (<code>success</code>, <code>failure</code>, <code>cancelled</code>, <code>notEnrolled</code>,
+      <code>unavailable</code>, <code>lockedOut</code>). A biometric outcome is a property of the handset, not a
+      business rule, so inventing a domain type for it would be a lie. The cost: these are the only three UI
+      files bound to the service class rather than to a domain abstraction.</p></div>
+      <div class="ar"><p>ثلاثة ملفات — <code>biometric_gate.dart:4</code> و<code>biometric_login_screen.dart:7</code>
+      و<code>settings_screen.dart:12</code> — تستورد <code>data/services/biometric_service.dart</code> لقراءة
+      احتمالات <code>BiometricResult</code> (success، وfailure، وcancelled، وnotEnrolled، وunavailable،
+      وlockedOut). نتيجة البصمة صفة في الجهاز وليست قاعدة عمل، لذا اختراع نوع في Domain لها يكون تمثيلًا خاطئًا.
+      والثمن: هذه هي الملفات الثلاثة الوحيدة في الواجهة المرتبطة بصنف الخدمة لا بتجريد في Domain.</p></div>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+    <a href="02-stack.html"><span class="lbl"><span class="t-en">Previous · §02</span><span class="t-ar">السابق · §02</span></span><span class="to"><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></span></a>
+    <a class="next" href="04-di.html"><span class="lbl"><span class="t-en">Next · §04</span><span class="t-ar">التالي · §04</span></span><span class="to"><span class="t-en">Composition root &amp; dependency injection</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#architecture">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

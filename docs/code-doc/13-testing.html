@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Testing &amp; QA · StreetBite code documentation · §13</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html" class="cur"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §13 Testing &amp; QA</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part I · Section 13 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الأول · القسم 13 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="testing">
+  <h2><span class="t-en"><span class="num">13</span> · Testing &amp; QA</span><span class="t-ar"><span class="num">13</span> · الاختبار وضبط الجودة</span></h2>
+
+  <div class="bi">
+    <div class="en">
+      <p>StreetBite is verified at three depths, and the interesting part is not the totals — it is that the layers
+      found <b>different</b> bugs. Layer 1 is 99 automated tests inside the Dart VM (17 files, no device, ~40 s).
+      Layer 2 is 6 Appium cases driving the installed release APK on a real handset. Layer 3 is a 51-case manual
+      workbook, of which only 17 have been executed and passed.</p>
+      <p>The stated reason for layers 2 and 3 is in the QA pack itself: <em>all fourteen defects raised were invisible
+      to <code>flutter analyze</code> and <code>flutter test</code>, which stayed green throughout</em>. A dependency
+      resolved before registration, a login form that pre-filled a password, and an accessibility node that swallowed
+      a button are all things a unit test cannot see, because none of them happen inside the Dart VM.</p>
+    </div>
+    <div class="ar">
+      <p>يُتحقّق من StreetBite على ثلاث أعماق، والمثير ليس المجاميع — بل أن الطبقات اكتشفت أخطاء <b>مختلفة</b>.
+      الطبقة الأولى 99 اختبارًا آليًا داخل آلة Dart (17 ملفًا، بلا جهاز، نحو 40 ثانية). والطبقة الثانية 6 حالات
+      Appium تُدير نسخة APK المثبّتة على جهاز حقيقي. والطبقة الثالثة workbook يدوي من 51 حالة، لم يُنفَّذ منه إلا
+      17 حالة ونجحت.</p>
+      <p>والسبب المعلن للطبقتين الثانية والثالثة موجود في حزمة الجودة نفسها: <em>الأخطاء الأربعة عشر التي رُفعت كانت
+      غير مرئية لـ <code>flutter analyze</code> و<code>flutter test</code>، وهما أخضران طوال الوقت</em>. فثابت
+      يُحلّ قبل تسجيله، ونموذج دخول يملأ كلمة المرور سلفًا، وعقدة إمكانية وصول تبتلع زرًا — ثلاثة أشياء لا يراها
+      اختبار الوحدة، لأن لا شيء منها يحدث داخل آلة Dart.</p>
+    </div>
+  </div>
+
+  <table class="tbl">
+    <thead><tr>
+      <th><span class="t-en">Layer</span><span class="t-ar">الطبقة</span></th>
+      <th><span class="t-en">Artefact</span><span class="t-ar">المُخرَج</span></th>
+      <th><span class="t-en">Count</span><span class="t-ar">العدد</span></th>
+      <th><span class="t-en">Needs a device?</span><span class="t-ar">تحتاج جهازًا؟</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><span class="t-en">1 · Unit + widget</span><span class="t-ar">1 · وحدة وودجة</span></td>
+        <td><code>flutter_app/test/</code><span class="t-ar">مجلد الاختبارات</span></td>
+        <td>99 cases / 17 files<span class="t-ar">99 حالة في 17 ملفًا</span></td>
+        <td>No<span class="t-ar">لا</span></td></tr>
+      <tr><td><span class="t-en">2 · Device automation</span><span class="t-ar">2 · آلية الجهاز</span></td>
+        <td><code>automation/</code> — Java, TestNG, Maven, Appium<span class="t-ar">جافا مع TestNG وMaven وAppium</span></td>
+        <td>6 <code>@Test</code> / 1,991 lines<span class="t-ar">6 دوال اختبار من 1,991 سطرًا</span></td>
+        <td>Yes — release APK<span class="t-ar">نعم — APK إطلاق</span></td></tr>
+      <tr><td><span class="t-en">3 · Manual round</span><span class="t-ar">3 · جولة يدوية</span></td>
+        <td><code>manual_qa/</code> — XLSX + closure PDF + screenshots<span class="t-ar">Excel وملخّص الإغلاق واللقطات</span></td>
+        <td>51 cases, 17 executed, 34 blocked<span class="t-ar">51 حالة: 17 منفَّذة، 34 محجوبة</span></td>
+        <td>Yes — one handset<span class="t-ar">نعم — هاتف واحد</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">Layer 1 — 99 tests, and the harness that mirrors production</span><span class="t-ar">الطبقة الأولى — 99 اختبارًا، وبيئة تحاكي الإنتاج</span></h3>
+
+  <table class="dir">
+    <thead><tr><th>File</th><th class="n">Cases</th><th class="n">Lines</th><th>What it pins</th></tr></thead>
+    <tbody>
+      <tr><td><code>test/domain/cart_use_cases_test.dart</code></td><td class="n">11</td><td class="n">170</td><td>AddToCart · RemoveFromCart · CalculateOrderTotals against a mocktail repository.</td></tr>
+      <tr><td><code>test/domain/order_lifecycle_test.dart</code></td><td class="n">8</td><td class="n">115</td><td><code>statusAt</code> and the 45-minute boundary, plus "never resurrect a closed order".</td></tr>
+      <tr><td><code>test/data/models_test.dart</code></td><td class="n">15</td><td class="n">169</td><td>Meal/User/Order/Payment models — the Builder and strategy groups live here.</td></tr>
+      <tr><td><code>test/core/app_categories_test.dart</code></td><td class="n">5</td><td class="n">49</td><td><code>AppCategory.matches</code> — the ARB-key ↔ TheMealDB category mapping.</td></tr>
+      <tr><td><code>test/presentation/login_screen_test.dart</code></td><td class="n">14</td><td class="n">363</td><td>The biggest widget file: validation, failure copy, RTL, and the biometric entry point.</td></tr>
+      <tr><td><code>test/presentation/cart_bloc_test.dart</code></td><td class="n">7</td><td class="n">173</td><td>Seven <code>blocTest&lt;CartBloc, CartState&gt;</code> blocks — emit, act, expect.</td></tr>
+      <tr><td><code>test/presentation/order_details_screen_test.dart</code></td><td class="n">8</td><td class="n">205</td><td>Receipt rendering from a route argument, incl. the empty-id branch.</td></tr>
+      <tr><td><code>test/presentation/auth_biometric_gate_test.dart</code></td><td class="n">7</td><td class="n">131</td><td>Gate policy: success, failure dialog, bypass, and the no-hardware path.</td></tr>
+      <tr><td><code>test/presentation/biometric_login_screen_test.dart</code></td><td class="n">5</td><td class="n">198</td><td>The scan screen and its "use password instead" escape.</td></tr>
+      <tr><td><code>test/presentation/settings_biometric_sign_in_test.dart</code></td><td class="n">5</td><td class="n">160</td><td>The opt-in row, and that it is device-local.</td></tr>
+      <tr><td><code>test/presentation/cart_line_action_test.dart</code></td><td class="n">4</td><td class="n">140</td><td>The stepper: add, quantity text, remove.</td></tr>
+      <tr><td><code>test/presentation/l10n_extension_test.dart</code></td><td class="n">4</td><td class="n">103</td><td><code>trKey</code>/<code>trArgs</code> — the test that catches "Something went wrong" regressions.</td></tr>
+      <tr><td><code>test/presentation/theme_options_sheet_test.dart</code></td><td class="n">3</td><td class="n">89</td><td>Four appearances selectable and persisted.</td></tr>
+      <tr><td><code>test/presentation/orders_lifecycle_test.dart</code></td><td class="n">2</td><td class="n">63</td><td>Active vs Past sections on the Orders tab.</td></tr>
+      <tr><td><code>test/presentation/meal_details_screen_test.dart</code></td><td class="n">1</td><td class="n">133</td><td>Single deep test of the details screen built from an entity.</td></tr>
+      <tr><td><code>test/helpers/test_fixtures.dart</code></td><td class="n">—</td><td class="n">80</td><td><code>TestFixtures</code> factories — no test builds an entity by hand.</td></tr>
+      <tr><td><code>test/helpers/fake_biometric_service.dart</code></td><td class="n">—</td><td class="n">27</td><td>A stub <code>BiometricService</code> with two dials: <code>available</code> and <code>result</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="bi">
+    <div class="en">
+      <p><b>Four conventions make these tests survivable.</b> (1) Every widget file opens with
+      <code>TestWidgetsFlutterBinding.ensureInitialized()</code> and
+      <code>SharedPreferences.setMockInitialValues(&lt;String, Object&gt;{})</code> — without the mock store the
+      platform channel never answers and the test <em>hangs</em> rather than fails. (2) Dependencies are mocktail
+      mocks of the <b>abstract</b> repositories, never of implementations, so a widget test drives the same cubit
+      production uses. (3) Because <code>openBiometricGate</code> reaches its service through GetIt, a test registers
+      <code>FakeBiometricService</code> once in <code>setUpAll</code>, guarded by
+      <code>if (!GetIt.I.isRegistered&lt;BiometricService&gt;())</code> — that indirection is why the biometric flow is
+      testable at all, since <code>local_auth</code> has no channel in the test runner. (4) Cubits created by the
+      harness are closed with <code>addTearDown</code>, so a leaked bloc subscription cannot make the 17th file fail
+      because of something the 3rd file started.</p>
+      <p>The harness is deliberately a copy of production wiring: <code>MultiBlocProvider</code> with the three global
+      cubits the screen reads, <code>AppTheme.light</code>, the real localisation delegates, and a stub
+      <code>onGenerateRoute</code> that renders <code>route:/name</code>. That stub is what lets a test assert on a
+      successful login's navigation without a Navigator stack. One sentinel, <code>_useCubitLocale</code>, makes the
+      MaterialApp read its locale from <code>LocaleCubit</code> instead of a fixed value — the exact mechanism that
+      makes the runtime EN/AR toggle work, and the reason an RTL test can flip language without re-pumping the app.</p>
+    </div>
+    <div class="ar">
+      <p><b>أربعة اصطلاحات تجعل هذه الاختبارات معتمدة.</b> (1) كل ملف ودجة يفتتح بـ
+      <code>TestWidgetsFlutterBinding.ensureInitialized()</code> ثم
+      <code>SharedPreferences.setMockInitialValues(&lt;String, Object&gt;{})</code> — بلا المخزن المقلَّد لا تجيب قناة
+      النظام أبدًا، فيتوقّف الاختبار <em>معلّقًا</em> بدل أن يفشل. (2) التبعية تكون بمحاكاة mocktail لواجهات
+      المستودعات <b>المجرّدة</b> لا لتنفيذاتها، فاختبار الودجة يقود Cubit الإنتاج نفسه. (3) ولأن
+      <code>openBiometricGate</code> تصل إلى خدمتها عبر GetIt، يسجّل الاختبار <code>FakeBiometricService</code> مرة
+      واحدة في <code>setUpAll</code> محميًا بـ <code>if (!GetIt.I.isRegistered&lt;BiometricService&gt;())</code> —
+      وهذه الإحالة هي سبب قابلية اختبار مسار البصمة أصلًا، إذ لا قناة لـ <code>local_auth</code> في مشغّل الاختبار.
+      (4) والدوال التي تُنشئها بيئة الاختبار تُغلق بـ <code>addTearDown</code>، فلا تستطيع اشتراكات bloc مسرّبة أن
+      تُفشل الملف السابع عشر بسبب شيء بدأه الملف الثالث.</p>
+      <p>والبيئة نسخة مقصودة من توصيل الإنتاج: <code>MultiBlocProvider</code> بالدوال العالمية الثلاث التي تقرأها
+      الشاشة، و<code>AppTheme.light</code>، ومنسّقات الترجمة الحقيقية، و<code>onGenerateRoute</code> بديلة تعرض
+      <code>route:/name</code>. وهذا البديل هو ما يسمح للاختبار بالتحقق من تنقّل الدخول الناجح دون مكدّس Navigator.
+      وعلم واحد، <code>_useCubitLocale</code>، يجعل MaterialApp يقرأ لغته من <code>LocaleCubit</code> لا من قيمة
+      ثابتة — وهي الآلية نفسها التي تجعل تبديل الإنجليزية/العربية يعمل أثناء التشغيل، وسبب قدرة اختبار RTL على قلب
+      اللغة دون إعادة ضخّ التطبيق.</p>
+    </div>
+  </div>
+
+  <div class="bi">
+    <div class="en">
+      <p><b>The bloc layer uses <code>bloc_test</code>, not manual pumping.</b> <code>cart_bloc_test.dart</code> is
+      seven <code>blocTest&lt;CartBloc, CartState&gt;</code> blocks, each declaring the initial state, the
+      <code>act</code> that adds an event, and the <code>expect</code> list of states that must be emitted in order.
+      That shape is what makes the money rules from §8 executable: add the same meal twice and the state must show
+      <code>quantity: 2</code> with one line, not two lines.</p>
+      <p><b>The domain tests pin a boundary, not a behaviour.</b> <code>order_lifecycle_test.dart</code> builds an
+      order <em>N ago</em> through a local helper and asserts against
+      <code>AppConstants.orderActiveWindow</code> rather than a literal 45 — so changing the constant moves the tests
+      instead of silently breaking them. One case sits exactly <em>on</em> the boundary and expects
+      <code>OrderStatus.past</code>, which is what documents whether the window is inclusive; another asserts that a
+      vendor-closed order is never resurrected by a fresh clock reading.</p>
+    </div>
+    <div class="ar">
+      <p><b>طبقة bloc تستخدم <code>bloc_test</code> لا الضخّ اليدوي.</b> ملف <code>cart_bloc_test.dart</code> سبع
+      كتل <code>blocTest&lt;CartBloc, CartState&gt;</code>، كل واحدة تُعلن الحالة الأولى، ثم <code>act</code> الذي
+      يُضيف حدثًا، ثم قائمة <code>expect</code> بالحالات التي يجب أن تُصدَّر بالترتيب. وهذا الشكل هو ما يجعل قواعد
+      المال في §8 قابلة للتنفيذ: أضف الطبق نفسه مرّتين فتُظهر الحالة <code>quantity: 2</code> بسط واحد، لا سطّين.</p>
+      <p><b>اختبارات المجال تُثبّت حدًّا لا سلوكًا.</b> يبني <code>order_lifecycle_test.dart</code> طلبًا <em>منذ
+      N</em> عبر دالة مساعدة محلية، ويُسند إلى <code>AppConstants.orderActiveWindow</code> لا إلى 45 حرفية — فلو غيّر
+      الثابت تحرّكت الاختبارات بدل أن تنكسر بصمت. وحالة واحدة على الحد تمامًا وتتوقّع <code>OrderStatus.past</code>،
+      وهذا ما يوثّق ما إذا كانت النافذة شاملة؛ وحالة أخرى تجزم أن الطلب الذي أغلقه البائع لا يُبعث بقراءة ساعة جديدة.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Layer 2 — the Appium suite: six cases, one session per class</span><span class="t-ar">الطبقة الثانية — مجموعة Appium: ست حالات وجلسة لكل صنف</span></h3>
+
+  <table class="tbl">
+    <thead><tr>
+      <th><span class="t-en">Case</span><span class="t-ar">الحالة</span></th>
+      <th><span class="t-en">Asserts</span><span class="t-ar">ما تتحقق منه</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>TC-LOGIN-001</code><span class="t-ar">دخول 001</span></td>
+        <td>Valid credentials sign the user in and open the Home feed.<span class="t-ar">بيانات صحيحة تُوثّق المستخدم وتفتح التغذية الرئيسية.</span></td></tr>
+      <tr><td><code>TC-LOGIN-002</code><span class="t-ar">دخول 002</span></td>
+        <td>A wrong password is rejected with a friendly, localised message.<span class="t-ar">كلمة مرور خاطئة تُرفض برسالة لطيفة مترجمة.</span></td></tr>
+      <tr><td><code>TC-LOGIN-003</code><span class="t-ar">دخول 003</span></td>
+        <td>Empty fields are blocked by client-side validation before any network call.<span class="t-ar">الحقول الفارغة يمنعها تحقق جانب العميل قبل أي اتصال.</span></td></tr>
+      <tr><td><code>TC-HOME-004</code><span class="t-ar">رئيسية 004</span></td>
+        <td>The meals grid scrolls down and back to the top.<span class="t-ar">شبكة الأطباق تتمرّر نزولًا ثم تعود إلى الأعلى.</span></td></tr>
+      <tr><td><code>TC-HOME-005</code><span class="t-ar">رئيسية 005</span></td>
+        <td>The Hot Offers strip is a real horizontal list.<span class="t-ar">شريط العروض الساخنة قائمة أفقية حقيقية.</span></td></tr>
+      <tr><td><code>TC-CART-001</code><span class="t-ar">سلة 001</span></td>
+        <td>Adding a meal shows a SnackBar and the line reaches the cart.<span class="t-ar">إضافة طبق تُظهر شريطًا وتُبلّغ السلة بالسطر.</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="bi">
+    <div class="en">
+      <p>The suite is a small Page-Object model: <code>BaseTest</code> (399 lines) holds all the lifecycle,
+      <code>Config</code> (199) all the values, <code>Waits</code> (53) the explicit-wait helpers,
+      <code>SuiteListener</code> (117) the reporting, <code>LoginPage</code> (236) and <code>HomePage</code> (249)
+      the locators, and the three test classes contribute <em>nothing but steps and assertions</em>.
+      <code>testng.xml</code> declares one <code>&lt;class&gt;</code> per feature, mirroring the manual suites
+      one-to-one so a failing run maps straight onto a ticket.</p>
+      <p><b>Addressing is done the way §12 describes.</b> Page objects find nodes with
+      <code>//*[starts-with(@resource-id, 'login_button')]</code> — the identifier published by
+      <code>Semantics(identifier:)</code> — and fall back to <code>@text</code> or <code>@content-desc</code> only for
+      things the app does not tag, such as the "added to your cart" SnackBar. Locator <em>strategy</em>, not locator
+      <em>value</em>, is the reason this suite survived redesign work: the ids are stable strings, whereas
+      "the EditText above the Password field" is not.</p>
+    </div>
+    <div class="ar">
+      <p>المجموعة نموذج صفحات صغير: <code>BaseTest</code> (399 سطرًا) يحمل كل دورة الحياة، و<code>Config</code> (199)
+      كل القيم، و<code>Waits</code> (53) مساعدات الانتظار الصريح، و<code>SuiteListener</code> (117) التقارير،
+      و<code>LoginPage</code> (236) و<code>HomePage</code> (249) مواضع العناصر، أما أصناف الاختبار الثلاثة فلا تساهم
+      <em>إلا بالخطوات والتأكيدات</em>. ويعلن <code>testng.xml</code> <code>&lt;class&gt;</code> واحدًا لكل ميزة،
+      محاكيًا المجموعات اليدوية واحدًا لواحد، حتى تُنسب جولة فاشلة مباشرة إلى تذكرة.</p>
+      <p><b>والوصول إلى العناصر يتم كما يصفه §12.</b> تبحث كائنات الصف بعبارة XPath هي
+      <code>//*[starts-with(@resource-id, 'login_button')]</code> — أي المعرّف الذي ينشره
+      <code>Semantics(identifier:)</code> — وترجع إلى <code>@text</code> أو <code>@content-desc</code> فقط لما لا
+      يوسمه التطبيق، مثل شريط «أُضيف إلى سلتك». <em>استراتيجية</em> التحديد لا <em>قيمته</em> هي سبب نجاة هذه المجموعة
+      من أعمال إعادة التصميم: فالمعرّفات سلاسل ثابتة، بخلاف «حقل EditText فوق كلمة المرور».</p>
+    </div>
+  </div>
+
+  <div class="bi">
+    <div class="en">
+      <p><b>Two lifecycle decisions carry the suite.</b> The driver is created in <code>@BeforeClass</code> and
+      quit in <code>@AfterClass</code> — one Appium session per class, because creating a session costs an APK
+      re-launch and would dominate the runtime. But <code>@BeforeMethod</code> then <em>wipes the app sandbox</em>,
+      because StreetBite persists its Firebase session and a plain restart would leave every test after the first one
+      already signed in. The wipe prefers <code>mobile: clearApp</code>, falls back to <code>pm clear</code> through
+      <code>mobile: shell</code>, and if both fail prints a loud warning rather than letting a "Login expected" test
+      fail as a mysterious timeout. The comment records why the obvious choice is wrong: Appium 3 gates arbitrary
+      shell access behind an "insecure" feature, so the shell route fails by default and silently degrades to a mere
+      process restart — which is exactly the useless outcome.</p>
+      <p>Evidence is automatic: <code>@AfterMethod</code> writes a PNG named
+      <code>Class_method</code> when the result is a failure, and the same is done inside fixtures through
+      <code>setupStep(...)</code>, because TestNG does <em>not</em> run <code>@AfterMethod</code> when
+      <code>@BeforeMethod</code> throws — a broken fixture is precisely when seeing the screen matters most.
+      <code>SuiteListener</code> appends every outcome to one flat <code>target/suite-report.txt</code> and
+      <b>truncates</b> it on start: an append-only report lets forty old red lines sit under a green run, at which
+      point the file is evidence of nothing.</p>
+    </div>
+    <div class="ar">
+      <p><b>قراران في دورة الحياة يحملان المجموعة.</b> يُنشأ المُشغِّل في <code>@BeforeClass</code> ويُغلق في
+      <code>@AfterClass</code> — جلسة Appium واحدة لكل صنف، لأن إنشاء الجلسة يعيد إطلاق APK وكان سيسيطر على زمن
+      التنفيذ. لكن <code>@BeforeMethod</code> يمسح صندوق التطبيق بعدها <em>في كل حالة</em>، لأن StreetBite يحتفظ
+      بجلسة Firebase، ولو اكتُفي بإعادة التشغيل لكان كل اختبار بعد الأول مسجَّل الدخول أصلًا. والمسح يفضّل
+      <code>mobile: clearApp</code>، وإلا يرجع إلى <code>pm clear</code> عبر <code>mobile: shell</code>، وإذا فشل
+      الاثنان يطبع تحذيرًا صريحًا بدل أن يفشل اختبار «نتوقّع الدخول» كخطأ مهلة غامض. ويوثّق التعليق خطأ الخيار البديهي:
+      Appium 3 يحجب الوصول الحرّ إلى الصدفة خلف ميزة "insecure"، فمسار الصدفة يفشل افتراضيًا ويتدهور بصمت إلى إعادة
+      تشغيل العملية فقط — وهو النتيجة عديمة الفائدة نفسها.</p>
+      <p>والدليل آلي: يكتب <code>@AfterMethod</code> صورة PNG باسم <code>Class_method</code> متى كانت النتيجة فشلًا،
+      ويُفعل المثل داخل الأدوات التحضيرية عبر <code>setupStep(...)</code>، لأن TestNG لا يشغّل
+      <code>@AfterMethod</code> حين يستثني <code>@BeforeMethod</code> — والإداة المعطوبة هي تحديدًا الوقت الذي يهمّ
+      فيه رؤية الشاشة. و<code>SuiteListener</code> يُلحق كل نتيجة بملف مسطّح واحد هو
+      <code>target/suite-report.txt</code>، ويبتدئه بـ <b>قصّ</b>: فالملف الذي يُلحق فقط يسمح لأربعين سطراً أحمر
+      قديمًا بالبقاء تحت جولة خضراء، وحينها لا يعود دليلًا على شيء.</p>
+    </div>
+  </div>
+
+  <div class="bi">
+    <div class="en">
+      <p><b>Configuration has a documented precedence chain.</b> <code>Config.java</code> resolves each key in
+      order — a Maven <code>-D</code> system property, then an environment variable (upper-cased, dots turned into
+      underscores), then <code>automation.properties</code>. That is why the same suite runs on an emulator by default
+      and on a physical handset with nothing but <code>-Dappium.device=&lt;serial&gt;</code>. Implicit waits are set
+      to <b>0</b> deliberately, with the comment saying why: with Appium they hide real timing bugs and interact badly
+      with element caching, so all waiting is explicit (15 s). The APK path, the package name
+      (<code>com.example.streetbite_capstone</code>) and the seeded QA credentials all live in that one properties
+      file rather than in Java — the only credential in the repository is the intentional demo account, which is a
+      teaching-artefact decision, not a leak (see §14).</p>
+    </div>
+    <div class="ar">
+      <p><b>والإعدادات لها سلسلة أولوية موثّقة.</b> يحلّ <code>Config.java</code> كل مفتاح بالترتيب: خاصية نظام
+      بـ <code>-D</code> في Maven، فمتغيّر بيئة (أحرف كبيرة والنقاط شرط سفلية)، فـ
+      <code>automation.properties</code>. ولهذا تعمل المجموعة نفسها على محاكي افتراضيًا وعلى هاتف حقيقي بشيء واحد
+      فقط هو <code>-Dappium.device=&lt;serial&gt;</code>. الانتظارات الضمنية <b>صفر</b> عن قصد، والسبب مكتوب: مع
+      Appium تُخفي أخطاء التوقيت الحقيقية وتتعامل بسوء مع تخزين العناصر، فكل انتظار صريح (15 ثانية). ومسار APK
+      واسم الحزمة (<code>com.example.streetbite_capstone</code>) وبيانات حساب الجودة المزروعة كلها في ملف الخصائص
+      ذاك لا في جافا — والمعرّف الوحيد في المستودع هو حساب تجريبي مُعلَن، وهو قرار تعليمي لا تسريب (انظر §14).</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Layer 3 — the manual pack, and the honesty rule</span><span class="t-ar">الطبقة الثالثة — الحزمة اليدوية وقاعدة الصراحة</span></h3>
+
+  <div class="bi">
+    <div class="en">
+      <p><code>manual_qa/</code> ships a workbook (<code>TestPlan_and_TestCases.xlsx</code>) holding the plan, the
+      suites, the execution record, the traceability matrix and a Defect Log that mirrors the Jira board one-to-one;
+      a one-page closure summary (<code>TestClosureSummary.pdf</code>); six screenshots; and four Python generators.
+      Its opening line is a status, not a boast: <b>"Status: NOT READY TO CLOSE. 17 of 51 cases have been executed
+      and passed; 34 are still recorded as Blocked."</b></p>
+      <p>The rule that produces those numbers is worth quoting: <em>"Nothing is marked 'passed' on the strength of
+      having written it. A case is marked executed only if the release APK was installed on a real device and the
+      behaviour was observed."</em> The 34 remaining cases are therefore <b>Blocked</b>, not silently green — the pack
+      states that an honest 17/51 is worth more than a fabricated 51/51. Screenshots are numbered to match case IDs
+      (<code>04_home_feed.png</code>, <code>05_home_arabic.png</code>, <code>06_cart_empty.png</code>,
+      <code>10_dark_mode.png</code>) so evidence and case line up without guesswork.</p>
+      <p>The pack is <b>generated, not hand-edited</b>: <code>build_qa_workbook.py</code> writes the base plan,
+      <code>apply_execution_results.py</code> layers the real 17/51 record, <code>apply_defect_log.py</code> adds the
+      observed defects, and <code>build_closure_summary.py</code> renders the PDF — in that order, because each script
+      edits the workbook the previous one produced. Skipping step 2 leaves the deliverable showing the plan rather
+      than what was observed, which is the failure mode the ordering comment exists to prevent.</p>
+    </div>
+    <div class="ar">
+      <p>تصدّر <code>manual_qa/</code> workbook (هو <code>TestPlan_and_TestCases.xlsx</code>) يحمل الخطة والمجموعات
+      وسجلّ التنفيذ ومصفوفة التتبّع وسجلّ أخطاء يطابق لوحة Jira واحدًا لواحد؛ وملخّص إغلاق من صفحة واحدة
+      (<code>TestClosureSummary.pdf</code>)؛ وست لقطات؛ وأربع دوال توليد بلغة Python. وسطره الافتتاحي حالة لا فخر:
+      <b>«الحالة: غير جاهز للإغلاق. نُفِّذت 17 من 51 حالة ونجحت؛ و34 ما زالت مسجّلة كمحجوبة.»</b></p>
+      <p>والقاعدة التي تُنتج هذه الأرقام تستحق الاقتباس: <em>«لا شيء يُوسم بـ«نجح» لمجرد أننا كتبناه. والحالة
+      تُوسم بـ«منفَّذة» فقط إن ثُبِّت APK الإطلاق على جهاز حقيقي ولُوحظ السلوك»</em>. والـ 34 الباقية لذا
+      <b>محجوبة</b>، لا خضراء بصمت — وتقول الحزمة إن 17/51 صادقة خير من 51/51 مختلَقة. واللقطات مرقّمة مطابقةً
+      لمعرّفات الحالات (<code>04_home_feed.png</code>، <code>05_home_arabic.png</code>، <code>06_cart_empty.png</code>،
+      <code>10_dark_mode.png</code>) حتى تُطابق اللقطة حالتها دون تخمين.</p>
+      <p>والحزمة <b>مولَّدة لا محرَّرة يدويًا</b>: <code>build_qa_workbook.py</code> يكتب الخطة الأساس، ثم
+      <code>apply_execution_results.py</code> يُركّب سجل 17/51 الحقيقي، ثم <code>apply_defect_log.py</code> يضيف
+      الأخطاء المرصودة، ثم <code>build_closure_summary.py</code> يولّد الـ PDF — بهذا الترتيب، لأن كل دالة تحرّر ما
+      أنتجتها سابقتها. وتخطّي الخطوة الثانية يترك المُسلَّم يعرض الخطة لا ما رُصد، وهذا هو النمط الذي وُجد تعليق
+      الترتيب لمنعه.</p>
+    </div>
+  </div>
+
+  <dl class="kv">
+    <dt>Device</dt><dd>Xiaomi Redmi 24117RN76G · Android 16 (API 36) · 1080 × 2400 · 480 dpi — the same handset used by the Appium suite, which is what makes the manual and automated results comparable rather than anecdotal.<span class="t-ar">الجهاز: Xiaomi Redmi 24117RN76G · Android 16 (API 36) · 1080 × 2400 · كثافة 480 — الهاتف نفسه الذي استخدمته مجموعة Appium، وهذا ما يجعل النتائج اليدوية والآلية قابلة للمقارنة لا مجرد روايات.</span></dd>
+    <dt>Build under test</dt><dd><code>1.0.0+3</code>, release APK at <code>flutter_app/build/app/outputs/flutter-apk/app-release.apk</code><span class="t-ar">إصدار البناء قيد الاختبار <code>1.0.0+3</code>، وAPK الإطلاق في المسار المذكور</span></dd>
+    <dt>Commands</dt><dd><code>dart format .</code> · <code>flutter analyze</code> (No issues found) · <code>flutter test</code> (99 passed) · <code>mvn -f automation/pom.xml test</code><span class="t-ar">الأوامر: التنسيق · التحليل (لا مشاكل) · الاختبار (99 نجحت) · ثم تشغيل Maven على المجموعة</span></dd>
+  </dl>
+
+  <h3><span class="t-en">The defect log — the argument for testing on a device</span><span class="t-ar">سجلّ الأخطاء — حجة الاختبار على جهاز</span></h3>
+
+  <table class="tbl">
+    <thead><tr>
+      <th><span class="t-en">Key</span><span class="t-ar">المفتاح</span></th>
+      <th><span class="t-en">Found by</span><span class="t-ar">كيف وُجد</span></th>
+      <th><span class="t-en">What was wrong</span><span class="t-ar">ما الخطب</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>SB-106</code></td><td>Device<span class="t-ar">جهاز</span></td><td><code>FirestoreService</code> resolved before registration → launch crash.<span class="t-ar">ثابت يُحلّ قبل التسجيل → انهيار عند الإقلاع.</span></td></tr>
+      <tr><td><code>SB-107</code></td><td>Device<span class="t-ar">جهاز</span></td><td><code>AuthRepositoryImpl</code> resolved by concrete type → start-up crash.<span class="t-ar">يُحلّ بنوعه الملموس → انهيار عند البدء.</span></td></tr>
+      <tr><td><code>SB-108</code></td><td>Device<span class="t-ar">جهاز</span></td><td>The QA account existed only in the local fallback store, so Firebase login always failed.<span class="t-ar">حساب الجودة كان في المخزن المحلي فقط، فدخول Firebase يفشل دائمًا.</span></td></tr>
+      <tr><td><code>SB-109</code></td><td>Device<span class="t-ar">جهاز</span></td><td>The Home AppBar had no EN/AR toggle, unlike every other screen.<span class="t-ar">شريط الرئيسية بلا مبدّل لغة، خلافًا لكل الشاشات.</span></td></tr>
+      <tr><td><code>SB-110</code></td><td>Appium<span class="t-ar">آلية</span></td><td>The QA-account seed left the app permanently signed in, making Login unreachable.<span class="t-ar">زرع الحساب ترك التطبيق مسجَّل الدخول دائمًا، فيتعذّر الوصول للدخول.</span></td></tr>
+      <tr><td><code>SB-111</code></td><td>Appium<span class="t-ar">آلية</span></td><td>The login form silently pre-filled the demo email <b>and password</b>.<span class="t-ar">نموذج الدخول يملأ البريد التجريبي <b>وكلمة المرور</b> بصمت.</span></td></tr>
+      <tr><td><code>SB-112</code></td><td>Appium<span class="t-ar">آلية</span></td><td>Meal cards merged into one accessibility node, hiding Add to Cart.<span class="t-ar">بطاقات الأطباق دمجت في عقدة وصول واحدة فأخفت «أضف إلى السلة».</span></td></tr>
+      <tr><td><code>SB-113</code></td><td>Appium<span class="t-ar">آلية</span></td><td>Page objects inherited a null driver; reported as a UI timeout.<span class="t-ar">كائنات الصف ورثت مشغِّلًا عديمًا، فرُصدت كناهي واجهة.</span></td></tr>
+      <tr><td><code>SB-114</code></td><td>Device<span class="t-ar">جهاز</span></td><td>Firestore had no rules file → <code>PERMISSION_DENIED</code> on every read and write.<span class="t-ar">لا ملف قواعد لFirestore ← <code>PERMISSION_DENIED</code> في كل قراءة وكتابة.</span></td></tr>
+      <tr><td><code>SB-115</code></td><td>Device<span class="t-ar">جهاز</span></td><td>The seed signed real users <b>out</b> of their own session on every launch.<span class="t-ar">الزرع يُخرج المستخدمين الحقيقيين من جلستهم عند كل إقلاع.</span></td></tr>
+      <tr><td><code>SB-116</code></td><td>Device<span class="t-ar">جهاز</span></td><td>"Zombie session": an authenticated UI with no backend session.<span class="t-ar">«جلسة زومبي»: واجهة مُوثَّقة بلا جلسة خلفية.</span></td></tr>
+      <tr><td><code>SB-117</code></td><td>Device<span class="t-ar">جهاز</span></td><td>The profile gate had no bypass → permanently unreachable.<span class="t-ar">بوابة الملف بلا تجاوز → يتعذّر الوصول نهائيًا.</span></td></tr>
+      <tr><td><code>SB-118</code></td><td>Device<span class="t-ar">جهاز</span></td><td>Profile re-queried Firestore on every rebuild.<span class="t-ar">الملف يعيد استعلام Firestore عند كل إعادة بناء.</span></td></tr>
+      <tr><td><code>SB-119</code></td><td>Device<span class="t-ar">جهاز</span></td><td><b>Open.</b> The Maps key is rejected → the vendor map is blank; the app now degrades to a readable error view with Retry instead of freezing.<span class="t-ar"><b>مفتوح.</b> مفتاح الخرائط مرفوض ← خريطة البائعين فارغة؛ التطبيق الآن يتدهور إلى رسالة خطأ مع إعادة محاولة بدل التجمّد.</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="bi">
+    <div class="en">
+      <p>Read as a distribution, the log is a lesson about layers: <b>7</b> of 14 are wiring or backend problems
+      (SB-106, 107, 108, 114, 115, 116, 118) that only a cold start against real services can surface; <b>4</b> were
+      found by the Appium suite, and two of those are the suite <em>testing itself</em> — SB-112 and SB-113 are
+      automation defects, not app defects. <b>SB-111</b> is the one that would have shipped: a login form with a
+      pre-filled password is a security smell that no widget test complained about, because in the test the field
+      <em>was</em> empty.</p>
+      <p><code>SB-119</code> is classified honestly as a <b>credential</b> problem, not a code problem — the SDK
+      reports <code>StatusCode=INVALID_ARGUMENT</code> then <code>Authorization failure</code>, and tiles will not
+      draw until a valid key is supplied in <code>android/key.properties</code> (which is gitignored and therefore
+      absent from the repository) or Maps SDK for Android is enabled in Google Cloud Console.</p>
+    </div>
+    <div class="ar">
+      <p>لو قُرئ السجلّ كتوزيع فلغةٌ عن الطبقات: <b>7</b> من 14 مشاكل توصيل أو خلفية (SB-106، 107، 108، 114، 115،
+      116، 118) لا يكشفها إلا بدء بارد مقابل خدمات حقيقية؛ و<b>4</b> وجدتها مجموعة Appium، واثنان منها تختبر
+      المجموعة <em>نفسها</em> — فـ SB-112 وSB-113 عيبا آلية لا عيبا تطبيق. و<b>SB-111</b> هو الذي كان سيُصدَّر:
+      نموذج دخول بكلمة مرور محشوّة لم يشتكِ منه أي اختبار ودجة، لأن الحقل فيه <em>كان</em> فارغًا.</p>
+      <p>و<code>SB-119</code> مُصنَّف بصراحة كمشكلة <b>معرّف</b> لا كود — يبلّغ SDK عن
+      <code>StatusCode=INVALID_ARGUMENT</code> ثم <code>Authorization failure</code>، ولن تُرسم البلاطات حتى يوضع
+      مفتاح صالح في <code>android/key.properties</code> (وهو مستثنى من git وغائب لذا عن المستودع) أو حتى يُفعَّل
+      Maps SDK for Android في Google Cloud Console.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">What is deliberately <em>not</em> covered</span><span class="t-ar">ما ليس مُغطًّى <em>عن قصد</em></span></h3>
+
+  <p class="warn">
+  <b>Be exact about the limits.</b> There is no CI: no <code>.github/</code> directory, no pipeline — the three
+  commands above are run by hand, which means "green" is a statement about the last manual run, not a standing
+  guarantee. There are no golden/screenshot widget tests, so the four appearance variants are compared by eye.
+  There is no coverage gate; <code>flutter test --coverage</code> is runnable but nothing reads the output. No test
+  touches real Firebase or real Google Maps, so SB-114 and SB-119 were necessarily device findings. And the Appium
+  suite is 6 cases against a screens-and-tabs app — the biometric gate, the offline cache fallback and the Arabic
+  receipts have no device-level regression behind them. Stating the 34 blocked manual cases is part of the deliverable
+  for the same reason.<span class="t-ar">
+  <b>كن دقيقًا في الحدود.</b> لا CI: لا مجلد <code>.github/</code> ولا مسار أنابيب — الأوامر الثلاثة أعلاه تُشغَّل
+  يدويًا، فـ «أخضر» خبر عن آخر تشغيل يدوي لا ضمان دائم. ولا اختبارات ذهبية لودجات، فتُقارن المظاهر الأربعة بالعين.
+  ولا حدّ لتغطية؛ <code>flutter test --coverage</code> قابل للتشغيل لكن لا أحد يقرأ مخرجه. ولا اختبار يلمس Firebase
+  الحقيقي أو خرائط Google الحقيقية، ولذا كان SB-114 وSB-119 بالضرورة نتائج جهاز. ومجموعة Appium ست حالات مقابل تطبيق
+  شاشات وتبويبات — فبوابة البصمة، والتحوّل إلى المخزن حين ينقطع الاتصال، والإيصالات العربية، ثلاثة بلا انحدار على
+  مستوى الجهاز. وذكر الحالات الـ 34 المحجوبة جزء من المُسلَّم لهذا السبب نفسه.</span></p>
+</section>
+<nav class="pager">
+    <a href="12-navigation.html"><span class="lbl"><span class="t-en">Previous · §12</span><span class="t-ar">السابق · §12</span></span><span class="to"><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></span></a>
+    <a class="next" href="14-build.html"><span class="lbl"><span class="t-en">Next · §14</span><span class="t-ar">التالي · §14</span></span><span class="to"><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#testing">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

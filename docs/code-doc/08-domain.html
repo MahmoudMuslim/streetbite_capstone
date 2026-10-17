@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Business rules · StreetBite code documentation · §08</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html" class="cur"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §08 Business rules</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part I · Section 08 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الأول · القسم 08 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="domain">
+  <h2><span class="t-en"><span class="num">08</span> · Business rules</span><span class="t-ar"><span class="num">08</span> · قواعد العمل</span></h2>
+
+  <div class="bi">
+    <div class="en">
+      <p>The domain layer is 33 files and 1,190 lines: 8 entities, 6 repository contracts, and 19 files holding
+      20 use cases. Its defining property is what it does <em>not</em> import. A grep across
+      <code>lib/domain/</code> finds <b>zero</b> <code>package:flutter</code> imports, <b>zero</b> Dio,
+      <b>zero</b> <code>cloud_firestore</code> — and exactly one pub dependency, <code>equatable</code>.
+      Everything else it reaches is <code>core/usecase/usecase.dart</code>, <code>core/error/either.dart</code>
+      and <code>core/error/failures.dart</code>, each imported nineteen times, once per use-case file.</p>
+      <p>That is the dependency rule of <a href="03-architecture.html#architecture">§3</a> stated as something you can verify rather
+      than believe: the rules of the business can be tested with no widget, no device and no network, which is
+      exactly what <code>test/domain/</code> does.</p>
+    </div>
+    <div class="ar">
+      <p>طبقة المجال هي 33 ملفًا و1,190 سطرًا: ثمانية كيانات، وستة عقود مستودعات، وتسعة عشر ملفًا تحوي عشرين
+      حالة استخدام. وأبرز ما يميّزها هو ما لا تستورده. فالفحص بـ grep في <code>lib/domain/</code> لا يجد ولا
+      استيراد واحد لـ<code>package:flutter</code>، ولا Dio، ولا <code>cloud_firestore</code> — وتجد تابعيّة واحدة
+      من pub فقط، وهي <code>equatable</code>. وما عدا ذلك تصل إليه عبر
+      <code>core/usecase/usecase.dart</code> و<code>core/error/either.dart</code> و<code>core/error/failures.dart</code>،
+      وكل واحد منها مستورد تسع عشرة مرة، مرة عند كل ملف حالة استخدام.</p>
+      <p>وهذه هي قاعدة التبعيات الواردة في <a href="03-architecture.html#architecture">§3</a> معروضة كشيء يمكنك التحقق منه لا كشيء
+      تُصدّقه: فأن تستطيع اختبار قواعد العمل دون ودجة ولا جهاز ولا شبكة — وهذا تحديدًا ما يفعله
+      <code>test/domain/</code>.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Three contracts, chosen per use case</span><span class="t-ar">ثلاثة عقود، تُختار لكل حالة استخدام</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th>Contract</th>
+      <th><span class="t-en">Shape</span><span class="t-ar">الشكل</span></th>
+      <th><span class="t-en">Why it exists</span><span class="t-ar">لماذا يوجد</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>UseCase&lt;T, P&gt;</code></td>
+        <td><code>Future&lt;T&gt; call(P params)</code></td>
+        <td><span class="t-en">Anything that can touch a backend. [T] is the <em>resolved</em> type, so a fallible use case declares <code>UseCase&lt;Either&lt;Failure, X&gt;, P&gt;</code> — which is what forces every caller to handle the failure branch.</span><span class="t-ar">كل ما قد يلمس خادمًا. النوع [T] هو النوع <em>المحلَّل</em>، لذا تُصرِّح حالة الاستخدام القابلة للفشل بصيغة <code>UseCase&lt;Either&lt;Failure, X&gt;, P&gt;</code> — وهذا ما يُجبر كل مستدعٍ على معالجة فرع الخطأ.</span></td></tr>
+      <tr><td><code>SyncUseCase&lt;T, P&gt;</code></td>
+        <td><code>T call(P params)</code></td>
+        <td><span class="t-en">The cart and the money are arithmetic on the device. Wrapping them in a <code>Future</code> would only add microtask hops — and would let the UI flash a "loading" frame between two states that are already computable. Staying synchronous lets <code>CartBloc</code> emit the next state inside the same event handler.</span><span class="t-ar">السلة والمال حساباتٌ تُجرى على الجهاز. ولفّهما في <code>Future</code> لا يزيد إلا قفزات microtask، وكان ليدع الواجهة تومض بإطار «جارٍ التحميل» بين حالتين يمكن حسابهما من قبل. أما بقاؤها متزامنة فيسمح لـ<code>CartBloc</code> بإطلاق الحالة التالية داخل معالج الحدث نفسه.</span></td></tr>
+      <tr><td><code>Params</code> / <code>NoParams</code></td>
+        <td><code>abstract class Params extends Equatable</code></td>
+        <td><span class="t-en">A parameter <em>object</em> rather than a positional list, so a use case can gain an argument without breaking its call sites. Extending <code>Equatable</code> keeps Bloc state comparison cheap.</span><span class="t-ar">كائن وسائط لا قائمة مرتَّبة، ف تستطيع حالة استخدام أن تضيف وسيطًا دون أن تكسر مواضع استدعائها. ووراثة <code>Equatable</code> تبقي مقارنة حالات Bloc رخيصة.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">Rule 1 · the money</span><span class="t-ar">القاعدة الأولى · المال</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>CalculateOrderTotals</code> is the only place the fees are computed. Its own doc comment gives the
+      reason: the <em>same</em> numbers must come out for the UI, for the Firestore document, and for the unit
+      tests, so a formula repeated in a widget is a bug waiting to diverge.</p>
+    </div>
+    <div class="ar">
+      <p><code>CalculateOrderTotals</code> هو الموضع الوحيد الذي تُحسَب فيه الرسوم. ويعطي تعليق الملف نفسه
+      السبب: يجب أن تخرج الأرقام <em>نفسها</em> للواجهة، ولوثيقة Firestore، ولاختبار الوحدة. أما المعادلة
+      المكرَّرة في ودجة فعيبة تنتظر الانحراف.</p>
+    </div>
+  </div>
+  <table class="tbl">
+    <thead><tr>
+      <th><span class="t-en">Constant</span><span class="t-ar">الثابت</span></th>
+      <th>Value</th>
+      <th><span class="t-en">Rule</span><span class="t-ar">القاعدة</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>deliveryFee</code></td><td>2.49</td>
+        <td><span class="t-en">Applied to every non-empty basket under the free threshold.</span><span class="t-ar">تُطبَّق على كل سلة غير فارغة قيمتها دون حدّ المجاني.</span></td></tr>
+      <tr><td><code>serviceFee</code></td><td>1.49</td>
+        <td><span class="t-en">Flat, on every non-empty basket. Never waived.</span><span class="t-ar">مقطوعة، على كل سلة غير فارغة. ولا يُعفى منها أبدًا.</span></td></tr>
+      <tr><td><code>freeDeliveryThreshold</code></td><td>30.00</td>
+        <td><span class="t-en">At or above it the delivery fee becomes <code>0.0</code>. <code>OrderTotals.hasFreeDelivery</code> is the getter the promo hint reads.</span><span class="t-ar">عند هذا الحدّ أو فوقه تصير رسوم التوصيل <code>0.0</code>. وتلميح العرض العام يقرأ قيمتها من <code>OrderTotals.hasFreeDelivery</code>.</span></td></tr>
+      <tr><td><span class="t-en">empty basket</span><span class="t-ar">سلة فارغة</span></td><td>0.00</td>
+        <td><span class="t-en">Both fees are forced to zero, so an empty cart reads a clean <code>0.00</code> and never "−$2.49" or a phantom charge.</span><span class="t-ar">يُجبَر الرسمان على الصفر، فتقرأ السلة الفارغة <code>0.00</code> نظيفة، لا «−$2.49» ولا رسومًا وهمية.</span></td></tr>
+    </tbody>
+  </table>
+  <p><code>subtotal = Σ (meal.price × quantity)</code> · <code>lineTotal</code> lives on
+  <code>CartItemEntity</code>, not inside the loop · <code>total = subtotal + deliveryFee + serviceFee</code></p>
+
+  <h3><span class="t-en">Rule 2 · one home for cart mutation</span><span class="t-ar">القاعدة الثانية · موطن واحد لتعديل السلة</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>AddToCart</code> and <code>RemoveFromCart</code> are mirror-image pure functions over the item
+      list: find by <code>meal.id</code>, then either increment or append; decrement, then <b>drop the whole line
+      at zero</b>. Neither mutates its input — both copy the list first with
+      <code>List.of(params.currentItems)</code>. <code>CartBloc</code> funnels every event through them, so
+      there is exactly one place where quantities change.</p>
+      <p>The consequence the user sees: tapping "+" on a meal card twice produces one line with quantity 2, not
+      two lines; and tapping "−" down to zero removes the row entirely instead of leaving a "0 × Shawarma"
+      behind.</p>
+    </div>
+    <div class="ar">
+      <p>الدالتان <code>AddToCart</code> و<code>RemoveFromCart</code> متناظرتان ولا تُجريان أي أثر جانبي: تبحث
+      الأولى عن الصنف بـ<code>meal.id</code> فتزيد كميته أو تضيفه من جديد، والثانية تُنقِص ثم
+      <b>تحذف السطر كاملًا عند بلوغ الصفر</b>. ولا تُعدِّل أيٌّ منهما مُدخَلها، بل تنسخ كلتاهما القائمة أولًا بـ
+      <code>List.of(params.currentItems)</code>. ويصبّ <code>CartBloc</code> كل حدث عبرهما، فيبقى موطن تغيير
+      الكميات واحدًا بالضبط.</p>
+      <p>وأثرٌ يراه المستخدم: النقر على "+" في بطاقة طبق مرتين يُنتج سطرًا واحدًا بكمية 2 لا سطرين، والنقر على "−"
+      حتى الصفر يحذف السطر كلَّه بدل أن يترك خلفه «0 × شاورما».</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Rule 3 · an order ages on its own</span><span class="t-ar">القاعدة الثالثة · الطلب يَهرَم من ذاته</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p>There is no cron job and no background write that moves an order from <em>Current</em> to
+      <em>Past</em>. <code>OrderStatus</code> has two values, and <code>OrderEntity.statusAt(now)</code> answers
+      the question: if <code>now.difference(placedAt)</code> is less than
+      <code>AppConstants.orderActiveWindow</code> — forty-five minutes — the order is still active.
+      <code>GetOrderHistory</code> resolves the persisted status against a single reading of the clock on the way
+      out, so the Orders tab, the Profile summary and the receipt all see the same lifecycle without any of them
+      owning the rule.</p>
+      <p>Two properties are worth noticing. It is <em>self-healing</em>: an order drawn as active at 12:00 is
+      past by 13:00 and nothing was ever written. And <code>OrderStatus.fromKey</code> falls back to
+      <code>past</code> for an unknown or missing key, so a malformed document cannot invent a live order.</p>
+    </div>
+    <div class="ar">
+      <p>لا وظيفة مجدولة ولا كتابة في الخلفية تنقل الطلب من <em>الحالي</em> إلى <em>السابق</em>. ولـ
+      <code>OrderStatus</code> قيمتان، ويجيب <code>OrderEntity.statusAt(now)</code> عن السؤال: إن كان فرق
+      <code>now.difference(placedAt)</code> أقل من <code>AppConstants.orderActiveWindow</code> — خمس وأربعين
+      دقيقة — فالطلب ما زال حيًّا. ويحلّ <code>GetOrderHistory</code> الحالة المخزَّنة مقابل قراءة واحدة للساعة
+      في طريق الخروج، فترى شارة التبويب وملخص الملف الشخصي والإيصال دورة الحياة ذاتها دون أن تملك أيٌّ منها
+      القاعدة.</p>
+      <p>خاصيّتان تستحقان الوقوف عندهما. الأولى أنها <em>مُصلِحة لنفسها</em>: طلبٌ رُسم حيًّا في الثانية عشرة
+      يصبح سابقًا في الواحدة من غير أي كتابة. والثانية أن <code>OrderStatus.fromKey</code> يرجع إلى
+      <code>past</code> عند مفتاح مجهول أو مفقود، فلا تستطيع وثيقة مشوَّهة أن تخترع طلبًا حيًّا.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Rule 4 · payment as a strategy, not a flag</span><span class="t-ar">القاعدة الرابعة · الدفع ستراتيجية لا راية</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>PaymentMethod</code> is an <code>abstract interface class</code> with four members —
+      <code>type</code>, <code>labelKey</code>, <code>descriptionKey</code>, <code>receiptLine()</code> — and two
+      implementations, <code>CashPayment</code> and <code>CardPayment</code>. The checkout screen depends on the
+      interface, so adding a wallet means writing a new class and never editing the two existing ones. This is
+      the clearest use of the Strategy pattern in the project, and the file's own comment maps all five SOLID
+      letters onto it.</p>
+      <p><code>CardPayment</code> keeps only <code>last4</code>, which defaults to <code>4242</code>, so a card
+      number cannot reach SharedPreferences or Firestore even by accident — the field does not exist. The
+      receipt line renders as <code>····4242</code>. Equality is defined on <code>type</code> for the interface
+      and on <code>(type, last4)</code> for the card, and <code>PaymentModel</code> stores the discriminator as
+      the enum's <code>key</code> string so a schema change on the server stays readable.</p>
+    </div>
+    <div class="ar">
+      <p><code>PaymentMethod</code> هو <code>abstract interface class</code> بأربعة أعضاء — <code>type</code>
+      و<code>labelKey</code> و<code>descriptionKey</code> و<code>receiptLine()</code> — وله تنفيذان هما
+      <code>CashPayment</code> و<code>CardPayment</code>. وتعتمد شاشة إتمام الطلب على الواجهة، فإضافة محفظة
+      تعني كتابة صنف جديد دون تعديل الصنفين القائمَين. وهذا أوضح استخدامٍ لنمط Strategy في المشروع، ويُنسِب
+      تعليق الملف نفسه حروف SOLID الخمسة إليها واحدًا واحدًا.</p>
+      <p>ولا يحفظ <code>CardPayment</code> سوى <code>last4</code> وقيمته الافتراضية <code>4242</code>، فلا
+      يستطيع رقم بطاقة أن يصل إلى SharedPreferences ولا إلى Firestore حتى بالخطأ — لأن الحقل غير موجود. ويكون سطر
+      الإيصال <code>····4242</code>. ويُعرَّف التساوي على <code>type</code> في الواجهة، وعلى
+      <code>(type, last4)</code> في البطاقة، ويخزِّن <code>PaymentModel</code> المُميِّز نصَّ <code>key</code>
+      الخاص بالتعداد، فيبقى تغيير المخطط على الخادم قابلًا للقراءة.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Rule 5 · validators speak in keys</span><span class="t-ar">القاعدة الخامسة · دوال التحقق تنطق بمفاتيح</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>Validators</code> is a class of statics with a private constructor, and every one of its methods
+      returns an <b>ARB message key</b> or <code>null</code> — never a sentence. That single decision is what
+      lets the same validator produce an English or an Arabic message at runtime with no hard-coded text in the
+      UI layer.</p>
+      <ul>
+        <li><code>required(value, emptyKey)</code> — takes its own message key as an argument, so one rule serves
+        every field.</li>
+        <li><code>email</code> — a deliberately permissive local-part pattern; it catches "no @, no dot", not
+        RFC 5322.</li>
+        <li><code>password</code> — <code>minPasswordLength = 6</code>.</li>
+        <li><code>confirmPassword(value, password)</code> — literal equality after the empty check.</li>
+        <li><code>fullName</code> — at least two whitespace-separated words <b>and</b> at least one capital
+        letter anywhere, which is the rule written in the functional requirements.</li>
+      </ul>
+    </div>
+    <div class="ar">
+      <p><code>Validators</code> صنفٌ ودواله ثابتة ومنشِئه خاص، وتُعيد كل دالة فيه <b>مفتاح رسالة ARB</b> أو
+      <code>null</code> — لا جملة. وهذا القرار وحده هو ما يسمح للدالة ذاتها بأن تُنتج رسالة إنجليزية أو عربية
+      أثناء التشغيل، دون نصٍّ مضمَّن في طبقة الواجهة.</p>
+      <ul>
+        <li><code>required(value, emptyKey)</code> — تأخذ مفتاح رسالتها وسيطًا، فقاعدة واحدة تخدم كل الحقول.</li>
+        <li><code>email</code> — نمطٌ متساهل عن قصد في الجزء السابق للـ @؛ يمسك «لا @ ولا نقطة» لا RFC 5322.</li>
+        <li><code>password</code> — الثابت <code>minPasswordLength = 6</code>.</li>
+        <li><code>confirmPassword(value, password)</code> — تساويٌ حرفي بعد فحص الفراغ.</li>
+        <li><code>fullName</code> — كلمتان على الأقل تفصلهما مسافة، <b>و</b> حرف كبير واحد في أي موضع، وهو الشرط
+        المكتوب في المتطلبات الوظيفية.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Where a rule is <em>not</em> domain, and why that is honest</span><span class="t-ar">قواعد ليست في طبقة المجال — ولماذا يقال ذلك بصدق</span></h3>
+  <div class="note">
+    <b>Two deliberate exceptions · استثناءان مقصودان</b>
+    <div class="bi">
+      <div class="en"><p>First, <b>prices</b>. TheMealDB has no prices, so <code>MealModel</code> derives one
+      from the meal id in the <em>data</em> layer, and the domain entity simply carries a
+      <code>double price</code>. Putting that derivation in the domain would make one vendor's data shape into a
+      business rule. Second, the <b>biometric outcome</b>: <code>BiometricResult</code> lives in
+      <code>data/services/</code> and is read directly by three presentation files, because its branches
+      (<code>notEnrolled</code>, <code>lockedOut</code>, <code>unavailable</code>) describe a handset, not a
+      business. Both are recorded in <a href="03-architecture.html#architecture">§3</a> instead of being smoothed over.</p></div>
+      <div class="ar"><p>الأول <b>الأسعار</b>: لا أسعار عند TheMealDB، لذا يشتقّ <code>MealModel</code> سعرًا من
+      معرّف الطبق في طبقة <em>البيانات</em>، وتحمل كِيانة المجال <code>double price</code> فقط. ولو أُدرج ذلك
+      الاشتقاق في المجال لتحوّل شكل بيانات مورِّد بعينه إلى قاعدة عمل. والثاني <b>نتيجة البصمة</b>: يعيش
+      <code>BiometricResult</code> في <code>data/services/</code> وتقرأه ثلاثة ملفات من العرض مباشرة، لأن
+      تفرّعاته (<code>notEnrolled</code> و<code>lockedOut</code> و<code>unavailable</code>) تصف جهازًا لا
+      عملًا. وكلاهما مذكور في <a href="03-architecture.html#architecture">§3</a> بدل أن يُتجاهَل.</p></div>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+    <a href="07-data.html"><span class="lbl"><span class="t-en">Previous · §07</span><span class="t-ar">السابق · §07</span></span><span class="to"><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></span></a>
+    <a class="next" href="09-theme.html"><span class="lbl"><span class="t-en">Next · §09</span><span class="t-ar">التالي · §09</span></span><span class="to"><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#domain">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

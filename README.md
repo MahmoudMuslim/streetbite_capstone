@@ -13,6 +13,7 @@ streetbite-capstone/
 ├── flutter_app/      # Flutter 3.47 · Clean Architecture · Firebase
 ├── automation/       # Appium 3 + Java + TestNG end-to-end suite (6/6 green)
 ├── manual_qa/        # Test plan, 51 cases, traceability matrix, closure PDF
+├── docs/             # Bilingual code-documentation site (18 sections) + report deck
 └── figma/            # reference design assets (PNG exports + Dart notes)
 ```
 
@@ -80,6 +81,16 @@ summary that honestly reads **NOT READY TO CLOSE**.
 
 → **[QA README](manual_qa/README.md)**
 
+### `docs/` — the documentation
+
+An 18-section code and app reference built as a static bilingual site — one page
+per section, English and Arabic side by side, with an EN / AR / Both toggle that
+is remembered across every page. Open `docs/code-doc/index.html` in a browser;
+there is no build step and no server required. Alongside it,
+`docs/StreetBite_Capstone_Report_EN-AR.pptx` is the matching presentation deck.
+
+→ **[Code documentation](docs/code-doc/index.html)**
+
 ---
 
 ## Design patterns used, and where
@@ -145,6 +156,7 @@ reuse is always a one-line import.
 | Appium suite with a shared `BaseTest`, one feature per class | ✅ **6/6 passing** on a physical device (Android 16) — [`automation/README.md`](automation/README.md) |
 | Test plan + suites + traceability matrix | ✅ [`manual_qa/`](manual_qa/) — 17/51 cases executed |
 | Test closure summary (one page) | ✅ [`TestClosureSummary.pdf`](manual_qa/TestClosureSummary.pdf) — reads NOT READY TO CLOSE |
+| Bilingual code documentation + capstone report deck | ✅ [`docs/code-doc/`](docs/code-doc/index.html) — 18 sections, EN + AR |
 
 ---
 

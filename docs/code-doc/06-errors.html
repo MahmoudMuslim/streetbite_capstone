@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Error handling · StreetBite code documentation · §06</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html" class="cur"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §06 Error handling</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part I · Section 06 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الأول · القسم 06 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="errors">
+  <h2><span class="t-en"><span class="num">06</span> · Error handling</span><span class="t-ar"><span class="num">06</span> · معالجة الأخطاء</span></h2>
+
+  <div class="bi">
+    <div class="en">
+      <p>This is the requirement the whole project is organised around: <b>no unhandled exception anywhere</b>.
+      StreetBite gets there by refusing to use exceptions as a cross-layer protocol. An exception is allowed
+      inside one layer, must be caught at the boundary of that layer, and leaves it as a
+      <b>value</b> — a <code>Failure</code> inside the left branch of an <code>Either</code>.</p>
+    </div>
+    <div class="ar">
+      <p>هذا هو المطلب الذي نُظِّم حوله المشروع كله: <b>لا استثناء غير معالَج في أي مكان</b>.
+      يحقق StreetBite ذلك بأن يرفض استخدام الاستثناءات بروتوكولًا بين الطبقات. الاستثناء مسموح داخل طبقة
+      واحدة، ويجب التقاطه عند حدّها، ويخرج منها <b>قيمةً</b> — وهو <code>Failure</code> في الفرع الأيسر من
+      <code>Either</code>.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">The three-step contract</span><span class="t-ar">العقد ذو الخطوات الثلاث</span></h3>
+  <div class="flow">
+    <div class="st bad"><b>1 · data source</b><span class="t-en">A plugin throws (<code>DioException</code>, <code>FirebaseException</code>, <code>PlatformException</code>). The wrapper rethrows one of three app exceptions.</span><span class="t-ar">ترمي الإضافة استثناءً (<code>DioException</code>، و<code>FirebaseException</code>، و<code>PlatformException</code>)، ويعيد الغلاف الرمي بأحد ثلاثة استثناءات خاصة بالتطبيق.</span></div>
+    <div class="st"><b>2 · repository</b><span class="t-en">Catches it and returns <code>Left(someFailure)</code>. This is the boundary — nothing passes through uncaught.</span><span class="t-ar">تلتقطه وتُعيد <code>Left(someFailure)</code>. هذا هو الحدّ: لا شيء يعبر غير ملتقَط.</span></div>
+    <div class="st ok"><b>3 · Cubit / Bloc</b><span class="t-en"><code>result.fold(onFailure, onSuccess)</code> — the compiler forces both branches. The failure branch emits a state that carries <code>messageKey</code>.</span><span class="t-ar">تُطوي الحالة <code>result.fold(onFailure, onSuccess)</code> — ويُجبر المترجم فرعي الاثنين. فرع الخطأ يطلق حالة تحمل <code>messageKey</code>.</span></div>
+    <div class="st ok"><b>4 · widget</b><span class="t-en">The key is resolved by <code>context.trKey(...)</code> into an English or Arabic sentence and shown by <code>AppErrorView</code> or a SnackBar.</span><span class="t-ar">يُحلّ المفتاح بـ <code>context.trKey(...)</code> إلى جملة إنجليزية أو عربية ويعرضه <code>AppErrorView</code> أو رسالة قصيرة.</span></div>
+  </div>
+
+  <h3><span class="t-en"><code>Either</code> — why a value and not a throw</span><span class="t-ar"><code>Either</code> — لماذا قيمة لا رمية</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>core/error/either.dart</code> is a 62-line sealed type: <code>Left&lt;L, R&gt;</code> for the
+      failure, <code>Right&lt;L, R&gt;</code> for the success, and three members — <code>fold</code>, <code>map</code>
+      and <code>valueOrNull</code>. The file's own doc comment states the argument: exceptions are invisible to
+      the type system, so a repository can forget one and the compiler stays quiet, which is exactly how an
+      unhandled exception reaches production. With a sealed result type the caller <em>cannot</em> ignore the
+      failure branch.</p>
+      <p><code>map</code> is what lets a use case refine a result without unwrapping it —
+      <code>GetOrderHistory</code> uses it to re-resolve every stored order status against the clock while
+      leaving a <code>Left</code> untouched.</p>
+    </div>
+    <div class="ar">
+      <p>ملف <code>core/error/either.dart</code> نوع مختوم من 62 سطرًا: <code>Left&lt;L, R&gt;</code> للخطأ،
+      و<code>Right&lt;L, R&gt;</code> للنجاح، وثلاثة أعضاء فقط — <code>fold</code> و<code>map</code>
+      و<code>valueOrNull</code>. يشرح تعليق الملف نفسه الحجة: الاستثناءات غير مرئية لنظام الأنواع، فيمكن
+      لمستودع أن ينسى واحدًا ويظل المترجم صامتًا، وهذا بالضبط كيف يصل استثناء غير معالَج إلى الإنتاج. مع نوع
+      نتيجة مختوم لا يستطيع المستدعي <em>تجاهل</em> فرع الخطأ.</p>
+      <p>ودالة <code>map</code> هي ما يسمح لحالة استخدام بتهذيب النتيجة دون فكّها — تستخدمها
+      <code>GetOrderHistory</code> لإعادة حلّ حالة كل طلب مخزَّن مقابل الوقت، مع ترك أي <code>Left</code> كما
+      هو.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">The failure vocabulary</span><span class="t-ar">قاموس الأخطاء</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th>Failure</th><th>messageKey</th>
+      <th><span class="t-en">Raised when</span><span class="t-ar">ينشأ عندما</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>ServerFailure</code></td><td><code>failureNetwork</code></td>
+        <td><span class="t-en">MealDB is unreachable, returns a non-2xx status, or Firestore throws a <code>FirebaseException</code>.</span><span class="t-ar">تعذّر الوصول إلى MealDB، أو إرجاع حالة خارج 2xx، أو رمي Firestore لـ <code>FirebaseException</code>.</span></td></tr>
+      <tr><td><code>CacheFailure</code></td><td><code>failureCache</code></td>
+        <td><span class="t-en">The local cache could not satisfy the request — the last resort has failed, so there is nothing offline to show.</span><span class="t-ar">لم تستطع الذاكرة المحلية تلبية الطلب — وهو آخر ملاذ، فلا شيء غير متصل لعرضه.</span></td></tr>
+      <tr><td><code>ValidationFailure</code></td><td><em>any key</em></td>
+        <td><span class="t-en">A problem the user can fix by changing input. Carries its own key rather than a fixed one.</span><span class="t-ar">مشكلة يستطيع المستخدم إصلاحها بتغيير مدخلاته. يحمل مفتاحه الخاص لا مفتاحًا ثابتًا.</span></td></tr>
+      <tr><td><code>AuthFailure</code></td><td><code>authError*</code></td>
+        <td><span class="t-en">Firebase rejected a credential. The specific code is translated (see below), because "wrong password" and "no network" demand different handling.</span><span class="t-ar">رفضت Firebase بيانات اعتماد. يُترجم الرمز المحدّد (انظر أدناه)، لأن «كلمة مرور خاطئة» و«لا شبكة» تقتضيان معاملة مختلفة.</span></td></tr>
+      <tr><td><code>CancelledFailure</code></td><td><code>failureCancelled</code></td>
+        <td><span class="t-en">The user backed out of an action, e.g. dismissed the image picker. Not an error to apologise for.</span><span class="t-ar">تراجع المستخدم عن إجراء، كمعارض اختيار الصورة. وليس خطأً يستلزم اعتذارًا.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">Exceptions live below the boundary only</span><span class="t-ar">الاستثناءات تعيش تحت الحدّ فقط</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th>Exception</th>
+      <th><span class="t-en">Thrown by</span><span class="t-ar">يرميه</span></th>
+      <th><span class="t-en">Mapped into</span><span class="t-ar">يتحوّل إلى</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>NetworkException</code></td>
+        <td><span class="t-en"><code>DioClient</code> — its interceptor converts every <code>DioException</code>; <code>badResponse</code> keeps the status code.</span><span class="t-ar"><code>DioClient</code> — يحوّل معترِضه كل <code>DioException</code>؛ ويحتفظ <code>badResponse</code> برمز الحالة.</span></td>
+        <td><span class="t-en"><code>ServerFailure</code> in <code>MealRepositoryImpl</code></span><span class="t-ar"><code>ServerFailure</code> في <code>MealRepositoryImpl</code></span></td></tr>
+      <tr><td><code>SerializationException</code></td>
+        <td><span class="t-en">A body that is not a JSON object, or a cached blob that will not decode.</span><span class="t-ar">جسم ليس كائن JSON، أو مخزون محلي لا يُفكّ.</span></td>
+        <td><span class="t-en"><code>CacheFailure</code> (<code>meal_repository_impl.dart:107</code>) — the transport worked, so it is not a network error. When the same exception comes from the cache, <code>_readCache</code> swallows it and returns an empty list, i.e. "no cache".</span><span class="t-ar"><code>CacheFailure</code> — السطر 107 من <code>meal_repository_impl.dart</code>. فقد نجحت الشبكة ولا يُحسب خطأً فيها. وإذا جاء الاستثناء نفسه من المخزون المحلي تبتلعه <code>_readCache</code> وتُعيد قائمة فارغة، أي «لا مخزون».</span></td></tr>
+      <tr><td><code>FirestoreNotAvailableException</code></td>
+        <td><span class="t-en">Touching <code>FirestoreService.firestore</code> while it is unconfigured.</span><span class="t-ar">لمس <code>FirestoreService.firestore</code> بينما هو غير مُهيَّأ.</span></td>
+        <td><span class="t-en">Repositories check <code>isAvailable</code> first, so this is mostly a development-time tripwire — loud in a test, invisible to a user.</span><span class="t-ar">تتحقق المستودعات من <code>isAvailable</code> أولًا، فهو في الغالب إنذار في وقت التطوير: صاخبٌ في الاختبار، وخفيٌّ عن المستخدم.</span></td></tr>
+      <tr><td><code>PlatformException</code></td>
+        <td><span class="t-en"><code>local_auth</code> during a biometric prompt.</span><span class="t-ar"><code>local_auth</code> أثناء طلب البصمة.</span></td>
+        <td><span class="t-en"><code>BiometricResult</code> — see <a href="11-security.html#security">§11</a>. Never a <code>Failure</code>, because the UI branches on the outcome.</span><span class="t-ar"><code>BiometricResult</code> — راجع <a href="11-security.html#security">§11</a>. وليس <code>Failure</code> أبدًا لأن الواجهة تتفرّع حسب النتيجة.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">Firebase Auth codes are translated, never forwarded</span><span class="t-ar">رموز Firebase Auth تُترجَم ولا تُمرَّر</span></h3>
+  <div class="bi">
+    <div class="en">
+      <p><code>AuthRemoteDataSource.mapAuthError</code> is a single exhaustive switch from a Firebase error code
+      to an ARB key: <code>invalid-email</code> → <code>authErrorInvalidEmail</code>,
+      <code>email-already-in-use</code> → <code>authErrorEmailInUse</code>, <code>weak-password</code> →
+      <code>authErrorWeakPassword</code>, <code>user-not-found</code> → <code>authErrorUserNotFound</code>,
+      <code>too-many-requests</code> → <code>authErrorTooManyRequests</code>,
+      <code>network-request-failed</code> → <code>authErrorNetwork</code>, and everything else →
+      <code>authErrorUnknown</code>. Both <code>wrong-password</code> and the newer unified
+      <code>invalid-credential</code> land on <code>authErrorWrongPassword</code>, so the app shows one message
+      whichever one Firebase happens to return.</p>
+      <p>That last key is load-bearing: <code>AuthRepositoryImpl._isConnectivityFailure</code> treats only
+      <code>authErrorNetwork</code> and <code>authErrorUnknown</code> as a reason to fall back to the on-device
+      store. A credential rejection is <em>not</em> connectivity, and falling back for it would let a wrong
+      password succeed offline — a false pass that would have made the whole Appium suite meaningless.</p>
+    </div>
+    <div class="ar">
+      <p>يربط <code>mapAuthError</code> في <code>AuthRemoteDataSource</code> رمزَ Firebase واحدًا بمفتاح ARB
+      واحد: <code>invalid-email</code> ← <code>authErrorInvalidEmail</code>، و<code>email-already-in-use</code>
+      ← <code>authErrorEmailInUse</code>، و<code>weak-password</code> ← <code>authErrorWeakPassword</code>،
+      و<code>user-not-found</code> ← <code>authErrorUserNotFound</code>، و<code>too-many-requests</code> ←
+      <code>authErrorTooManyRequests</code>، و<code>network-request-failed</code> ←
+      <code>authErrorNetwork</code>، وكل ما عدا ذلك ← <code>authErrorUnknown</code>. وأمّا
+      <code>wrong-password</code> و<code>invalid-credential</code> — وهو الرمز الموحّد الجديد — فيتحوّلان معًا
+      إلى <code>authErrorWrongPassword</code>، فلا يغير التطبيق رسالته أيّ الرمزين أرجعت Firebase.</p>
+      <p>وهذا المفتاح الأخير حامل للأثر: لا يعتبر <code>AuthRepositoryImpl._isConnectivityFailure</code> سوى
+      <code>authErrorNetwork</code> و<code>authErrorUnknown</code> سببًا للرجوع إلى المخزن المحلي. فرفض بيانات
+      الاعتماد ليس انقطاع اتصال، والرجوع عنده كان ليجعل كلمة مرور خاطئة تنجح أثناء عدم الاتصال — نتيجة خاطئة
+      كانت ستُفقد حزمة Appium معناها كله.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">The last three nets</span><span class="t-ar">الشِّباكَ الثلاث الأخيرة</span></h3>
+  <div class="bi">
+    <div class="en">
+      <ul>
+        <li><b>Start-up</b>: <code>main()</code> wraps dependency wiring in <code>try</code>, then verifies the
+        graph with <code>_isGraphWired()</code>. A half-built container renders
+        <code>_StartupFailureApp</code> — a plain screen with the exact fix printed on it — instead of
+        crashing inside <code>runApp</code>, the one place Flutter has no recovery.</li>
+        <li><b>The map</b>: <code>MapErrorBoundary</code> is an <code>ErrorWidgetBuilder</code> scope around the
+        Google Maps widget. If the platform view fails to paint (a disabled API key, no GPU), only the map is
+        replaced by <code>MessagePanel</code>; the rest of the screen survives.</li>
+        <li><b>Money</b>: an empty basket produces no fees at all, so a failed checkout can never display
+        "−$2.49" or a phantom delivery charge.</li>
+      </ul>
+    </div>
+    <div class="ar">
+      <ul>
+        <li><b>الإقلاع</b>: يلفّ <code>main()</code> توصيل التبعيات في <code>try</code> ثم يتحقق من الشجرة بـ
+        <code>_isGraphWired()</code>. فالحاوية نصف المبنية تعرض <code>_StartupFailureApp</code> — شاشة بسيطة
+        تطبع الإصلاح المطلوب عليها — بدل الانهيار داخل <code>runApp</code>، وهو الموضع الوحيد في Flutter الذي لا
+        رجوع فيه.</li>
+        <li><b>الخريطة</b>: <code>MapErrorBoundary</code> نطاق <code>ErrorWidgetBuilder</code> حول أداة خرائط
+        Google. وإذا فشل العرض الأصلي في الرسم (مفتاح API معطَّل، أو لا معالج رسومات) تُستبدل الخريطة وحدها بـ
+        <code>MessagePanel</code> ويبقى بقية الشاشة.</li>
+        <li><b>المال</b>: السلة الفارغة لا تُنتج أي رسوم، فلا يمكن لإتمام طلب فاشل أن يعرض «−$2.49» أو رسوم
+        توصيل وهمية.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>What a user can actually see · ما يراه المستخدم فعلًا</b>
+    <div class="bi">
+      <div class="en"><p>Three surfaces, all built on the same <code>MessagePanel</code>:
+      <code>AppLoadingView</code> (waiting), <code>EmptyStateView</code> (nothing to show),
+      <code>AppErrorView</code> (something failed, with a Retry button). A failure never shows a stack trace, a
+      status code, or an English sentence in an Arabic UI.</p></div>
+      <div class="ar"><p>ثلاثة أسطح، كلها مبنية على نفس <code>MessagePanel</code>: <code>AppLoadingView</code>
+      (في الانتظار)، و<code>EmptyStateView</code> (لا شيء للعرض)، و<code>AppErrorView</code> (حدث خطأ، مع زر
+      إعادة). ولا يعرض الفشل أبدًا تتبع مكدّس ولا رمز حالة ولا جملة إنجليزية في واجهة عربية.</p></div>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+    <a href="05-state.html"><span class="lbl"><span class="t-en">Previous · §05</span><span class="t-ar">السابق · §05</span></span><span class="to"><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></span></a>
+    <a class="next" href="07-data.html"><span class="lbl"><span class="t-en">Next · §07</span><span class="t-ar">التالي · §07</span></span><span class="to"><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#errors">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

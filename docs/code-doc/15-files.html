@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Every file in lib/ · StreetBite code documentation · §15</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html" class="cur"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §15 Every file in lib/</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part II · Section 15 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الثاني · القسم 15 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="files">
+  <h2><span class="t-en"><span class="num">15</span> · Every file in <code>lib/</code></span><span class="t-ar"><span class="num">15</span> · كل ملف في <code>lib/</code></span></h2>
+  <div class="bi"><div class="en">
+  <p>This is the complete mechanical inventory: <b>158 hand-written Dart files, 15,491 lines</b>, plus the three generated localisation files listed separately in §15.5. Each row is the path, the exact line count, and one sentence saying what the file is for.</p>
+  <p>The descriptions are <b>generated from the source, not written from memory</b>: each one is the first line of that file's own dartdoc, with hand-written corrections for the 25 rows the extraction truncated or which described a neighbouring class in the same file. The Arabic line is the matching gloss. Where this table and a source file disagree, the source wins — and the disagreement is a documentation bug worth reporting.</p>
+  </div><div class="ar">
+  <p>هذا الجرد الميكانيكي الكامل: <b>158 ملف Dart مكتوبة يدويًا، 15,491 سطرًا</b>، إضافة إلى ثلاثة ملفات ترجمة مولَّدة تُسرد على حدة في §15.5. يعطي كل سطر المسار، وعدد الأسطر الفعلي، وجملة واحدة تقول وظيفة الملف.</p>
+  <p>الأوصاف <b>مولَّدة من المصدر لا من الحفظ</b>: كل وصف هو أول سطر من توثيق dartdoc الخاص بالملف نفسه، مع تصحيحات مكتوبة يدويًا لخمسة وعشرين سطرًا اقتُطع جردُه أو وصف صنفًا مجاورًا في الملف نفسه. والسطر العربي مقابلُه. وحيث يخالف هذا الجدول ملف المصدر، يفوز المصدر — وتلك المخالفة خطأ توثيق يستحق الإبلاغ.</p>
+  </div></div>
+  <h3><span class="t-en">15.1 · The three files at the top</span><span class="t-ar">15.1 · الملفات الثلاثة في الجذر</span></h3>
+  <div class="bi"><div class="en"><p>These are the only files outside a layer folder. <code>main.dart</code> boots, <code>app.dart</code> wires the cubits and the MaterialApp, <code>injection.dart</code> builds the object graph — read them in that order and the rest of the tree explains itself.</p></div><div class="ar"><p>هذه هي الملفات الثلاثة الوحيدة خارج مجلدات الطبقات. يقلع <code>main.dart</code> التطبيق، ويوصل <code>app.dart</code> حالات Cubit بـ MaterialApp، ويبني <code>injection.dart</code> رسم الكائنات — اقرأها بهذا الترتيب فتشرح بقية الشجرة نفسها.</p></div></div>
+  <table class="dir">
+    <thead><tr><th><span class="t-en">File</span><span class="t-ar">الملف</span></th><th class="n"><span class="t-en">Lines</span><span class="t-ar">الأسطر</span></th><th><span class="t-en">What it is</span><span class="t-ar">ما هو</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>lib/app.dart</code></td><td class="n">112</td><td><span class="t-en">Root widget of StreetBite.</span><span class="t-ar">الودجة الجذرية: سبعة Cubit ثم MaterialApp.</span></td></tr>
+      <tr><td><code>lib/injection.dart</code></td><td class="n">390</td><td><span class="t-en">The service locator.</span><span class="t-ar">جذر التركيب: 45 تسجيلًا في GetIt.</span></td></tr>
+      <tr><td><code>lib/main.dart</code></td><td class="n">148</td><td><span class="t-en">Application entry point.</span><span class="t-ar">نقطة الدخول: التهيئة ثم runApp بحماية من الانهيار.</span></td></tr>
+    </tbody>
+  </table>
+  <h3><span class="t-en">15.2 · lib/core/ — 17 files</span><span class="t-ar">15.2 · lib/core/ — 17 ملفًا</span></h3>
+  <div class="bi"><div class="en"><p>Cross-cutting vocabulary: constants, the Either/Failure error model, the Dio wrapper, the whole design system, the use-case contracts and four pure helpers. Nothing here imports a screen.</p></div><div class="ar"><p>مفردات مستعرضة لكل الطبقات: الثوابت، ونموذج أخطاء Either/Failure، وغلاف Dio، ونظام التصميم كاملًا، وعقود حالات الاستخدام، وأربع دوال خالصة. ولا شيء هنا يستورد شاشة.</p></div></div>
+  <table class="dir">
+    <thead><tr><th><span class="t-en">File</span><span class="t-ar">الملف</span></th><th class="n"><span class="t-en">Lines</span><span class="t-ar">الأسطر</span></th><th><span class="t-en">What it is</span><span class="t-ar">ما هو</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>lib/core/constants/app_categories.dart</code></td><td class="n">89</td><td><span class="t-en">The seven menu categories, shown as chips on Home and as the Browse grid.</span><span class="t-ar">الفئات السبع للشرائح والشبكة، ومطابقة اسم الفئة.</span></td></tr>
+      <tr><td><code>lib/core/constants/app_constants.dart</code></td><td class="n">62</td><td><span class="t-en">Global, immutable configuration constants for StreetBite.</span><span class="t-ar">كل الثوابت العامة: الوصلات، والمهل، والرسوم.</span></td></tr>
+      <tr><td><code>lib/core/constants/app_routes.dart</code></td><td class="n">26</td><td><span class="t-en">Named routes for every navigable screen in StreetBite.</span><span class="t-ar">أسماء المسارات الاثني عشر ومؤشرات التبويبات.</span></td></tr>
+      <tr><td><code>lib/core/error/either.dart</code></td><td class="n">62</td><td><span class="t-en">Minimal &lt;code&gt;Either&lt;/code&gt; implementation used across every layer.</span><span class="t-ar">Either المغلق: fold وmap وvalueOrNull.</span></td></tr>
+      <tr><td><code>lib/core/error/exceptions.dart</code></td><td class="n">34</td><td><span class="t-en">Low level exceptions thrown by the data sources.</span><span class="t-ar">استثناءات مصادر البيانات: شبكة وتجزئة وFirestore.</span></td></tr>
+      <tr><td><code>lib/core/error/failures.dart</code></td><td class="n">47</td><td><span class="t-en">Every recoverable error modelled as a sealed Failure carrying an ARB key.</span><span class="t-ar">سلّم Failure المغلق ومفاتيح ARB لكل خطأ.</span></td></tr>
+      <tr><td><code>lib/core/network/dio_client.dart</code></td><td class="n">92</td><td><span class="t-en">Thin, testable wrapper around [Dio].</span><span class="t-ar">غلاف Dio رفيع: مهل وتحويل للأخطاء.</span></td></tr>
+      <tr><td><code>lib/core/theme/app_colors.dart</code></td><td class="n">97</td><td><span class="t-en">StreetBite colour palette, taken from the Figma design file.</span><span class="t-ar">لوحة الألوان كما في Figma، مع ملاحظة لكل لون.</span></td></tr>
+      <tr><td><code>lib/core/theme/app_glass_theme.dart</code></td><td class="n">23</td><td><span class="t-en">App-wide defaults for the Liquid Glass renderer.</span><span class="t-ar">إعدادات مسيّر الزجاج على مستوى التطبيق.</span></td></tr>
+      <tr><td><code>lib/core/theme/app_glass_tokens.dart</code></td><td class="n">53</td><td><span class="t-en">Tells the widget layer whether the Liquid Glass look is active.</span><span class="t-ar">ThemeExtension يقول إن كان الزجاج مُفعَّلًا.</span></td></tr>
+      <tr><td><code>lib/core/theme/app_theme.dart</code></td><td class="n">386</td><td><span class="t-en">Builds the light, dark and Liquid Glass [ThemeData] for StreetBite.</span><span class="t-ar">بناء ThemeData الفاتح والداكن والزجاجي.</span></td></tr>
+      <tr><td><code>lib/core/theme/app_theme_mode.dart</code></td><td class="n">49</td><td><span class="t-en">The four appearances StreetBite ships.</span><span class="t-ar">المظاهر الأربعة التي يصدّرها التطبيق.</span></td></tr>
+      <tr><td><code>lib/core/usecase/usecase.dart</code></td><td class="n">43</td><td><span class="t-en">Base contract for every "do one thing" asynchronous use case.</span><span class="t-ar">عقود UseCase وSyncUseCase وParams.</span></td></tr>
+      <tr><td><code>lib/core/utils/responsive.dart</code></td><td class="n">59</td><td><span class="t-en">Responsive layout helpers built on top of [MediaQuery].</span><span class="t-ar">نقاط التوقف وأعمدة الشبكة والحشو.</span></td></tr>
+      <tr><td><code>lib/core/utils/string_helpers.dart</code></td><td class="n">34</td><td><span class="t-en">Pure, reusable helpers shared across layers.</span><span class="t-ar">دوال نصية خالصة مشتركة بين الطبقات.</span></td></tr>
+      <tr><td><code>lib/core/utils/validators.dart</code></td><td class="n">61</td><td><span class="t-en">Declarative form validators.</span><span class="t-ar">دوال تحقق النماذج، تُرجع مفاتيح ARB.</span></td></tr>
+    </tbody>
+  </table>
+  <h3><span class="t-en">15.3 · lib/data/ — 20 files</span><span class="t-ar">15.3 · lib/data/ — 20 ملفًا</span></h3>
+  <div class="bi"><div class="en"><p>Eleven data sources and gateways, seven models, six repository implementations and one platform service. This is where every external system is touched, and where every exception is converted into a Failure.</p></div><div class="ar"><p>أحد عشر مصدر بيانات وبوابة، وسبعة نماذج، وستة تنفيذات للمستودعات، وخدمة منصّة واحدة. هنا تُلمَس كل الأنظمة الخارجية، وهنا يُحوَّل كل استثناء إلى Failure.</p></div></div>
+  <table class="dir">
+    <thead><tr><th><span class="t-en">File</span><span class="t-ar">الملف</span></th><th class="n"><span class="t-en">Lines</span><span class="t-ar">الأسطر</span></th><th><span class="t-en">What it is</span><span class="t-ar">ما هو</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>lib/data/datasources/auth_local_data_source.dart</code></td><td class="n">150</td><td><span class="t-en">On-device account store used when Firebase cannot be reached.</span><span class="t-ar">متجر الحسابات على الجهاز حين يتعذر الوصول إلى Firebase.</span></td></tr>
+      <tr><td><code>lib/data/datasources/auth_remote_data_source.dart</code></td><td class="n">111</td><td><span class="t-en">Remote data source backed by **Firebase Authentication**.</span><span class="t-ar">مصدر بيانات عن Firebase Authentication.</span></td></tr>
+      <tr><td><code>lib/data/datasources/firestore_service.dart</code></td><td class="n">160</td><td><span class="t-en">**Singleton** — the Firestore gateway for the whole application.</span><span class="t-ar">بوابة Firestore الوحيدة ومسارات المجموعات.</span></td></tr>
+      <tr><td><code>lib/data/datasources/meal_local_data_source.dart</code></td><td class="n">57</td><td><span class="t-en">Local data source backed by &lt;code&gt;shared_preferences&lt;/code&gt;.</span><span class="t-ar">مخزن القائمة الكامل في shared_preferences.</span></td></tr>
+      <tr><td><code>lib/data/datasources/meal_remote_data_source.dart</code></td><td class="n">43</td><td><span class="t-en">Remote data source for the TheMealDB menu feed.</span><span class="t-ar">مصدر بيانات قائمة TheMealDB.</span></td></tr>
+      <tr><td><code>lib/data/datasources/vendor_local_data_source.dart</code></td><td class="n">98</td><td><span class="t-en">Hardcoded seed of street-food vendors pinned on the Nearby Vendors map.</span><span class="t-ar">زرع خمسة بائعين على الخريطة بغير خادم.</span></td></tr>
+      <tr><td><code>lib/data/models/cart_item_model.dart</code></td><td class="n">30</td><td><span class="t-en">Firestore representation of a single cart line.</span><span class="t-ar">تمثيل سطر سلة في Firestore.</span></td></tr>
+      <tr><td><code>lib/data/models/favourite_model.dart</code></td><td class="n">35</td><td><span class="t-en">Firestore representation of a saved meal.</span><span class="t-ar">تمثيل طبق محفوظ في Firestore.</span></td></tr>
+      <tr><td><code>lib/data/models/meal_model.dart</code></td><td class="n">152</td><td><span class="t-en">Data-layer representation of a TheMealDB meal.</span><span class="t-ar">طبق TheMealDB في طبقة البيانات وتحويلات JSON.</span></td></tr>
+      <tr><td><code>lib/data/models/order_model.dart</code></td><td class="n">112</td><td><span class="t-en">Firestore representation of a placed order.</span><span class="t-ar">تمثيل طلب منفَّذ في Firestore.</span></td></tr>
+      <tr><td><code>lib/data/models/payment_model.dart</code></td><td class="n">37</td><td><span class="t-en">Serialisable snapshot of a [PaymentMethod] strategy.</span><span class="t-ar">لقطة قابلة للتسلسل لاستراتيجية الدفع.</span></td></tr>
+      <tr><td><code>lib/data/models/user_model.dart</code></td><td class="n">151</td><td><span class="t-en">Data-layer representation of a StreetBite account.</span><span class="t-ar">حساب StreetBite في طبقة البيانات وتحويلات JSON.</span></td></tr>
+      <tr><td><code>lib/data/models/vendor_model.dart</code></td><td class="n">84</td><td><span class="t-en">Firestore / API representation of a street-food vendor.</span><span class="t-ar">تمثيل بائع الشارع في Firestore أو API.</span></td></tr>
+      <tr><td><code>lib/data/repositories/auth_repository_impl.dart</code></td><td class="n">182</td><td><span class="t-en">Coordinates Firebase Auth with the on-device fallback store.</span><span class="t-ar">ينسّق Firebase Auth مع المتجر المحلي.</span></td></tr>
+      <tr><td><code>lib/data/repositories/favourite_repository_impl.dart</code></td><td class="n">87</td><td><span class="t-en">Favourites storage, scoped to &lt;code&gt;users/{uid}/favourites&lt;/code&gt;.</span><span class="t-ar">تخزين المفضّلات تحت users/{uid}/favourites.</span></td></tr>
+      <tr><td><code>lib/data/repositories/meal_repository_impl.dart</code></td><td class="n">136</td><td><span class="t-en">Which data source should serve a request.</span><span class="t-ar">يختار أي مصدر بيانات يخدم الطلب.</span></td></tr>
+      <tr><td><code>lib/data/repositories/order_repository_impl.dart</code></td><td class="n">63</td><td><span class="t-en">Persists and reads the &lt;code&gt;orders&lt;/code&gt; collection through the Firestore singleton.</span><span class="t-ar">يكتب ويقرأ مجموعة الطلبات عبر البوابة.</span></td></tr>
+      <tr><td><code>lib/data/repositories/profile_repository_impl.dart</code></td><td class="n">77</td><td><span class="t-en">Reads and writes &lt;code&gt;users/{uid}&lt;/code&gt; through the [FirestoreService] singleton.</span><span class="t-ar">قراءة وكتابة users/{uid} عبر FirestoreService.</span></td></tr>
+      <tr><td><code>lib/data/repositories/vendor_repository_impl.dart</code></td><td class="n">25</td><td><span class="t-en">Serves the vendor list used by the Nearby Vendors map.</span><span class="t-ar">يخدم قائمة البائعين للخريطة.</span></td></tr>
+      <tr><td><code>lib/data/services/biometric_service.dart</code></td><td class="n">142</td><td><span class="t-en">Wraps local_auth so every biometric failure becomes a friendly ARB key once.</span><span class="t-ar">يغلّف local_auth ويصنّف كل خطأ بيومتري.</span></td></tr>
+    </tbody>
+  </table>
+  <h3><span class="t-en">15.4 · lib/domain/ — 33 files</span><span class="t-ar">15.4 · lib/domain/ — 33 ملفًا</span></h3>
+  <div class="bi"><div class="en"><p>Eight entities, six repository contracts and nineteen use-case files holding twenty use cases. The layer's import list is the proof of its purity: zero Flutter, zero Dio, zero cloud_firestore, one pub dependency (<code>equatable</code>).</p></div><div class="ar"><p>ثمانية كيانات، وستة عقود للمستودعات، وتسعة عشر ملف حالة استخدام تحوي عشرين حالة. وقائمة الاستيراد في هذه الطبقة دليل نقائها: صفر Flutter، وصفر Dio، وصفر cloud_firestore، وتبعية pub واحدة هي <code>equatable</code>.</p></div></div>
+  <table class="dir">
+    <thead><tr><th><span class="t-en">File</span><span class="t-ar">الملف</span></th><th class="n"><span class="t-en">Lines</span><span class="t-ar">الأسطر</span></th><th><span class="t-en">What it is</span><span class="t-ar">ما هو</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>lib/domain/entities/cart_item_entity.dart</code></td><td class="n">19</td><td><span class="t-en">One line in the cart: a meal plus how many times it was added.</span><span class="t-ar">سطر في السلة: طبق مع عدد مرّات إضافته.</span></td></tr>
+      <tr><td><code>lib/domain/entities/device_info_entity.dart</code></td><td class="n">32</td><td><span class="t-en">Device metadata surfaced on the Profile screen, read through device_info_plus.</span><span class="t-ar">بيانات الجهاز المعروضة في شاشة الملف.</span></td></tr>
+      <tr><td><code>lib/domain/entities/favourite_entity.dart</code></td><td class="n">15</td><td><span class="t-en">A meal the user has hearted, stored under users/{uid}/favourites.</span><span class="t-ar">طبق أعجبه المستخدم، محفوظ تحت users/{uid}.</span></td></tr>
+      <tr><td><code>lib/domain/entities/meal_entity.dart</code></td><td class="n">49</td><td><span class="t-en">A single dish as shown on the home feed, the details screen and the cart.</span><span class="t-ar">طبق واحد كما يظهر في الرئيسية والتفاصيل والسلة.</span></td></tr>
+      <tr><td><code>lib/domain/entities/order_entity.dart</code></td><td class="n">99</td><td><span class="t-en">A completed StreetBite order, persisted in Cloud Firestore.</span><span class="t-ar">طلب مكتمل، محفوظ في Cloud Firestore.</span></td></tr>
+      <tr><td><code>lib/domain/entities/payment.dart</code></td><td class="n">108</td><td><span class="t-en">Payment strategies for the checkout screen.</span><span class="t-ar">استراتيجيات الدفع: نقدًا أو ببطاقة، كصنف مغلق.</span></td></tr>
+      <tr><td><code>lib/domain/entities/user_entity.dart</code></td><td class="n">39</td><td><span class="t-en">A StreetBite account.</span><span class="t-ar">حساب StreetBite: المعرّف والاسم والبريد والصورة.</span></td></tr>
+      <tr><td><code>lib/domain/entities/vendor_entity.dart</code></td><td class="n">41</td><td><span class="t-en">A street-food vendor pinned on the Nearby Vendors map.</span><span class="t-ar">بائع شارع مثبَّت على خريطة القريبين.</span></td></tr>
+      <tr><td><code>lib/domain/repositories/auth_repository.dart</code></td><td class="n">42</td><td><span class="t-en">Contract for authentication and the persisted session.</span><span class="t-ar">عقد المصادقة والجلسة المحفوظة.</span></td></tr>
+      <tr><td><code>lib/domain/repositories/favourite_repository.dart</code></td><td class="n">18</td><td><span class="t-en">Contract for the per-user favourites sub-collection in Cloud Firestore.</span><span class="t-ar">عقد مجموعة المفضّلات الفرعية لكل مستخدم.</span></td></tr>
+      <tr><td><code>lib/domain/repositories/meal_repository.dart</code></td><td class="n">19</td><td><span class="t-en">Contract for the live menu feed.</span><span class="t-ar">عقد تغذية القائمة الحيّة.</span></td></tr>
+      <tr><td><code>lib/domain/repositories/order_repository.dart</code></td><td class="n">16</td><td><span class="t-en">Contract for the orders collection in Cloud Firestore.</span><span class="t-ar">عقد مجموعة الطلبات في Firestore.</span></td></tr>
+      <tr><td><code>lib/domain/repositories/profile_repository.dart</code></td><td class="n">19</td><td><span class="t-en">Contract for the user profile document at users/{uid}.</span><span class="t-ar">عقد مستند الملف الشخصي تحت users/{uid}.</span></td></tr>
+      <tr><td><code>lib/domain/repositories/vendor_repository.dart</code></td><td class="n">9</td><td><span class="t-en">Contract for the Nearby Vendors map.</span><span class="t-ar">عقد خريطة البائعين القريبين.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/add_to_cart.dart</code></td><td class="n">37</td><td><span class="t-en">Adds a meal to the cart, or increments it when already present.</span><span class="t-ar">يضيف طبقا، أو يزيد كميّته إن كان موجودا.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/calculate_order_totals.dart</code></td><td class="n">72</td><td><span class="t-en">Computes the money shown on the Cart screen and stored with the order.</span><span class="t-ar">يحسب المال المعروض في السلة والمحفوظ مع الطلب.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/get_biometric_sign_in.dart</code></td><td class="n">17</td><td><span class="t-en">Reads this device's biometric sign-in opt-in.</span><span class="t-ar">يقرأ خيار الدخول البيومتري لهذا الجهاز.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/get_device_info.dart</code></td><td class="n">99</td><td><span class="t-en">Reads the device model and OS version shown on the Profile screen.</span><span class="t-ar">يقرأ طراز الجهاز وإصدار النظام للملف الشخصي.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/get_favourites.dart</code></td><td class="n">17</td><td><span class="t-en">Loads every meal the signed-in user has hearted.</span><span class="t-ar">يحمّل كل الأطباق التي أعجبت المستخدم.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/get_meals.dart</code></td><td class="n">32</td><td><span class="t-en">Loads the full menu feed for the Home screen grid.</span><span class="t-ar">يحمّل القائمة الكاملة لشبكة الرئيسية.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/get_nearby_vendors.dart</code></td><td class="n">17</td><td><span class="t-en">Returns the vendors pinned on the Nearby Vendors map.</span><span class="t-ar">يعيد البائعين المثبَّتين على الخريطة.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/get_order_history.dart</code></td><td class="n">28</td><td><span class="t-en">Reads the signed-in user's order history, newest first.</span><span class="t-ar">يقرأ سجلّ الطلبات الأحدث أولا، ويحلّ نافذة النشاط مرة واحدة.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/get_user_profile.dart</code></td><td class="n">16</td><td><span class="t-en">Reads the Firestore profile document for [uid], or &lt;code&gt;null&lt;/code&gt; when absent.</span><span class="t-ar">يقرأ مستند Firestore للملف، أو null إن غاب.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/login_user.dart</code></td><td class="n">27</td><td><span class="t-en">Signs an existing user in and surfaces Firebase's error message in the UI.</span><span class="t-ar">يُدخل مستخدما موجودا ويوصل خطأ Firebase للواجهة.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/logout_user.dart</code></td><td class="n">12</td><td><span class="t-en">Clears the persistent session (Firebase sign-out + local cache wipe).</span><span class="t-ar">يمسح الجلسة الدائمة: تسجيل الخروج من Firebase وتنظيف المحلي.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/pick_and_upload_photo.dart</code></td><td class="n">57</td><td><span class="t-en">Picks a new profile picture from the gallery / camera and publishes it.</span><span class="t-ar">يختار صورة ملف من المعرض وينشرها.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/place_order.dart</code></td><td class="n">38</td><td><span class="t-en">Persists the checkout to Cloud Firestore and returns the created order id.</span><span class="t-ar">يحفظ إتمام الطلب في Firestore ويعيد معرّف الطلب.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/remove_from_cart.dart</code></td><td class="n">42</td><td><span class="t-en">Removes one serving of a meal, dropping the whole line at zero.</span><span class="t-ar">ينقص حصّة، ويحذف السطر عند الصفر.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/restore_session.dart</code></td><td class="n">48</td><td><span class="t-en">Restores the persisted session on cold start; defines LoginParams and SignUpParams.</span><span class="t-ar">يستعيد الجلسة عند البدء البارد، ويعرّف LoginParams وSignUpParams.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/save_user_profile.dart</code></td><td class="n">20</td><td><span class="t-en">Creates or refreshes the Firestore profile document for [user].</span><span class="t-ar">ينشئ أو يحدّث مستند الملف الشخصي للمستخدم.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/set_biometric_sign_in.dart</code></td><td class="n">23</td><td><span class="t-en">Turns the biometric gate on a restored session on or off; defines its params.</span><span class="t-ar">يُشغّل أو يُطفئ بوابة البصمة، ويعرّف وسائطها.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/signup_user.dart</code></td><td class="n">26</td><td><span class="t-en">Creates an account and signs the new user straight in.</span><span class="t-ar">ينشئ حسابا ويدخل المستخدم الجديد مباشرة.</span></td></tr>
+      <tr><td><code>lib/domain/usecases/toggle_favourite.dart</code></td><td class="n">37</td><td><span class="t-en">Saves / removes a meal from the user's favourites in Cloud Firestore.</span><span class="t-ar">يحفظ أو يحذف طبقا من مفضّلات المستخدم.</span></td></tr>
+    </tbody>
+  </table>
+  <h3><span class="t-en">15.5 · lib/l10n/generated/ — 3 files</span><span class="t-ar">15.5 · lib/l10n/generated/ — 3 ملفات</span></h3>
+  <div class="bi"><div class="en"><p>Not hand-written, and excluded from the 158-file count. Listed so the reference is genuinely complete: these 2,384 lines are what every sentence in the app resolves through.</p></div><div class="ar"><p>غير مكتوبة يدويًا، وهي خارج عدّ الـ 158 ملفًا. أُدرجت هنا حتى يكون المرجع مكتملًا فعلًا: في هذه الـ 2,384 سطرًا تُحلّ كل جملة في التطبيق.</p></div></div>
+  <table class="dir">
+    <thead><tr><th><span class="t-en">File</span><span class="t-ar">الملف</span></th><th class="n"><span class="t-en">Lines</span><span class="t-ar">الأسطر</span></th><th><span class="t-en">What it is</span><span class="t-ar">ما هو</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>lib/l10n/generated/app_localizations.dart</code></td><td class="n">1202</td><td><span class="t-en">Generated abstract localiser: every message getter for both locales.</span><span class="t-ar">الصنف المولّد: 178 رسالة لكلا اللغتين.</span></td></tr>
+      <tr><td><code>lib/l10n/generated/app_localizations_ar.dart</code></td><td class="n">586</td><td><span class="t-en">The translations for Arabic (&lt;code&gt;ar&lt;/code&gt;).</span><span class="t-ar">ترجمات العربية (ar) المولّدة.</span></td></tr>
+      <tr><td><code>lib/l10n/generated/app_localizations_en.dart</code></td><td class="n">596</td><td><span class="t-en">The translations for English (&lt;code&gt;en&lt;/code&gt;).</span><span class="t-ar">ترجمات الإنجليزية (en) المولّدة.</span></td></tr>
+    </tbody>
+  </table>
+  <h3><span class="t-en">15.6 · lib/presentation/blocs/ — 17 files</span><span class="t-ar">15.6 · lib/presentation/blocs/ — 17 ملفًا</span></h3>
+  <div class="bi"><div class="en"><p>One Bloc (the cart, because checkout is a transaction) and eight Cubit state files, in pairs: the class that owns the state, and the sealed hierarchy it emits.</p></div><div class="ar"><p>Bloc واحد (السلة، لأن إتمام الطلب معاملة) وثماني ملفات حالات لـ Cubit، في أزواج: الصنف الذي يملك الحالة، والهرم المغلق الذي يصدره.</p></div></div>
+  <table class="dir">
+    <thead><tr><th><span class="t-en">File</span><span class="t-ar">الملف</span></th><th class="n"><span class="t-en">Lines</span><span class="t-ar">الأسطر</span></th><th><span class="t-en">What it is</span><span class="t-ar">ما هو</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>lib/presentation/blocs/auth/auth_cubit.dart</code></td><td class="n">135</td><td><span class="t-en">Owns **all** authentication state for the app.</span><span class="t-ar">يملك كل حالة المصادقة في التطبيق.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/auth/auth_state.dart</code></td><td class="n">75</td><td><span class="t-en">States emitted by [AuthCubit].</span><span class="t-ar">حالات AuthCubit المغلقة، ومنها بوابة البصمة.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/cart/cart_bloc.dart</code></td><td class="n">180</td><td><span class="t-en">Owns the shopping cart and the checkout transaction.</span><span class="t-ar">يملك السلة ومعاملة إتمام الطلب.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/cart/cart_event.dart</code></td><td class="n">71</td><td><span class="t-en">Events accepted by [CartBloc].</span><span class="t-ar">أحداث CartBloc: إضافة وإنقاص وتفريغ وإتمام الطلب.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/cart/cart_state.dart</code></td><td class="n">82</td><td><span class="t-en">States emitted by [CartBloc].</span><span class="t-ar">حالات السلة، ومنها حالة الطلب المكتمل.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/favourites/favourites_cubit.dart</code></td><td class="n">64</td><td><span class="t-en">Owns the saved-meals list shared by the Profile screen and the heart button.</span><span class="t-ar">يملك قائمة المحفوظات لتبويب الملف وزر القلب.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/favourites/favourites_state.dart</code></td><td class="n">43</td><td><span class="t-en">States emitted by [FavouritesCubit].</span><span class="t-ar">حالات FavouritesCubit.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/locale/locale_cubit.dart</code></td><td class="n">45</td><td><span class="t-en">Switches the app between English and Arabic **at runtime**.</span><span class="t-ar">يبدّل الإنجليزية والعربية أثناء التشغيل.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/locale/locale_state.dart</code></td><td class="n">20</td><td><span class="t-en">Runtime language selection owned by [LocaleCubit].</span><span class="t-ar">اختيار اللغة الجاري الذي يملكه LocaleCubit.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/meals/meals_cubit.dart</code></td><td class="n">44</td><td><span class="t-en">Drives Home: the featured banner, the meals grid and the Hot Offers strip.</span><span class="t-ar">يقود الرئيسية: البانر والشبكة والعروض الساخنة.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/meals/meals_state.dart</code></td><td class="n">42</td><td><span class="t-en">States emitted by [MealsCubit] for the Home feed.</span><span class="t-ar">حالات تغذية الرئيسية التي يصدّرها MealsCubit.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/orders/orders_cubit.dart</code></td><td class="n">30</td><td><span class="t-en">Loads the signed-in user's order history from Cloud Firestore.</span><span class="t-ar">يحمّل سجلّ طلبات المستخدم من Firestore.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/orders/orders_state.dart</code></td><td class="n">45</td><td><span class="t-en">States emitted by [OrdersCubit] for the Orders tab / profile history.</span><span class="t-ar">حالات تبويب الطلبات وسجلّ الملف.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/profile/profile_cubit.dart</code></td><td class="n">68</td><td><span class="t-en">Owns the Profile screen: user, device metadata and profile photo.</span><span class="t-ar">يملك حالة شاشة الملف: المستخدم وجهازه وصورته.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/profile/profile_state.dart</code></td><td class="n">51</td><td><span class="t-en">States emitted by [ProfileCubit] — everything the Profile screen renders.</span><span class="t-ar">حالات ProfileCubit — كل ما تعرضه شاشة الملف.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/theme/theme_cubit.dart</code></td><td class="n">33</td><td><span class="t-en">Owns the appearance preference and persists it across launches.</span><span class="t-ar">يملك المظهر المختار ويحفظه بين التشغيلات.</span></td></tr>
+      <tr><td><code>lib/presentation/blocs/theme/theme_state.dart</code></td><td class="n">27</td><td><span class="t-en">Appearance preference owned by [ThemeCubit].</span><span class="t-ar">تفضيل المظهر الذي يملكه ThemeCubit.</span></td></tr>
+    </tbody>
+  </table>
+  <h3><span class="t-en">15.7 · lib/presentation/extensions + router — 6 files</span><span class="t-ar">15.7 · lib/presentation/extensions + router — 6 ملفات</span></h3>
+  <div class="bi"><div class="en"><p>Four extension files and the two router files. Small in lines, load-bearing in rules: <code>l10n_extension</code> is the only key-to-text bridge, <code>snack_extension</code> the only transient-message call, and <code>app_router</code> the only place a route name becomes a widget.</p></div><div class="ar"><p>أربعة ملفات امتداد وملفا التوجيه. قليلة الأسطر، حاملة للقواعد: <code>l10n_extension</code> الجسر الوحيد من المفتاح إلى النص، و<code>snack_extension</code> الاستدعاء الوحيد للرسائل العابرة، و<code>app_router</code> الموضع الوحيد الذي يتحول فيه اسم مسار إلى ودجة.</p></div></div>
+  <table class="dir">
+    <thead><tr><th><span class="t-en">File</span><span class="t-ar">الملف</span></th><th class="n"><span class="t-en">Lines</span><span class="t-ar">الأسطر</span></th><th><span class="t-en">What it is</span><span class="t-ar">ما هو</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>lib/presentation/extensions/app_theme_mode_l10n.dart</code></td><td class="n">44</td><td><span class="t-en">Localized name and glyph for each appearance, in one place.</span><span class="t-ar">اسم ورمز مترجمان لكل مظهر، في موضع واحد.</span></td></tr>
+      <tr><td><code>lib/presentation/extensions/cart_quantity.dart</code></td><td class="n">22</td><td><span class="t-en">Reads one meal's in-cart quantity out of a [CartState].</span><span class="t-ar">يقرأ كمّية طبق في السلة من حالة السلة.</span></td></tr>
+      <tr><td><code>lib/presentation/extensions/l10n_extension.dart</code></td><td class="n">147</td><td><span class="t-en">The single bridge between a message key and its localised sentence.</span><span class="t-ar">الجسر الوحيد بين مفتاح الرسالة والنص المترجم.</span></td></tr>
+      <tr><td><code>lib/presentation/extensions/snack_extension.dart</code></td><td class="n">17</td><td><span class="t-en">Single entry point for the app's transient messages.</span><span class="t-ar">الموضع الوحيد لإظهار رسائل عابرة.</span></td></tr>
+      <tr><td><code>lib/presentation/router/app_page_route.dart</code></td><td class="n">42</td><td><span class="t-en">Route used for every navigation in the app.</span><span class="t-ar">نوع المسار لكل تنقل: تلاشٍ مع انزلاق خفيف.</span></td></tr>
+      <tr><td><code>lib/presentation/router/app_router.dart</code></td><td class="n">138</td><td><span class="t-en">Central &lt;code&gt;onGenerateRoute&lt;/code&gt; implementation.</span><span class="t-ar">تطبيق onGenerateRoute: تبديل المسارات الاثني عشر.</span></td></tr>
+    </tbody>
+  </table>
+  <h3><span class="t-en">15.8 · lib/presentation/screens/ — 17 files, 5,033 lines</span><span class="t-ar">15.8 · lib/presentation/screens/ — 17 ملفًا، 5,033 سطرًا</span></h3>
+  <div class="bi"><div class="en"><p>Ordered by directory, then by size the numbers matter most on: the two heaviest screens are <code>profile_screen.dart</code> (645) and <code>order_details_screen.dart</code> (524), and together the two largest hold a quarter of the whole presentation layer.</p></div><div class="ar"><p>مرتّبة حسب المجلد ثم حسب الحجم — فهو الرقم الذي يهمّ هنا أكثر: أثقل شاشتين هما <code>profile_screen.dart</code> (645) و<code>order_details_screen.dart</code> (524)، وحجمهما معًا ربع طبقة العرض كلها.</p></div></div>
+  <table class="dir">
+    <thead><tr><th><span class="t-en">File</span><span class="t-ar">الملف</span></th><th class="n"><span class="t-en">Lines</span><span class="t-ar">الأسطر</span></th><th><span class="t-en">What it is</span><span class="t-ar">ما هو</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>lib/presentation/screens/auth/biometric_login_screen.dart</code></td><td class="n">202</td><td><span class="t-en">The fingerprint / face prompt that replaces the password on a cold start.</span><span class="t-ar">فحص البصمة أو الوجه الذي يستبدل الكلمة عند البدء.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/auth/login_screen.dart</code></td><td class="n">219</td><td><span class="t-en">Sign-in screen backed by **Firebase Authentication**.</span><span class="t-ar">شاشة الدخول خلف Firebase Authentication.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/auth/signup_screen.dart</code></td><td class="n">221</td><td><span class="t-en">Account creation screen.</span><span class="t-ar">شاشة إنشاء الحساب والتحقق من حقولها.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/browse/browse_screen.dart</code></td><td class="n">357</td><td><span class="t-en">"Browse" tab: the category grid plus the entry point to the Vendor Map.</span><span class="t-ar">تبويب التصفح: شبكة الفئات ومدخل خريطة البائعين.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/cart/cart_screen.dart</code></td><td class="n">213</td><td><span class="t-en">Cart + checkout screen.</span><span class="t-ar">شاشة السلة وإتمام الطلب، مع الإصغاء لحدث الطلب.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/cart/order_confirmation_screen.dart</code></td><td class="n">146</td><td><span class="t-en">Shown after a successful checkout.</span><span class="t-ar">تظهر بعد إتمام طلب ناجح وتنتقل إلى تبويب الطلبات.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/home/home_screen.dart</code></td><td class="n">571</td><td><span class="t-en">The live menu feed — StreetBite's home screen.</span><span class="t-ar">تغذية القائمة الحيّة — الشاشة الرئيسية للتطبيق.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/home/main_shell_screen.dart</code></td><td class="n">209</td><td><span class="t-en">The bottom-navigation shell from the Figma design, glass or Material.</span><span class="t-ar">هيكل التنقل السفلي من تصميم Figma: أربعة تبويبات، بالنمط الزجاجي أو Material.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/home/meal_details_screen.dart</code></td><td class="n">281</td><td><span class="t-en">Full description of a single meal.</span><span class="t-ar">الوصف الكامل لطبق واحد، مع طيران Hero.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/home/menu_search_sheet.dart</code></td><td class="n">132</td><td><span class="t-en">Opens the full-menu bottom sheet.</span><span class="t-ar">ورقة سفلية للقائمة الكاملة مع البحث.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/map/vendor_map_screen.dart</code></td><td class="n">335</td><td><span class="t-en">Full-screen Nearby Vendors map: five markers across five areas.</span><span class="t-ar">خريطة البائعين القريبين: خمس نقاط في خمس مناطق.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/orders/order_details_screen.dart</code></td><td class="n">524</td><td><span class="t-en">The receipt behind a row in the Orders tab (and in the Profile history).</span><span class="t-ar">الإيصال خلف سطر في الطلبات أو في سجلّ الملف.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/orders/orders_screen.dart</code></td><td class="n">202</td><td><span class="t-en">"Orders" tab — the two-block layout from the Figma design.</span><span class="t-ar">تبويب الطلبات — كتلة الجارية ثم المنتهية.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/profile/profile_screen.dart</code></td><td class="n">645</td><td><span class="t-en">Profile screen — reachable only after the biometric gate on the Home AppBar.</span><span class="t-ar">شاشة الملف خلف بوابة البصمة على شريط الرئيسية.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/profile/profile_tab_screen.dart</code></td><td class="n">90</td><td><span class="t-en">Bottom-nav wrapper around [ProfileScreen].</span><span class="t-ar">غلاف الهيكل حول شاشة الملف، مع Cubit خاص بها.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/settings/settings_screen.dart</code></td><td class="n">453</td><td><span class="t-en">Appearance + security preferences.</span><span class="t-ar">تفضيلات المظهر والأمن واللغة.</span></td></tr>
+      <tr><td><code>lib/presentation/screens/splash/splash_screen.dart</code></td><td class="n">233</td><td><span class="t-en">Splash / onboarding screen shown at the very start of every launch.</span><span class="t-ar">شاشة البداية: تنتظر الحركة وحكم الجلسة معًا.</span></td></tr>
+    </tbody>
+  </table>
+  <h3><span class="t-en">15.9 · lib/presentation/widgets/ — 46 files, 4,004 lines</span><span class="t-ar">15.9 · lib/presentation/widgets/ — 46 ملفًا، 4,004 سطرًا</span></h3>
+  <div class="bi"><div class="en"><p>The largest folder in the app and the flattest: no sub-folders, one widget per file, and no file longer than 266 lines. That is the deliberate shape — a widget that grows past ~250 lines is split rather than nested.</p></div><div class="ar"><p>أكبر مجلد في التطبيق وأسطحه: لا مجلدات فرعية، وودجة في كل ملف، ولا ملف أطول من 266 سطرًا. وهذا الشكل مقصود — فأي ودجة تتجاوز نحو 250 سطرًا تُقسَّم بدل أن تُعشَّش.</p></div></div>
+  <table class="dir">
+    <thead><tr><th><span class="t-en">File</span><span class="t-ar">الملف</span></th><th class="n"><span class="t-en">Lines</span><span class="t-ar">الأسطر</span></th><th><span class="t-en">What it is</span><span class="t-ar">ما هو</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>lib/presentation/widgets/app_error_view.dart</code></td><td class="n">42</td><td><span class="t-en">Friendly full-screen error state used by every screen that can fail.</span><span class="t-ar">حالة خطأ كاملة الشاشة تستخدمها كل الشاشات.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/app_loading_view.dart</code></td><td class="n">51</td><td><span class="t-en">Centred &lt;code&gt;CircularProgressIndicator&lt;/code&gt; with a localized caption.</span><span class="t-ar">دوّارة مركزية بتسمية مترجمة.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/app_network_image.dart</code></td><td class="n">88</td><td><span class="t-en">Remote image with a shimmer placeholder and a graceful failure state.</span><span class="t-ar">صورة بعيدة ببديل وميض وحالة فشل لائقة.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/app_page_body.dart</code></td><td class="n">38</td><td><span class="t-en">Constrained, scrollable page body used by every full-page form screen.</span><span class="t-ar">جسم صفحة مقيّد وقابل للتمرير لكل نموذج.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/app_search_field.dart</code></td><td class="n">64</td><td><span class="t-en">The app's search input.</span><span class="t-ar">حقل البحث في التطبيق، بزجاج أو بدونه.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/app_segmented_picker.dart</code></td><td class="n">142</td><td><span class="t-en">Three-or-fewer-way pill selector used for Theme and Language in Settings.</span><span class="t-ar">مبدّل أقراص لثلاثة خيارات أو أقل: المظهر واللغة.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/app_surface.dart</code></td><td class="n">65</td><td><span class="t-en">The app's card primitive.</span><span class="t-ar">بدائية البطاقات في التطبيق: سطح وزاوية وظل.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/app_text_field.dart</code></td><td class="n">129</td><td><span class="t-en">Reusable labelled text field used by both the Login and Sign Up screens.</span><span class="t-ar">حقل نصّ بتسمية، للدخول والتسجيل، بعنوان وصول.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/auth_app_bar_actions.dart</code></td><td class="n">15</td><td><span class="t-en">Appearance and language switchers heading the authentication screens.</span><span class="t-ar">مبدّلا المظهر واللغة فوق شاشات المصادقة.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/auth_card.dart</code></td><td class="n">20</td><td><span class="t-en">Rounded surface grouping a form's fields, matching the 20 px card radius.</span><span class="t-ar">سطح مدوّر يجمع حقول النموذج بزاوية 20 بكسل.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/auth_header.dart</code></td><td class="n">35</td><td><span class="t-en">Large title + supporting sentence at the top of Login / Sign Up.</span><span class="t-ar">عنوان كبير وجملة مساندة أعلى الدخول والتسجيل.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/biometric_gate.dart</code></td><td class="n">89</td><td><span class="t-en">Runs the fingerprint / face check and decides what happens next.</span><span class="t-ar">يشغّل فحص البصمة ويقرّر ما يحدث بعد الفشل.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/biometric_login_button.dart</code></td><td class="n">56</td><td><span class="t-en">Circular fingerprint shortcut that sits beside the primary Log In button.</span><span class="t-ar">اختصار دائري للبصمة بجانب زر الدخول.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/cart_badge.dart</code></td><td class="n">61</td><td><span class="t-en">Green circular badge showing how many servings are in the cart.</span><span class="t-ar">شارة خضراء بعدد الحصص في السلة.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/cart_count_badge.dart</code></td><td class="n">77</td><td><span class="t-en">How many servings of one meal are in the cart, printed on the product card.</span><span class="t-ar">عدد حصص طبق على البطاقة نفسها.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/cart_item_tile.dart</code></td><td class="n">209</td><td><span class="t-en">One cart line: image, name, price, quantity stepper and remove action.</span><span class="t-ar">سطر سلة: صورة واسم وسعر ومعداد وحذف.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/cart_line_action.dart</code></td><td class="n">266</td><td><span class="t-en">The cart control on a product card.</span><span class="t-ar">متحكّم السلة على بطاقة المنتج: + أو العدّاد.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/empty_state_view.dart</code></td><td class="n">44</td><td><span class="t-en">Shared "nothing here yet" panel for the cart, favourites and order history.</span><span class="t-ar">لوحة «لا شيء بعد» للسلة والمفضّلات والطلبات.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/favourites_skeleton.dart</code></td><td class="n">35</td><td><span class="t-en">Loading placeholder for the horizontal favourites strip on Profile.</span><span class="t-ar">بديل وميض لشريط المفضّلات الأفقي.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/glass_aurora.dart</code></td><td class="n">69</td><td><span class="t-en">The aurora gradient that Liquid Glass surfaces refract against.</span><span class="t-ar">تدرّج الشفقية الذي تنكسر أسطح الزجاج عليه.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/glass_backdrop.dart</code></td><td class="n">21</td><td><span class="t-en">Paints [GlassAurora] behind the whole &lt;code&gt;Navigator&lt;/code&gt; in Liquid Glass mode.</span><span class="t-ar">يرسم الشفقية خلف Navigator كله في وضع الزجاج.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/home_feed_skeleton.dart</code></td><td class="n">107</td><td><span class="t-en">Loading placeholder that mirrors the real Home feed, section for section.</span><span class="t-ar">بديل وميض يطابق تغذية الرئيسية قسمًا قسمًا.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/hot_offer_card.dart</code></td><td class="n">156</td><td><span class="t-en">One tile of the horizontal "Hot Offers" strip.</span><span class="t-ar">بلاطة واحدة من شريط العروض الساخنة.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/info_row.dart</code></td><td class="n">60</td><td><span class="t-en">Label / value line used by the device-information card.</span><span class="t-ar">سطر تسمية/قيمة في بطاقة معلومات الجهاز.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/language_toggle_button.dart</code></td><td class="n">62</td><td><span class="t-en">Compact EN / AR switch shown in every AppBar and on the splash screen.</span><span class="t-ar">مبدّل EN/AR المختصر في كل شريط أعلى.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/map_error_boundary.dart</code></td><td class="n">71</td><td><span class="t-en">Catches build/paint errors inside its subtree and swaps in a readable error.</span><span class="t-ar">يعترض أخطاء البناء والرسم داخل شجرته الفرعية ويعرض رسالة بدلها.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/meal_banner_page.dart</code></td><td class="n">146</td><td><span class="t-en">One page of the Home screen's featured-meals &lt;code&gt;PageView&lt;/code&gt;.</span><span class="t-ar">صفحة من PageView للأطباق المميزة، مع Hero.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/meal_card.dart</code></td><td class="n">208</td><td><span class="t-en">A single tile in the Home screen meals &lt;code&gt;GridView&lt;/code&gt; (2 columns on a phone).</span><span class="t-ar">بلاطة في شبكة أطباق الرئيسية، مع متحكّم السلة داخلها.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/message_panel.dart</code></td><td class="n">68</td><td><span class="t-en">The panel behind every state-shown-instead-of-content: circle, icon, text.</span><span class="t-ar">اللوحة خلف كل «حالة بدل المحتوى»: دائرة ورمز ونص.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/meta_pill.dart</code></td><td class="n">44</td><td><span class="t-en">Small icon + label pill used on the meal metadata row.</span><span class="t-ar">قرص صغير برمز وتسمية لسطر بيانات الطبق.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/order_history_tile.dart</code></td><td class="n">141</td><td><span class="t-en">One past/present order in the Profile history and the Orders tab.</span><span class="t-ar">طلب جارٍ أو منتهٍ في سجلّ الملف أو تبويب الطلبات.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/order_list_skeleton.dart</code></td><td class="n">48</td><td><span class="t-en">Loading placeholder for an order history list.</span><span class="t-ar">بديل وميض لقائمة سجلّ الطلبات.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/order_summary_card.dart</code></td><td class="n">154</td><td><span class="t-en">The sticky money panel at the bottom of the Cart screen.</span><span class="t-ar">لوحة المال اللاصقة أسفل شاشة السلة.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/payment_method_selector.dart</code></td><td class="n">93</td><td><span class="t-en">Radio list of the available payment strategies.</span><span class="t-ar">قائمة راديو لاستراتيجيات الدفع المتاحة.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/profile_gate_button.dart</code></td><td class="n">74</td><td><span class="t-en">Circular avatar that launches the biometric gate when tapped.</span><span class="t-ar">صورة دائرية تفتح بوابة البصمة عند النقر.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/section_header.dart</code></td><td class="n">44</td><td><span class="t-en">Section heading with an optional trailing action.</span><span class="t-ar">ترويسة قسم مع إجراء اختياري في طرفها.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/semantic_id.dart</code></td><td class="n">73</td><td><span class="t-en">Tags a subtree with a **stable accessibility identifier**.</span><span class="t-ar">يمنح شجرةً فرعية معرّف وصول ثابتًا لأجل Appium.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/settings_row.dart</code></td><td class="n">91</td><td><span class="t-en">Full-width settings row: leading icon, label, subtitle, trailing control.</span><span class="t-ar">سطر إعداد كامل العرض: رمز وتسمية وتبديل.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/shimmer_box.dart</code></td><td class="n">36</td><td><span class="t-en">A single opaque placeholder shape inside a [ShimmerScope].</span><span class="t-ar">شكل بديل معتّم داخل ShimmerScope.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/shimmer_scope.dart</code></td><td class="n">43</td><td><span class="t-en">Wraps placeholder shapes in the shimmer sweep.</span><span class="t-ar">يغلّف البدائل بلمعة الوميض.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/streetbite_logo.dart</code></td><td class="n">70</td><td><span class="t-en">The StreetBite mark: a rounded green tile with a fork-and-plate glyph.</span><span class="t-ar">علامة StreetBite: بلاطة خضراء برمز شوكة وصحن.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/success_burst.dart</code></td><td class="n">85</td><td><span class="t-en">Pops a child in with slight overshoot and sends two colour-matched ripples.</span><span class="t-ar">يُبرز عنصرا بتجاوز صغير ويرسل موجّتين ملوّنتين.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/theme_options_sheet.dart</code></td><td class="n">258</td><td><span class="t-en">Opens the appearance picker.</span><span class="t-ar">ورقة اختيار المظهر من الأربعة.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/theme_toggle_button.dart</code></td><td class="n">39</td><td><span class="t-en">Appearance button that opens the theme options sheet.</span><span class="t-ar">زر المظهر الذي يفتح ورقة الخيارات.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/vendor_info_window.dart</code></td><td class="n">160</td><td><span class="t-en">Custom contents of the Google Maps marker info window.</span><span class="t-ar">محتوى نافذة معلومات النقطة في خريطة Google.</span></td></tr>
+      <tr><td><code>lib/presentation/widgets/vendor_marker.dart</code></td><td class="n">57</td><td><span class="t-en">Marker builder for the Nearby Vendors map.</span><span class="t-ar">بانِي نقاط البائعين على خريطة القريبين.</span></td></tr>
+    </tbody>
+  </table>
+</section>
+<nav class="pager">
+    <a href="14-build.html"><span class="lbl"><span class="t-en">Previous · §14</span><span class="t-ar">السابق · §14</span></span><span class="to"><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></span></a>
+    <a class="next" href="16-classes.html"><span class="lbl"><span class="t-en">Next · §16</span><span class="t-ar">التالي · §16</span></span><span class="to"><span class="t-en">Class and type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#files">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tech stack · StreetBite code documentation · §02</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html" class="cur"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §02 Tech stack</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part I · Section 02 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الأول · القسم 02 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="stack">
+  <h2><span class="t-en"><span class="num">02</span> · Tech stack</span><span class="t-ar"><span class="num">02</span> · التقنيات المستخدمة</span></h2>
+
+  <div class="bi">
+    <div class="en">
+      <p>StreetBite is a Flutter app targeting Android only. The runtime is Dart with sound null safety,
+      compiled ahead-of-time into a release APK. Every third-party capability is reached through one of our
+      own classes, so no plugin type appears in the domain or presentation layers.</p>
+      <p>The state layer is <code>flutter_bloc</code>: one Bloc (the cart, because checkout is a real
+      transaction) and seven Cubits. Identity and persistence are Firebase. The menu feed is a public REST
+      API reached through Dio. The frosted look is delegated to a glass widget package with an adaptive
+      quality mode.</p>
+    </div>
+    <div class="ar">
+      <p>StreetBite تطبيق Flutter يستهدف أندرويد فقط. بيئة التشغيل هي Dart مع سلامة نوع صارمة Null Safety،
+      وتُترجم قبل التنفيذ إلى ملف APK نهائي. كل قدرة خارجية يمر بها التطبيق عبر أحد أصنافنا الخاصة، لذلك لا
+      يظهر نوع أي إضافة في طبقة Domain ولا في طبقة Presentation.</p>
+      <p>طبقة الحالة هي <code>flutter_bloc</code>: Bloc واحد (السلة، لأن إتمام الطلب معاملة حقيقية) وسبعة
+      Cubits. الهوية والتخزين لدى Firebase. وبيانات الأطباق تأتي من واجهة REST عامة نصل إليها عبر Dio. أما
+      الشكل الزجاجي فينفذه <code>liquid_glass_widgets</code> مع وضع جودة متكيّف.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Runtime and framework</span><span class="t-ar">وقت التشغيل والإطار</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th><span class="t-en">Layer</span><span class="t-ar">المستوى</span></th>
+      <th><span class="t-en">What runs it</span><span class="t-ar">ما الذي يشغّله</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>Dart SDK ^3.13.0</code></td>
+        <td><span class="t-en">Sound null safety; sealed classes, pattern matching and switch expressions are used in core code (<code>Either.fold</code>, <code>Failure</code> matching).</span><span class="t-ar">سلامة نوع صارمة؛ تُستخدم الأصناف المختومة ومطابقة الأنماط وتعبيرات switch في الكود الأساسي (<code>Either.fold</code> ومطابقة <code>Failure</code>).</span></td></tr>
+      <tr><td><code>Flutter (stable)</code></td>
+        <td><span class="t-en">100% widget-based UI; the only platform view is the Google Map.</span><span class="t-ar">واجهة مبنية بالكامل على الـ Widgets؛ العرض الأصلي الوحيد هو خريطة Google.</span></td></tr>
+      <tr><td><code>Android</code></td>
+        <td><span class="t-en">minSdk 24, targetSdk 35, compileSdk 36, Java 17, Kotlin 2.4.0, AGP 9.1.0.</span><span class="t-ar">الإصدار الأدنى 24، والهدف 35، والتجميع 36، وJava 17، وKotlin 2.4.0، وAGP 9.1.0.</span></td></tr>
+      <tr><td><code>iOS</code></td>
+        <td><span class="t-en">Project scaffolding exists but is not a target — the capstone ships as an APK, and the iOS folder is deliberately left at template state.</span><span class="t-ar">هيكل iOS موجود لكنه ليس هدفًا — المشروع يُسلَّم كملف APK، وتُترك مجلدات iOS على حالة القالب عمدًا.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">Dependencies declared in <code>pubspec.yaml</code></span><span class="t-ar">الاعتماديات المعلنة في <code>pubspec.yaml</code></span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th>Dependency</th>
+      <th><span class="t-en">Role in StreetBite</span><span class="t-ar">الدور في StreetBite</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>flutter_bloc ^9.1.1</code><br><code>bloc ^9.0.0</code></td>
+        <td><span class="t-en">State layer: <code>BlocBuilder</code>, <code>BlocListener</code>, <code>MultiBlocProvider</code>; imported directly by <code>CartBloc</code> and the Cubits.</span><span class="t-ar">طبقة الحالة: <code>BlocBuilder</code> و<code>BlocListener</code> و<code>MultiBlocProvider</code>؛ ويُستدعى الإطار مباشرة في <code>CartBloc</code> و Cubits.</span></td></tr>
+      <tr><td><code>equatable ^2.0.7</code></td>
+        <td><span class="t-en">Value equality for every entity, state and <code>Params</code> object, so Bloc rebuilds are cheap.</span><span class="t-ar">تساوي القيم لكل كيان وحالة وكائن <code>Params</code>، فتكون إعادة البناء رخيصة.</span></td></tr>
+      <tr><td><code>get_it ^8.0.3</code></td>
+        <td><span class="t-en">Service locator <code>sl</code>; the whole object graph is wired in <code>injection.dart</code>.</span><span class="t-ar">محدد الخدمة <code>sl</code>؛ وتُرسم شجرة الكائنات كاملة في <code>injection.dart</code>.</span></td></tr>
+      <tr><td><code>dio ^5.7.0</code></td>
+        <td><span class="t-en">The HTTP client behind <code>DioClient</code>: 20-second timeout plus an error-mapping interceptor.</span><span class="t-ar">عميل HTTP خلف <code>DioClient</code>: مهلة 20 ثانية ومعترض يحوّل الأخطاء.</span></td></tr>
+      <tr><td><code>shared_preferences ^2.3.3</code></td>
+        <td><span class="t-en">Local key/value store: meal cache, appearance, language, the offline account store and the session.</span><span class="t-ar">مخزن محلي مفتاح/قيمة: ذاكرة الأطباق والمظهر واللغة ومخزن الحسابات غير المتصل والجلسة.</span></td></tr>
+      <tr><td><code>firebase_core ^3.8.1</code></td>
+        <td><span class="t-en">Initialises Firebase; a failure here is tolerated and degrades the app to its local sources.</span><span class="t-ar">تهيئة Firebase؛ والفشل هنا مقبول ويحوّل التطبيق إلى المصادر المحلية.</span></td></tr>
+      <tr><td><code>firebase_auth ^5.3.4</code></td>
+        <td><span class="t-en">Email/password sign-up, login, logout, ID-token refresh and the auth-state stream.</span><span class="t-ar">التسجيل والدخول بالبريد وكلمة المرور وتسجيل الخروج وتحديث رمز الهوية وتدفق حالة المصادقة.</span></td></tr>
+      <tr><td><code>cloud_firestore ^5.6.6</code></td>
+        <td><span class="t-en">Users, per-user orders and favourites sub-collections — reached only through <code>FirestoreService</code>.</span><span class="t-ar">المستخدمون وطلبات كل مستخدم ومجموعات المفضلة الفرعية، ولا يُوصَل إليها إلا عبر <code>FirestoreService</code>.</span></td></tr>
+      <tr><td><code>google_maps_flutter ^2.9.0</code></td>
+        <td><span class="t-en">The Nearby Vendors map, five markers, custom info window.</span><span class="t-ar">خريطة المطاعم القريبة بخمس علامات ونافذة معلومات مخصصة.</span></td></tr>
+      <tr><td><code>image_picker ^1.1.2</code></td>
+        <td><span class="t-en">Picks the profile picture from gallery or camera.</span><span class="t-ar">اختيار صورة الملف الشخصي من المعرض أو الكاميرا.</span></td></tr>
+      <tr><td><code>local_auth ^3.0.2</code><br><code>local_auth_android ^2.0.4</code></td>
+        <td><span class="t-en">Fingerprint and face checks, wrapped once by <code>BiometricService</code>.</span><span class="t-ar">فحص البصمة والوجه، ويلفّها مرة واحدة <code>BiometricService</code>.</span></td></tr>
+      <tr><td><code>device_info_plus ^11.2.0</code></td>
+        <td><span class="t-en">Model and OS version shown on the Profile device card.</span><span class="t-ar">طراز الجهاز وإصدار النظام الظاهرين في بطاقة معلومات الجهاز.</span></td></tr>
+      <tr><td><code>flutter_localizations</code> (SDK)<br><code>intl: any</code></td>
+        <td><span class="t-en">RTL delegates plus the <code>NumberFormat</code> / <code>DateFormat</code> helpers exposed by <code>L10nX</code>.</span><span class="t-ar">مفوضات الاتجاه من اليمين إلى اليسار، ومساعدا <code>NumberFormat</code> و<code>DateFormat</code> اللذان يكشفهما <code>L10nX</code>.</span></td></tr>
+      <tr><td><code>cached_network_image ^3.4.1</code></td>
+        <td><span class="t-en">Meal thumbnails with disk caching, used only through <code>AppNetworkImage</code>.</span><span class="t-ar">صور الأطباق مع تخزين على القرص، ولا تُستخدم إلا عبر <code>AppNetworkImage</code>.</span></td></tr>
+      <tr><td><code>shimmer ^3.0.0</code></td>
+        <td><span class="t-en">The sweep behind every loading skeleton.</span><span class="t-ar">التأثير اللامع خلف كل هيكل تحميل.</span></td></tr>
+      <tr><td><code>liquid_glass_widgets ^1.13.0</code></td>
+        <td><span class="t-en">The two frosted appearances, initialised in <code>main()</code> with adaptive quality.</span><span class="t-ar">المظهران الزجاجيان، ويهيَّآن في <code>main()</code> بجودة متكيّفة.</span></td></tr>
+      <tr><td><code>cupertino_icons ^1.0.8</code></td>
+        <td><span class="t-en">Declared but never referenced — a leftover from the project template.</span><span class="t-ar">معلن لكنه غير مستخدم — بقية من قالب المشروع.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">Dev-only dependencies</span><span class="t-ar">اعتماديات التطوير فقط</span></h3>
+  <table class="tbl">
+    <thead><tr>
+      <th>Package</th>
+      <th><span class="t-en">Used for</span><span class="t-ar">يُستخدم في</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>flutter_test</code> (SDK)</td>
+        <td><span class="t-en">Unit and widget tests — 17 files in <code>test/</code> holding 99 cases.</span><span class="t-ar">اختبارات الوحدات والـ Widgets — 17 ملفًا في <code>test/</code> تضم 99 حالة.</span></td></tr>
+      <tr><td><code>bloc_test ^10.0.0</code></td>
+        <td><span class="t-en"><code>blocTest</code> emitter assertions for the cart and auth state machines.</span><span class="t-ar">تأكيدات emitted عبر <code>blocTest</code> لآلتَي حالة السلة والمصادقة.</span></td></tr>
+      <tr><td><code>mocktail ^1.0.4</code></td>
+        <td><span class="t-en">Mocks repositories and use cases without generated mock code.</span><span class="t-ar">محاكاة المستودعات وحالات الاستخدام دون كود محاكاة مولّد.</span></td></tr>
+      <tr><td><code>flutter_lints ^6.0.0</code></td>
+        <td><span class="t-en"><code>analysis_options.yaml</code>; the project keeps <code>flutter analyze</code> at zero issues.</span><span class="t-ar">ملف <code>analysis_options.yaml</code>؛ ويحافظ المشروع على <code>flutter analyze</code> بصفر ملاحظات.</span></td></tr>
+      <tr><td><code>flutter_launcher_icons ^0.14.4</code></td>
+        <td><span class="t-en">Generates the Android launcher icon set (adaptive + monochrome) from the PNG masters in <code>assets/icon</code>.</span><span class="t-ar">توليد أيقونة التشغيل لأندرويد (التكيفية والأحادية) من صور PNG الأصلية في <code>assets/icon</code>.</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="t-en">Outside the Flutter project</span><span class="t-ar">خارج مشروع Flutter</span></h3>
+  <div class="bi">
+    <div class="en">
+      <ul>
+        <li><b>Java 17 + Maven + TestNG + Appium (UiAutomator2)</b> in <code>automation/</code> — the
+        device-level suite that drives the installed APK.</li>
+        <li><b>Python</b> in <code>manual_qa/scripts/</code> — four builders that generate and patch the QA
+        workbook and the closure PDF.</li>
+        <li><b>Firebase Console</b> — Auth providers enabled, Firestore rules deployed from
+        <code>flutter_app/firestore.rules</code>.</li>
+        <li><b>Figma</b> in <code>figma/</code> — the design source the palette and the tab bar came from.</li>
+        <li><b>No CI</b> — every check (<code>dart format</code>, <code>flutter analyze</code>,
+        <code>flutter test</code>, <code>flutter build apk</code>) is run by hand.</li>
+      </ul>
+    </div>
+    <div class="ar">
+      <ul>
+        <li><b>Java 17 و Maven و TestNG و Appium (UiAutomator2)</b> في <code>automation/</code> — حزمة
+        الاختبار على مستوى الجهاز التي تُشغل ملف APK المثبت.</li>
+        <li><b>Python</b> في <code>manual_qa/scripts/</code> — أربعة مولدات تنشئ وتصلح مصنف جودة الاختبار
+        وملف الإغلاق بصيغة PDF.</li>
+        <li><b>وحدة تحكم Firebase</b> — تفعيل مزودي المصادقة ونشر قواعد Firestore من
+        <code>flutter_app/firestore.rules</code>.</li>
+        <li><b>Figma</b> في <code>figma/</code> — مصدر التصميم الذي أُخذت منه الألوان وشريط التبويب.</li>
+        <li><b>لا يوجد تكامل مستمر CI</b> — كل فحص (<code>dart format</code> و<code>flutter analyze</code>
+        و<code>flutter test</code> و<code>flutter build apk</code>) يُنفَّذ يدويًا.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+    <a href="01-overview.html"><span class="lbl"><span class="t-en">Previous · §01</span><span class="t-ar">السابق · §01</span></span><span class="to"><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></span></a>
+    <a class="next" href="03-architecture.html"><span class="lbl"><span class="t-en">Next · §03</span><span class="t-ar">التالي · §03</span></span><span class="to"><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#stack">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

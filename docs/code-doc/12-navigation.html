@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Navigation · StreetBite code documentation · §12</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html" class="cur"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §12 Navigation</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part I · Section 12 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الأول · القسم 12 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="navigation">
+  <h2><span class="t-en"><span class="num">12</span> · Navigation</span><span class="t-ar"><span class="num">12</span> · التنقّل</span></h2>
+
+  <div class="bi">
+    <div class="en">
+      <p>StreetBite navigates with the framework's own <em>imperative</em> API — <code>Navigator.pushNamed</code> and
+      a route-name table — not with a router package. There is exactly one place where a name becomes a widget:
+      <code>AppRouter.resolve</code>, wired as <code>onGenerateRoute</code> on the <code>MaterialApp</code> in
+      <a href="../../flutter_app/lib/app.dart"><code>app.dart:103</code></a> with <code>initialRoute: AppRoutes.splash</code>.</p>
+      <p>The consequence is a property the code relies on rather than a library feature: the graph is complete <b>by
+      construction</b>. <code>AppRoutes</code> declares twelve names; the <code>switch</code> has twelve cases plus a
+      <code>default</code>. A route name with no screen behind it cannot exist, because adding a constant without a
+      case silently lands on the splash instead of throwing — which is the fail-safe a capstone wants, not a red
+      crash screen.</p>
+    </div>
+    <div class="ar">
+      <p>يتنقّل StreetBite بواجهة الإطار <em>الآمرة</em> نفسها — <code>Navigator.pushNamed</code> وجدول أسماء
+      المسارات — لا بحزمة موجِّه. وهناك موضع واحد فقط يتحوّل فيه الاسم إلى ودجة:
+      <code>AppRouter.resolve</code>، الموصول كـ <code>onGenerateRoute</code> في <code>MaterialApp</code> داخل
+      <code>app.dart:103</code> مع <code>initialRoute: AppRoutes.splash</code>.</p>
+      <p>والنتيجة خاصية يعتمد عليها الكود لا ميزة مكتبة: اكتمال الرسم <b>بالبناء</b>. يُعلن <code>AppRoutes</code>
+      عن اثني عشر اسمًا، وفي <code>switch</code> اثنتا عشرة حالة و<code>default</code>. فلا يمكن وجود اسم مسار بلا
+      شاشة خلفه، لأن إضافة ثابت دون حالة يهبط على شاشة البداية بصمت بدل أن يستثني — وهو الفشل الآمن الذي
+      يناسب مشروع التخرّج، لا شاشة انهيار حمراء.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">The twelve routes and what travels on them</span><span class="t-ar">المسارات الاثنا عشر وما يُنقل معها</span></h3>
+
+  <table class="tbl">
+    <thead>
+      <tr>
+        <th><span class="t-en">Constant · path</span><span class="t-ar">الثابت · المسار</span></th>
+        <th><span class="t-en">Screen</span><span class="t-ar">الشاشة</span></th>
+        <th><span class="t-en">Arguments &amp; why</span><span class="t-ar">الوسائط ولماذا</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>splash</code> · <code>/</code><span class="t-ar">البداية</span></td><td><code>SplashScreen</code>
+        <span class="t-ar">شاشة البداية</span></td>
+        <td>None — and it is also the <code>default:</code> target for any unknown name.<span class="t-ar">لا شيء — وهي أيضًا هدف <code>default:</code> لأي اسم غير معروف.</span></td></tr>
+      <tr><td><code>login</code> · <code>/login</code><span class="t-ar">دخول</span></td><td><code>LoginScreen</code>
+        <span class="t-ar">شاشة الدخول</span></td><td>None.<span class="t-ar">لا شيء.</span></td></tr>
+      <tr><td><code>biometricLogin</code> · <code>/biometric-login</code><span class="t-ar">دخول حيوي</span></td><td><code>BiometricLoginScreen</code>
+        <span class="t-ar">شاشة الدخول البيومتري</span></td>
+        <td>Deliberately none: the gated user is read from the app-wide <code>AuthCubit</code>, the single place a <code>UserEntity</code> becomes known.<span class="t-ar">لا شيء عن قصد: المستخدم المُقيَّد يُقرأ من <code>AuthCubit</code> العام، الموضع الوحيد الذي يصبح فيه <code>UserEntity</code> معروفًا.</span></td></tr>
+      <tr><td><code>signUp</code> · <code>/signUp</code><span class="t-ar">تسجيل</span></td><td><code>SignUpScreen</code>
+        <span class="t-ar">شاشة التسجيل</span></td><td>None.<span class="t-ar">لا شيء.</span></td></tr>
+      <tr><td><code>home</code> · <code>/home</code><span class="t-ar">الرئيسية</span></td><td><code>MainShellScreen</code>
+        <span class="t-ar">الهيكل الرئيسي</span></td>
+        <td><code>[tabIndex]</code> → <code>initialIndex</code>, so a caller can rebuild the shell already sitting on Orders.<span class="t-ar"><code>[tabIndex]</code> ← <code>initialIndex</code>، حتى يبني استدعاءٌ الهيكل جالسًا بالفعل على تبويب الطلبات.</span></td></tr>
+      <tr><td><code>mealDetails</code> · <code>/meal-details</code><span class="t-ar">تفاصيل طبق</span></td><td><code>MealDetailsScreen</code>
+        <span class="t-ar">شاشة تفاصيل الطبق</span></td>
+        <td><code>[meal]</code> — the entity itself, so the screen renders instantly and keeps working offline.<span class="t-ar"><code>[طبق]</code> — الكيان نفسه، فتعرض الشاشة فورًا وتظل تعمل دون اتصال.</span></td></tr>
+      <tr><td><code>cart</code> · <code>/cart</code><span class="t-ar">السلة</span></td><td><code>CartScreen</code>
+        <span class="t-ar">سلة التسوق</span></td>
+        <td>None — the cart is a <code>CartBloc</code> above the Navigator, so it is never passed down.<span class="t-ar">لا شيء — السلة <code>CartBloc</code> فوق الـ Navigator، فلا تُمرَّر أبدًا.</span></td></tr>
+      <tr><td><code>orderConfirmation</code> · <code>/order-confirmation</code><span class="t-ar">تأكيد طلب</span></td><td><code>OrderConfirmationScreen</code>
+        <span class="t-ar">شاشة تأكيد الطلب</span></td><td>None.<span class="t-ar">لا شيء.</span></td></tr>
+      <tr><td><code>orderDetails</code> · <code>/order-details</code><span class="t-ar">تفاصيل طلب</span></td><td><code>OrderDetailsScreen</code>
+        <span class="t-ar">شاشة تفاصيل الطلب</span></td>
+        <td><code>[order]</code> — exactly like a meal, so a receipt opens instantly and never re-reads Firestore.<span class="t-ar"><code>[طلب]</code> — مثل الطبق تمامًا، فيُفتح الإيصال فورًا ولا يعيد قراءة Firestore.</span></td></tr>
+      <tr><td><code>vendorMap</code> · <code>/vendor-map</code><span class="t-ar">خريطة بائع</span></td><td><code>VendorMapScreen</code>
+        <span class="t-ar">شاشة خريطة البائعين</span></td><td>None.<span class="t-ar">لا شيء.</span></td></tr>
+      <tr><td><code>profile</code> · <code>/profile</code><span class="t-ar">الملف</span></td><td><code>ProfileScreen</code>
+        <span class="t-ar">شاشة الملف الشخصي</span></td><td>None.<span class="t-ar">لا شيء.</span></td></tr>
+      <tr><td><code>settings</code> · <code>/settings</code><span class="t-ar">إعدادات</span></td><td><code>SettingsScreen</code>
+        <span class="t-ar">شاشة الإعدادات</span></td><td>None.<span class="t-ar">لا شيء.</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="bi">
+    <div class="en">
+      <p><b>The argument contract.</b> <code>resolve</code> opens with
+      <code>settings.arguments as List<Object?>? ?? const []</code> and every typed value is read positionally —
+      <code>args.first! as MealEntity</code>. Flutter's own contract for a generated route is a list whose first
+      element is the payload, so a caller writes <code>arguments: [meal]</code>, never <code>arguments: meal</code>.
+      That is the one convention a new screen must learn before it can be reached.</p>
+      <p>Two screens accept a missing argument and synthesise a placeholder: <code>_MissingMeal</code> (an
+      <code>MealEntity</code> with every field empty and <code>price: 0</code>) and <code>_placeholderOrder()</code>.
+      The order placeholder keeps <code>id: ''</code> <em>on purpose</em> — the screen keys its "nothing to show"
+      branch off that empty id, so a bad deep link lands on the empty state rather than on a receipt with a
+      fabricated number and timestamp. It cannot be <code>const</code> because <code>OrderEntity</code> carries a
+      <code>DateTime</code>, and it is given <code>CashPayment</code> and <code>OrderStatus.past</code> so the
+      placeholder satisfies the entity's own non-null fields.</p>
+    </div>
+    <div class="ar">
+      <p><b>عقد الوسائط.</b> يفتتح <code>resolve</code> بـ
+      <code>settings.arguments as List<Object?>? ?? const []</code>، وتُقرأ كل قيمة مُصنَّفة بالترتيب —
+      <code>args.first! as MealEntity</code>. وعقد Flutter نفسه للمسار المولَّد هو قائمة أوّل عنصرها هو الحمولة،
+      فيكتب المستدعي <code>arguments: [meal]</code> ولا يكتب أبدًا <code>arguments: meal</code>. وهذا هو الاصطلاح
+      الواحد الذي على أي شاشة جديدة أن تتعلّمه قبل أن يُتوصَّل إليها.</p>
+      <p>وشاشتان تقبلان الوسيط الناقص وتُركّبان بديلًا: <code>_MissingMeal</code> (كيان <code>MealEntity</code>
+      بكل حقوله فارغة و<code>price: 0</code>) و<code>_placeholderOrder()</code>. وأما بديل الطلب فيُبقي
+      <code>id: ''</code> <em>عن قصد</em> — فالشاشة تُفرّع حالتها «لا شيء يُعرض» اعتمادًا على هذا المعرّف الفارغ،
+      وهكذا يهبط الرابط الخارجي الخاطئ على الحالة الفارغة لا على إيصال برقم ووقت مُختلَقين. ولا يمكن أن يكون
+      <code>const</code> لأن <code>OrderEntity</code> يحمل <code>DateTime</code>، ويأخذ البديل
+      <code>CashPayment</code> و<code>OrderStatus.past</code> حتى يُلبي حقول الكيان غير القابلة للعدم.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Every screen arrives through the same transition</span><span class="t-ar">كل شاشة تصل عبر الانتقال نفسه</span></h3>
+
+  <div class="bi">
+    <div class="en">
+      <p><code>AppPageRoute&lt;T&gt;</code> extends <code>PageRouteBuilder&lt;T&gt;</code> and is the route type the
+      router hands back for all twelve names. Its <code>buildTransitions</code> is a 320 ms
+      <code>Curves.easeOutCubic</code> fade wrapped around a <code>SlideTransition</code> from
+      <code>Offset(0, 0.035)</code> — a 3.5 % upward drift, visible but never showy. Forward and reverse durations are
+      the same constant, so backing out of a screen costs exactly as much time as entering it.</p>
+      <p>The reason to subclass rather than use <code>MaterialPageRoute</code> is stated in the file: because it is a
+      real <code>PageRoute</code>, the meal-card <em>Hero</em> flights still work. A fade alone would have killed the
+      photo flight between the card and the detail screen.</p>
+      <p>Both ends of that flight carry the same tag, <code>'meal-image-${meal.id}</code>, in three widgets —
+      <a href="../../flutter_app/lib/presentation/widgets/meal_card.dart"><code>meal_card.dart:59</code></a>,
+      <code>meal_banner_page.dart:56</code> and <code>meal_details_screen.dart:68</code> — so a tap on a home feed
+      card, a hot-offers banner, or a search-sheet row all animate into the detail photo. The tag is keyed on the
+      meal id, which is why two cards can be on screen at once without the flight jumping between them.</p>
+    </div>
+    <div class="ar">
+      <p><code>AppPageRoute&lt;T&gt;</code> يرث <code>PageRouteBuilder&lt;T&gt;</code> — وهو نوع المسار الذي يعيده
+      الموجِّه للأسماء الاثني عشر جميعًا. و<code>buildTransitions</code> عنده عبارة عن تلاشٍ 320 ملّي ثانية بمنحنى
+      <code>Curves.easeOutCubic</code> ملفوف حول <code>SlideTransition</code> من <code>Offset(0, 0.035)</code> —
+      انزياح صاعد بنسبة 3.5 %، ظاهر دون تكلّف. والمدة الأمامية والخلفية ثابت واحد، فالخروج من شاشة يكلّف الوقت نفسه
+      الذي تكلفه دخولها.</p>
+      <p>والسبب في التوريث بدل <code>MaterialPageRoute</code> مذكور في الملف: لأنه <code>PageRoute</code> حقيقي،
+      فإن طيران <em>Hero</em> الخاص ببطاقات الأطباق يعمل كما هو. وكان التلاشي وحده ليقتل طيران الصورة بين البطاقة
+      وشاشة التفاصيل.</p>
+      <p>وطرفا ذلك الطيران يحملان الوسم نفسه <code>'meal-image-${meal.id}</code> في ثلاث ودجات —
+      <code>meal_card.dart:59</code> و<code>meal_banner_page.dart:56</code> و<code>meal_details_screen.dart:68</code>
+      — فتتحرّك نقرة بطاقة في التغذية الرئيسية، أو نقرة بانر العروض الساخنة، أو نقرة سط في ورقة البحث، كلها نحو صورة
+      التفاصيل. والوسم مربوط بمعرّف الطبق، وهذا سبب قدرة بطاقتين على الظهور معًا دون أن يقفز الطيران بينهما.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">The four-tab shell: state that survives a tab switch</span><span class="t-ar">الهيكل ذو التبويبات الأربعة: حالة تنجو من تبديل التبويب</span></h3>
+
+  <div class="bi">
+    <div class="en">
+      <p><code>MainShellScreen</code> is one route that owns four screens — Home, Browse, Orders, Profile — through an
+      <code>IndexedStack</code>, not by rebuilding on each switch. An <code>IndexedStack</code> keeps every child in
+      the tree and shows one, so the Home feed remembers its scroll offset and its <code>PageView</code> index, and
+      coming back from the Cart does not re-trigger a network fetch. On a phone a user bounces between tabs dozens of
+      times a session; that is the reason for the widget choice, not aesthetics.</p>
+      <p>The four children are handed through <code>_tab(index, screen)</code>, which is a one-line
+      <code>_built.putIfAbsent(index, () =&gt; screen)</code> over a <code>&lt;int, Widget&gt;{}</code> map. It looks
+      redundant — the const constructors make building cheap — but its job is to make the intent explicit and to be
+      the single place where a future non-const tab would become lazy. Tab indices also exist as named constants on
+      <code>AppRoutes</code> (<code>tabHome 0 … tabProfile 3</code>) plus <code>MainShellScreen.ordersTabIndex = 2</code>
+      as a <code>static const</code>, because the order-confirmation screen needs that number without importing the
+      shell's internals.</p>
+      <p><code>initState</code> schedules one thing after the first frame: read <code>AuthCubit</code>, and if the
+      session is authenticated call <code>OrdersCubit.load(uid)</code>. That warms the orders cache so the Orders tab
+      renders instantly on the first tap instead of showing a spinner the user has to wait out.</p>
+    </div>
+    <div class="ar">
+      <p><code>MainShellScreen</code> مسار واحد يملك أربع شاشات — الرئيسية، التصفّح، الطلبات، الملف — عبر
+      <code>IndexedStack</code>، لا بإعادة البناء عند كل تبديل. ويُبقي <code>IndexedStack</code> كل الأبناء في
+      الشجرة ويعرض واحدًا، فتتذكر التغذية الرئيسية موضع تمريرها ومفهرس <code>PageView</code>، والعائد من السلة لا
+      يعيد تشغيل طلب شبكة. وعلى الهاتف يتنقّل المستخدم بين التبويبات عشرات المرّات في الجلسة، وهذا هو سبب اختيار
+      الودجة لا المظهر.</p>
+      <p>ويُمرَّر الأبناء الأربعة عبر <code>_tab(index, screen)</code>، وهي سطر واحد
+      <code>_built.putIfAbsent(index, () =&gt; screen)</code> فوق قاموس <code>&lt;int, Widget&gt;{}</code>. وتبدو
+      زائدة — فالبُنَيات الثابتة (<code>const</code>) تجعل البناء رخيصًا — لكن وظيفتها جعل النية صريحة، وأن تكون
+      الموضع الوحيد الذي
+      يصبح فيه تبويب غير ثابت كسولًا عند إضافته لاحقًا. ومؤشرات التبويبات موجودة أيضًا كثوابت مُسمَّاة على
+      <code>AppRoutes</code> (<code>tabHome 0 … tabProfile 3</code>) مع <code>MainShellScreen.ordersTabIndex = 2</code>
+      كـ <code>static const</code>، لأن شاشة تأكيد الطلب تحتاج هذا الرقم دون استيراد داخلَيّات الهيكل.</p>
+      <p>ويرتّب <code>initState</code> شيئًا واحدًا بعد الإطار الأول: قراءة <code>AuthCubit</code>، وإن كانت الجلسة
+      مُوثَّقة يُستدعى <code>OrdersCubit.load(uid)</code>. وهذا يُسخّن مخزن الطلبات حتى يظهر تبويب الطلبات فور أول
+      نقر بدل أن يُعرض دوّارة انتظار.</p>
+    </div>
+  </div>
+
+  <p class="note"><b>Two chrome branches, one body</b> — the shell branches on <code>AppGlassTokens.enabledOf(context)</code>:
+  under glass the same <code>IndexedStack</code> is hosted by a <code>GlassScaffold</code> with a refractive
+  <code>GlassTabBar</code>, otherwise by a plain <code>Scaffold</code> with a Material <code>NavigationBar</code> (whose
+  destinations carry <code>ValueKey('nav_home' | 'nav_browse' | 'nav_orders' | 'nav_profile')</code> for widget tests).
+  This is the one place in the app where the glass look changes <em>structure</em>, not just palette — navigation chrome
+  is what the material was designed for.<span class="t-ar"> فرعًا واجهة، جسم واحد — يتفرّع الهيكل على
+  <code>AppGlassTokens.enabledOf(context)</code>: تحت الزجاج يُستضاف <code>IndexedStack</code> نفسه بـ
+  <code>GlassScaffold</code> ومعها <code>GlassTabBar</code> انكساري، وإلا بـ <code>Scaffold</code> عادية و
+  <code>NavigationBar</code> مادية (وجهاتها تحمل <code>ValueKey</code> باسم <code>nav_home</code> و<code>nav_browse</code>
+  و<code>nav_orders</code> و<code>nav_profile</code> لاختبارات الودجات). وهذا الموضع الوحيد الذي يغيّر فيه مظهر الزجاج
+  <em>البنية</em> لا اللوحة وحدها — فواجهة التنقّل هي ما صُمّم له هذا الخام.</span></p>
+
+  <div class="bi">
+    <div class="en">
+      <p>Two details of the glass branch are non-obvious and are commented in the source. <code>extendBody: true</code>
+      lets the feed run behind the floating capsule, which means the body no longer reserves room for it — so the shell
+      republishes the capsule height as <code>MediaQuery.padding.bottom</code> using
+      <code>AppGlassTokens.bottomBarClearance</code> (104 dp). Screens read that one value as scroll padding and stay
+      correct under either look, because it is the same channel Material uses for a <code>NavigationBar</code>. And
+      because <code>GlassScaffold</code> does not wrap its <code>bottomBar</code> in a <code>Material</code>, the tab
+      labels would inherit <code>MaterialApp</code>'s fallback style — monospace with a yellow double underline — so a
+      <code>DefaultTextStyle</code> supplies the app's own <code>bodyMedium</code> with the decoration cleared, while
+      the bar still layers its per-state colour, size and weight on top.</p>
+      <p>The status bar is pinned rather than set to <code>auto</code>: <code>auto</code> follows the <em>device</em>
+      brightness, which can disagree with the in-app theme, so the style is chosen from
+      <code>Theme.of(context).brightness</code>.</p>
+    </div>
+    <div class="ar">
+      <p>وتفصيلان في فرع الزجاج غير بديهيّين، وهما معلَّق عليهما في المصدر. فـ <code>extendBody: true</code> يسمح
+      للتغذية بالمرور خلف الكبسولة العائمة، ما يعني أن الجسم لم يعد يحجز لها حيّزًا — لذلك يعيد الهيكل نشر ارتفاع
+      الكبسولة على أنه <code>MediaQuery.padding.bottom</code>، آخذًا قيمته من
+      <code>AppGlassTokens.bottomBarClearance</code> (104 نقطة). وتقرأ الشاشات هذه القيمة الواحدة كحشو تمرير وتبقى
+      صحيحة تحت أيٍّ من المظهرين، لأنها القناة نفسها التي تستخدمها مادية لـ <code>NavigationBar</code>. ولأن
+      <code>GlassScaffold</code> لا يلفّ <code>bottomBar</code> داخل <code>Material</code>، كانت تسميات التبويبات
+      لترث الأسلوب الاحتياطي لـ <code>MaterialApp</code> — خطّ أحادي المسافة تحته خطّان أصفران — فيوفّر
+      <code>DefaultTextStyle</code> أسلوب <code>bodyMedium</code> الخاص بالتطبيق بعد حذف الزخرفة، بينما يظلّ الشريط
+      يطبّق لونه وحجمه ووزنه لكل حالة في طبقة أعلى.</p>
+      <p>وشريط الحالة مثبَّت لا <code>auto</code>: لأن <code>auto</code> يتبع سطوع <em>الجهاز</em>، وقد يخالف السمة
+      داخل التطبيق، فيُختار الأسلوب من <code>Theme.of(context).brightness</code>.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Stack discipline: three verbs, used deliberately</span><span class="t-ar">انضباط المكدّس: ثلاثة أفعال مستخدمة عن قصد</span></h3>
+
+  <table class="tbl">
+    <thead><tr>
+      <th><span class="t-en">Verb</span><span class="t-ar">الفعل</span></th>
+      <th><span class="t-en">Where</span><span class="t-ar">أين</span></th>
+      <th><span class="t-en">What it guarantees</span><span class="t-ar">ما يضمنه</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><code>pushNamed</code><span class="t-ar">دفع بالاسم</span></td>
+        <td>Card → meal details, feed → cart, profile → settings, order → receipt.<span class="t-ar">بطاقة ← تفاصيل طبق، تغذية ← سلة، ملف ← إعدادات، طلب ← إيصال.</span></td>
+        <td>A back gesture returns you exactly where you were. Correct for anything the user might want to step back from.<span class="t-ar">إشارة الرجوع تعيدك تمامًا إلى حيث كنت. وهذا صحيح لكل ما قد يريد المستخدم خطوة للخلف منه.</span></td></tr>
+      <tr><td><code>pushNamedAndRemoveUntil(…, (route) =&gt; false)</code><span class="t-ar">دفع وحذف الكل</span></td>
+        <td>Login, sign-up and biometric success → home; order placed → confirmation; empty-state "Browse menu" → home; logout → login.<span class="t-ar">نجاح الدخول أو التسجيل أو البصمة ← الرئيسية؛ تنفيذ الطلب ← التأكيد؛ "تصفّح القائمة" ← الرئيسية؛ تسجيل الخروج ← الدخول.</span></td>
+        <td>The old stack is gone, so the sign-in pages can never be swiped back into after a session exists — and after logout the shell can never be swiped back into.<span class="t-ar">المكدّس القديم يُمحى، فلا يمكن الرجوع بالتمرير إلى صفحات الدخول بعد وجود جلسة — ولا إلى الهيكل بعد الخروج.</span></td></tr>
+      <tr><td><code>popUntil((route) =&gt; route.isFirst)</code><span class="t-ar">رجوع للأول</span></td>
+        <td>The empty-cart state's action button.<span class="t-ar">زر إجراء حالة السلة الفارغة.</span></td>
+        <td>Collapses every intermediate screen back to the shell instead of stacking a "Browse" route on top of a cart that has nothing in it.<span class="t-ar">يُغلق كل الشاشات الوسيطة عائدًا إلى الهيكل، بدل تكديس مسار تصفّح فوق سلة لا شيء فيها.</span></td></tr>
+      <tr><td><code>pushReplacement</code><span class="t-ar">استبدال</span></td>
+        <td>Splash → its destination only.<span class="t-ar">البداية ← وجهتها وحدها.</span></td>
+        <td>Splash is never left in the stack, so back from Home does not replay a loading screen.<span class="t-ar">لا تبقى البداية في المكدّس أبدًا، فالرجوع من الرئيسية لا يعيد تشغيل شاشة تحميل.</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="bi">
+    <div class="en">
+      <p><b>Splash waits for two independent gates.</b> <code>SplashScreen</code> refuses to navigate until
+      <em>both</em> the entrance animation has run its minimum display time <b>and</b> <code>AuthCubit.restore()</code>
+      has answered. Two flags are checked in <code>_tryNavigate()</code>, which is called from the animation delay
+      <em>and</em> from the end of the restore — whichever finishes second performs the jump, so the user never sees a
+      half-built screen or a splash that flickers before the verdict.</p>
+      <p>The destination is a pure function of the auth state: authenticated → <code>home</code>,
+      <code>AuthBiometricGate</code> → <code>biometricLogin</code>, anything else → <code>login</code>. A <em>gated</em>
+      session goes to the scan screen rather than the password form, because landing on Login after the device had
+      already accepted the credentials would make the whole opt-in invisible. The jump itself builds the page by
+      calling <code>AppRouter.resolve(RouteSettings(name: route))</code> directly inside a 450 ms fade
+      <code>PageRouteBuilder</code> — the router is a function, so the splash can reuse it without going through
+      <code>onGenerateRoute</code>.</p>
+    </div>
+    <div class="ar">
+      <p><b>البداية تنتظر بابين مستقلّين.</b> ترفض <code>SplashScreen</code> التنقّل حتى تعمل <em>كلاهما</em>:
+      مدة العرض الدنيا للأنيميشن <b>و</b> ردّ <code>AuthCubit.restore()</code>. وعلمان يُفحصان في
+      <code>_tryNavigate()</code> المستدعاة من تأخير الأنيميشن <em>و</em> من نهاية الاستعادة — فينفّذ القفز الثاني
+      انتهاءً، فلا يرى المستخدم شاشة نصف مبنية ولا بداية تومض قبل الحكم.</p>
+      <p>والوجهة دالة خالصة في حالة المصادقة: مُوثَّق ← <code>home</code>، و<code>AuthBiometricGate</code> ←
+      <code>biometricLogin</code>، وكل شيء آخر ← <code>login</code>. فالجلسة <em>المُقيَّدة</em> تذهب إلى شاشة الفحص
+      لا إلى نموذج كلمة المرور، لأن الهبوط على الدخول بعد أن كان الجهاز قد قبل البيانات بالفعل سيجعل الاختيار كله غير
+      مرئي. والقفزة نفسها تبني الصفحة باستدعاء <code>AppRouter.resolve(RouteSettings(name: route))</code> مباشرة داخل
+      <code>PageRouteBuilder</code> بتلاشٍ 450 ملّي ثانية — فالموجِّه دالة، وتستطيع البداية إعادة استخدامه دون المرور
+      بـ <code>onGenerateRoute</code>.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">The checkout handoff, in three pushes</span><span class="t-ar">تسليم الخروج من السلة، في ثلاث دفعات</span></h3>
+
+  <div class="flow">
+    <div class="st"><b>CartBloc</b> emits <code>CartOrderPlaced</code><i>listener in <code>cart_screen.dart:71</code></i>
+      <span class="t-ar">يُصدر <code>CartBloc</code> حدث <code>CartOrderPlaced</code> — المستمع في <code>cart_screen.dart:71</code></span></div>
+    <div class="st"><b>Clear + push</b><code>CartCleared</code>, then <code>pushNamedAndRemoveUntil(orderConfirmation)</code><i>the whole stack is replaced</i>
+      <span class="t-ar"><b>تفريغ ودفع:</b> <code>CartCleared</code> ثم استبدال المكدّس كله بمسار التأكيد</span></div>
+    <div class="st"><b>View my orders</b><code>home</code> with <code>arguments: [MainShellScreen.ordersTabIndex]</code>
+      <i><code>order_confirmation_screen.dart:97</code></i>
+      <span class="t-ar"><b>عرض طلباتي:</b> <code>home</code> بوسيط <code>[MainShellScreen.ordersTabIndex]</code></span></div>
+    <div class="st ok"><b>Shell on Orders</b><code>initialIndex: 2</code> → tab 2, cart badge from the cleared cart<i>landing on Home made the button look broken</i>
+      <span class="t-ar"><b>الهيكل على الطلبات:</b> <code>initialIndex: 2</code> → التبويب 2، وشارة السلة من السلة المُفرَّغة</span></div>
+  </div>
+
+  <div class="bi">
+    <div class="en">
+      <p>Nothing else in the app passes a tab index, and nothing else needs to: the confirmation screen's button says
+      "View my orders", and because every route was popped, that button is the only way off the screen. Rebuilding the
+      shell with <code>initialIndex: 2</code> is what makes the promise in the label true, and the cart badge starts
+      from the already-cleared cart rather than showing the four items that were just ordered.</p>
+    </div>
+    <div class="ar">
+      <p>لا شيء آخر في التطبيق يمرّر مؤشّر تبويب، ولا شيء آخر يحتاج ذلك: فزر شاشة التأكيد يقول "عرض طلباتي"، ولأن كل
+      المسارات أُخرجت من المكدّس، فإن هذا الزر هو السبيل الوحيد للخروج من الشاشة. وإعادة بناء الهيكل بـ
+      <code>initialIndex: 2</code> هو ما يجعل الوعد في التسمية صحيحًا، وتبدأ شارة السلة من السلة المُفرَّغة أصلًا بدل
+      أن تُعرض الأربعة التي طُلبت للتوّ.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">A second address layer for automation</span><span class="t-ar">طبقة عنوان ثانية لأغراض الآلية</span></h3>
+
+  <div class="bi">
+    <div class="en">
+      <p>A Dart <code>ValueKey</code> is invisible to the platform: UiAutomator2 and Appium cannot see it, so an automation
+      suite is left addressing "the EditText above the Password field" or raw coordinates — both of which break the
+      moment the design changes. <code>SemanticId</code> exists to fix exactly that. It wraps a subtree in
+      <code>Semantics(identifier: id, container: true)</code>, and Flutter publishes that identifier to Android as the
+      node's <code>resource-id</code> — the very thing an Appium XPath can address. Ten widget files use it, giving
+      stable handles such as <code>login_button</code>, <code>go_to_sign_up_button</code>, <code>open_cart_button</code>,
+      <code>hot_offers_list</code>, <code>open_map_button</code>, <code>save_favourite_button</code>,
+      <code>reorder_button</code>, <code>biometric_login_button</code>, <code>use_password_button</code>, plus the two
+      parameterised families <code>add_to_cart_button_&lt;mealId&gt;</code> and
+      <code>cart_line_quantity_&lt;mealId&gt;</code>.</p>
+      <p>Two design points are worth more than the API itself. Callers normally pass <code>key: ValueKey(id)</code>
+      as well, so <code>find.byKey</code> in a widget test and <code>resource-id</code> on a device address <em>the
+      same widget with the same string</em> — the two layers of the test suite cannot drift apart. And
+      <code>explicitChildNodes</code> defaults to <code>true</code> because of a real bug: Flutter merges a subtree's
+      labels into one accessibility node, which used to make a meal card surface as a single blob of text and its
+      Add-to-Cart button <b>vanish from the tree entirely, taking its <code>resource-id</code> with it</b>. Declaring
+      children explicit is what let the Appium suite reach a button nested inside a card. The optional
+      <code>label</code> adds a human name beside the identifier so a screen reader still announces something useful,
+      and — unlike an id — a label is localised.</p>
+    </div>
+    <div class="ar">
+      <p>قيمة <code>ValueKey</code> غير مرئية للنظام: فلا يرى UiAutomator2 ولا Appium شيئًا منها، ولا يبقى أمام
+      مجموعة الاختبار الآلي سوى التعليب بـ «حقل EditText فوق كلمة المرور» أو بإحداثيات خام — وكلاهما ينكسر لحظة
+      تغيّر التصميم. و<code>SemanticId</code> وُجدت لعلاج هذا بالتحديد. فهي تلفّ شجرة فرعية بـ
+      <code>Semantics(identifier: id, container: true)</code>، وينشر Flutter هذا المعرّف إلى Android على أنه
+      <code>resource-id</code> العقدة — وهو تحديدًا ما يستطيع XPath في Appium أن يُعنونه. وتستخدمها عشر ملفات ودجات،
+      فتعطي عناوين ثابتة مثل <code>login_button</code> و<code>go_to_sign_up_button</code> و<code>open_cart_button</code>
+      و<code>hot_offers_list</code> و<code>open_map_button</code> و<code>save_favourite_button</code> و
+      <code>reorder_button</code> و<code>biometric_login_button</code> و<code>use_password_button</code>، إضافة إلى
+      أسرتين مُوسَّطتين <code>add_to_cart_button_&lt;mealId&gt;</code> و<code>cart_line_quantity_&lt;mealId&gt;</code>.</p>
+      <p>ونقطتان في التصميم أهمّ من الواجهة نفسها. فالمستدعي يمرّر عادةً <code>key: ValueKey(id)</code> أيضًا، فيُعنون
+      <code>find.byKey</code> في اختبار ودجة و<code>resource-id</code> على الجهاز <em>الودجة نفسها بالسلسلة نفسها</em>
+      — فلا تتباعد طبقتا مجموعة الاختبار. و<code>explicitChildNodes</code> قيمتها الافتراضية <code>true</code> بسبب
+      خطأ حقيقي: يدمج Flutter تسميات الشجرة الفرعية في عقدة إمكانية وصول واحدة، وكانت بطاقة الطبق تظهر لذلك ككتلة نص
+      واحدة ويختفي زر «أضف إلى السلة» <b>من الشجرة بالكامل، آخذًا <code>resource-id</code> معه</b>. والتصريح بالأبناء
+      هو ما مكّن مجموعة Appium من الوصول إلى زر متداخّل داخل بطاقة. والتسمية الاختيارية <code>label</code> تضيف اسمًا
+      بشريًا بجانب المعرّف حتى تُذيع تقنية المساعدة اسمًا مفيدًا — وبخلاف المعرّف، التسمية مترجمة.</p>
+    </div>
+  </div>
+
+  <p class="warn"><b>Honest gap</b> — <code>onGenerateRoute</code> <em>could</em> parse a deep link, and the router's
+  <code>default</code> branch is commented "Unknown route (bad deep link): land on the splash rather than crash". But
+  nothing in <code>lib/</code> registers a link handler or reads <code>Uri</code> parameters. The manifest does carry
+  one <code>VIEW</code> intent filter with the custom scheme <code>streetbite</code> — commented as
+  <code>streetbite://qa/reset</code> for the Appium suite — but no Dart, Kotlin or Java code parses it. So a shared
+  link cannot open a specific meal; the OS starts the app and the
+  splash decides the destination, and the only real effect of an external link is activity recreation. Ship-quality
+  deep linking would need a link-handler package plus a route-level argument schema (see §11).<span class="t-ar">
+  <b>فجوة صريحة</b> — كان يمكن <code>onGenerateRoute</code> أن يحلّ رابطًا خارجيًا، وحالة <code>default</code> معلَّق
+  عليها "مسار غير معروف (رابط خارجي خاطئ): اهبط على البداية بدل الانهيار". لكن لا شيء في <code>lib/</code> يسجّل
+  معالج روابط، ولا يقرأ وسائط <code>Uri</code>. ويحمل الملف <code>AndroidManifest.xml</code> مرشّح قصد من نوع
+  <code>VIEW</code> واحدًا بمخطط مخصّص هو <code>streetbite</code> — وتعليق المصدر يسمّيه
+  <code>streetbite://qa/reset</code>
+  لحزمة Appium — لكن لا كود يحلّله في Dart أو Kotlin أو جافا. فلا يستطيع رابط مشارك فتح طبق معيّن؛
+  يبدأ النظام التطبيق وتقرّر البداية الوجهة، والأثر الحقيقي الوحيد للرابط الخارجي هو إعادة إنشاء النشاط. وكان
+  الربط العميق بجودة الإطلاق يحتاج حزمة معالج روابط، إضافة إلى مخطط وسائط على مستوى المسار (انظر §11).</span></p>
+
+</section>
+<nav class="pager">
+    <a href="11-security.html"><span class="lbl"><span class="t-en">Previous · §11</span><span class="t-ar">السابق · §11</span></span><span class="to"><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></span></a>
+    <a class="next" href="13-testing.html"><span class="lbl"><span class="t-en">Next · §13</span><span class="t-ar">التالي · §13</span></span><span class="to"><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#navigation">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

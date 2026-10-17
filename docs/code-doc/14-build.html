@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build &amp; release · StreetBite code documentation · §14</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html" class="cur"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <p class="home"><a href="index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §14 Build &amp; release</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · Part I · Section 14 of 18 · <a href="index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · الجزء الأول · القسم 14 من 18 · <a href="index.html">الفهرس الكامل</a></span></p>
+<section id="build">
+  <h2><span class="t-en"><span class="num">14</span> · Build &amp; release</span><span class="t-ar"><span class="num">14</span> · البناء والإصدار</span></h2>
+
+  <div class="bi">
+    <div class="en">
+      <p>StreetBite ships one artefact: an Android APK. The repository still carries the iOS, macOS, Windows, Linux
+      and Web scaffolding Flutter generates, but nothing in the project targets them — no Apple developer settings,
+      no bundle identifiers tuned, no web manifest. The honest framing is <b>Android-only</b>, and the practical
+      consequence is that platform churn from <code>flutter create</code> under <code>ios/</code> should be reverted,
+      not committed.</p>
+      <p>The version is <code>1.0.0+3</code> in <code>pubspec.yaml</code> (versionName / versionCode), and both are
+      handed to Gradle through <code>flutter.versionName</code> / <code>flutter.versionCode</code>, so the Dart file
+      is the single place a release is bumped.</p>
+    </div>
+    <div class="ar">
+      <p>يصدَّر StreetBite في مُخرَج واحد: APK لأندرويد. ولا يزال المستودع يحمل هياكل iOS وmacOS وWindows وLinux
+      والويب التي يولّدها Flutter، لكن لا شيء في المشروع يستهدفها — لا إعدادات مطوّري Apple، ولا معرّفات حزمة معدَّلة،
+      ولا manifest للويب. والتصنيف الصادق هو <b>أندرويد فقط</b>، وأثره العملي أن أي تغيير منصات من
+      <code>flutter create</code> تحت <code>ios/</code> يُرجَع عنه ولا يُلتزَم به في git.</p>
+      <p>والإصدار <code>1.0.0+3</code> في <code>pubspec.yaml</code> (اسم الإصدار ورمزه)، وكلاهما يوصل إلى Gradle عبر
+      <code>flutter.versionName</code> و<code>flutter.versionCode</code>، فملف Dart هو الموضع الوحيد الذي يُرفع فيه
+      الإصدار.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">The toolchain, pinned</span><span class="t-ar">سلسلة الأدوات مُثبَّتة</span></h3>
+
+  <table class="tbl">
+    <thead><tr>
+      <th><span class="t-en">Layer</span><span class="t-ar">الطبقة</span></th>
+      <th><span class="t-en">Version</span><span class="t-ar">الإصدار</span></th>
+      <th><span class="t-en">Declared in</span><span class="t-ar">أين يُعلن</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td>Dart SDK<span class="t-ar">SDK لـ Dart</span></td><td><code>^3.13.0</code><span class="t-ar">أي 3.13.0 فأحدث متوافقة</span></td><td><code>pubspec.yaml → environment</code><span class="t-ar">قسم environment</span></td></tr>
+      <tr><td>Android Gradle Plugin<span class="t-ar">AGP</span></td><td>9.1.0<span class="t-ar">9.1.0</span></td><td><code>android/settings.gradle.kts</code><span class="t-ar">ملف الإعداد</span></td></tr>
+      <tr><td>Kotlin<span class="t-ar">كوتلن</span></td><td>2.4.0<span class="t-ar">2.4.0</span></td><td><code>android/settings.gradle.kts</code><span class="t-ar">الملف نفسه</span></td></tr>
+      <tr><td>Gradle wrapper<span class="t-ar">غلاف Gradle</span></td><td>9.3.1 (<code>-all</code>)<span class="t-ar">9.3.1 من نوع all</span></td><td><code>android/gradle/wrapper/gradle-wrapper.properties</code><span class="t-ar">ملف الخصائص</span></td></tr>
+      <tr><td>Java / JVM target<span class="t-ar">جافا</span></td><td>17 (both <code>compileOptions</code> and <code>jvmTarget</code>)<span class="t-ar">17 في compileOptions وjvmTarget</span></td><td><code>android/app/build.gradle.kts</code><span class="t-ar">ملف بناء التطبيق</span></td></tr>
+      <tr><td>compileSdk / targetSdk / minSdk<span class="t-ar">SDK البناء والهدف والأدنى</span></td><td>36 / 35 / 24<span class="t-ar">36 و35 و24</span></td><td><code>android/app/build.gradle.kts</code><span class="t-ar">نفس الملف</span></td></tr>
+      <tr><td>package<span class="t-ar">الحزمة</span></td><td><code>com.example.streetbite_capstone</code><span class="t-ar">اسم الحزمة وnamespace متطابقان</span></td><td><code>applicationId</code> = <code>namespace</code><span class="t-ar">وكلاهما يُستخدم في Appium</span></td></tr>
+      <tr><td>google-services plugin<span class="t-ar">إضافة Google Services</span></td><td>4.3.15<span class="t-ar">4.3.15</span></td><td><code>settings.gradle.kts</code>, <b>applied conditionally</b><span class="t-ar">تُطبَّق <b>بشرط</b></span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="bi">
+    <div class="en">
+      <p>Three of those numbers exist because of other people's code, and the build file says so.
+      <code>compileSdk = 36</code> is chosen because several bundled plugins (maps, image_picker, local_auth) already
+      target 36, and compiling against the highest keeps them compatible with our own floor.
+      <code>minSdk = 24</code> is the practical floor for Play integrity checks on a 2026 build, above the 23 that
+      <code>local_auth</code> alone would demand. And <code>targetSdk</code> stays one behind <code>compileSdk</code>,
+      which is the normal, deliberate gap.</p>
+      <p><b>The conditional Firebase plugin is the cleverest line in the file.</b> The Google Services Gradle plugin
+      hard-fails when <code>google-services.json</code> is missing — which would make a fresh clone un-buildable, since
+      that file is git-ignored. So it is applied only when the file exists:</p>
+      <pre><code>if (file(<span class="s">"google-services.json"</span>).exists()) {
+  apply(plugin = <span class="s">"com.google.gms.google-services"</span>)
+}</code></pre>
+      <p>A contributor who clones the repository and runs <code>flutter run</code> therefore gets a working app in
+      on-device fallback mode (§07); a contributor who drops in a real <code>google-services.json</code> silently gets
+      Firebase Auth and Firestore, with no build file edit at all. That is the same degrade-instead-of-abort principle
+      that <code>main()</code> follows at runtime, applied to the build.</p>
+    </div>
+    <div class="ar">
+      <p>ثلاثة من هذه الأرقام موجودة بسبب كود الآخرين، وملف البناء يقول ذلك. فـ <code>compileSdk = 36</code> اختير
+      لأن حزمًا مرفقة (الخرائط، ومنتقي الصور، والمصادقة البيومترية) تستهدف 36 أصلًا، والبناء مقابل الأعلى يبقيها
+      متوافقة مع حدّنا الأدنى. و<code>minSdk = 24</code> هو الأرض العملية لفحوص سلامة Play في بناء 2026، فوق 23 الذي
+      تطلبه <code>local_auth</code> وحدها. ويبقى <code>targetSdk</code> خلف <code>compileSdk</code> بواحد، وهو الفارق
+      المألوف المقصود.</p>
+      <p><b>إضافة Firebase الشرطية هي أذكى سطر في الملف.</b> فإضافة Google Services الخاصة بـ Gradle تفشل بعنف حين
+      يغيب <code>google-services.json</code> — ما يجعل الاستنساخ الجديد غير قابل للبناء، إذ أن هذا الملف مستثنى من
+      git. لذا تُطبَّق فقط إن وُجد الملف، بالكود المبيّن أعلاه. فيحصل من يستنسخ المستودع ويشغّل
+      <code>flutter run</code> على تطبيق عامِل في وضع التحوّل المحلي (§07)؛ ومن يضع
+      <code>google-services.json</code> حقيقيًا يحصل على Auth وFirestore بصمت، دون تحرير ملف بناء إطلاقًا. وهذا هو
+      مبدأ التدهور بدل الإجهاض الذي يسلكه <code>main()</code> أثناء التشغيل، مطبَّقًا على البناء.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Gradle tuning that is Windows-specific</span><span class="t-ar">ضبط Gradle خاص بويندوز</span></h3>
+
+  <div class="bi">
+    <div class="en">
+      <p><code>android/gradle.properties</code> carries four deliberate edits on top of the Flutter template:</p>
+      <ul>
+        <li><code>kotlin.incremental=false</code> and <code>kotlin.compiler.execution.strategy=in-process</code> —
+        Kotlin's memory-mapped incremental caches (<code>.tab</code> files) cannot be closed on Windows when an
+        antivirus or the Search index holds a handle, failing the build with "Could not close incremental caches".
+        Disabling incremental compilation sidesteps it; the cost is a few seconds per plugin module.</li>
+        <li><code>android.nonTransitiveRClass=true</code> — the release is a single-ABI beta, so per-ABI splitting
+        would only multiply build time.</li>
+        <li><code>android.nonFinalResIds=true</code> — required for R8's optimised resource shrinking.</li>
+        <li>JVM args sized for this project: <code>-Xmx8G</code> with a 4 GB metaspace cap.</li>
+      </ul>
+      <p>The release build type enables <code>isMinifyEnabled</code> and <code>isShrinkResources</code> with
+      <code>proguard-android-optimize.txt</code> plus a project <code>proguard-rules.pro</code> that keeps the Flutter
+      engine's entry points, the Play Services and Firebase classes (resolved reflectively), and silences the
+      unused Play Core reference.</p>
+    </div>
+    <div class="ar">
+      <p>يحمل <code>android/gradle.properties</code> أربعة تعديلات مقصودة فوق قالب Flutter:</p>
+      <ul>
+        <li><code>kotlin.incremental=false</code> و<code>kotlin.compiler.execution.strategy=in-process</code> —
+        لا يمكن إغلاق تخزين كوتلن التزايدي المعيَّن بالذاكرة (ملفات <code>.tab</code>) على ويندوز حين يحفظ مضادّ
+        الفيروسات أو فهرس البحث مقبضًا، فيفشل البناء بـ «تعذّر إغلاق التخزين التزايدي». وعطّل هذا التزايدي يتجاوز
+        المشكلة؛ وثمنها ثوانٍ قليلة لكل ملحق.</li>
+        <li><code>android.nonTransitiveRClass=true</code> — إصدار تجريبي ببنية معمارية واحدة للعتاد، فتقسيم لكل
+        بنية يضاعف زمن البناء وحسب.</li>
+        <li><code>android.nonFinalResIds=true</code> — مطلوب لتقليص R8 المحسَّن للموارد.</li>
+        <li>وسائط JVM على قدر المشروع: <code>-Xmx8G</code> مع سقف 4 غيغابايت للـ metaspace.</li>
+      </ul>
+      <p>ويُفعّل نمط الإطلاق <code>isMinifyEnabled</code> و<code>isShrinkResources</code> مع
+      <code>proguard-android-optimize.txt</code> وملف <code>proguard-rules.pro</code> خاص بالمشروع يبقي نقاط دخول
+      محرّك Flutter، وفئات Play Services وFirebase (لأنها تُحلّ بالانعكاس)، ويُخرس مرجع Play Core غير المستخدم.</p>
+    </div>
+  </div>
+
+  <div class="bi">
+    <div class="en">
+      <p><b>Signing is debug, and the file admits it.</b> <code>signingConfig = signingConfigs.getByName("debug")</code>
+      inside the <code>release</code> block, with a comment giving the exact <code>keytool</code> command to generate an
+      upload key before a real Play release. This is a defensible choice for a capstone distributed through Firebase
+      App Distribution — where an internal key would break the out-of-the-box build for every reviewer — but it is not
+      a Play Store configuration, and the documentation should not imply that it is.</p>
+      <p>The build is repeatable without secrets because <code>manifestPlaceholders["MAPS_API_KEY"]</code> is read
+      from <code>android/key.properties</code> with an <em>empty default</em>, and the repository ships
+      <code>key.properties.example</code> with the three-line copy-and-fill instructions. Absent a key the app still
+      compiles, installs and runs; only the vendor map degrades (§11).</p>
+    </div>
+    <div class="ar">
+      <p><b>والتوقيع للتصحيح، والملف يقرّ بذلك.</b> <code>signingConfig = signingConfigs.getByName("debug")</code>
+      داخل كتلة <code>release</code>، مع تعليق يعطي أمر <code>keytool</code> الحرفي لتوليد مفتاح رفع قبل إطلاق Play
+      حقيقي. وهذا اختيار يجوز الدفاع عنه لمشروع تخرّج يُوزَّع عبر Firebase App Distribution — حيث كان مفتاح داخلي سيكسر
+      البناء الجاهز لكل مُراجِع — لكنه ليس إعدادًا للنشر في متجر Play، ولا يجب أن توحي الوثيقة بأنه كذلك.</p>
+      <p>ويكون البناء قابلًا للتكرار بلا أسرار لأن <code>manifestPlaceholders["MAPS_API_KEY"]</code> يُقرأ من
+      <code>android/key.properties</code> بـ<em>افتراضي فارغ</em>، ويصدّر المستودع
+      <code>key.properties.example</code> مع ثلاث أسطر للنسخ والملء. وبلا مفتاح يظل التطبيق يُصرَّف ويُثبَّت ويعمل؛
+      خريطة البائعين وحدها تتدهور (§11).</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">Firebase, rules, and one stale reference</span><span class="t-ar">Firebase والقواعد ومرجعٌ بائت</span></h3>
+
+  <div class="bi">
+    <div class="en">
+      <p><code>firebase.json</code> and <code>firestore.rules</code> are committed; <code>google-services.json</code>
+      and <code>ios/Runner/GoogleService-Info.plist</code> are git-ignored. The rules file is the artefact that closed
+      SB-114: without it, every Firestore read and write returned <code>PERMISSION_DENIED</code> while Auth kept
+      working, so three screens failed and the app looked "mostly fine". The whole rule set is one idea —
+      <code>isOwner(uid)</code>, with the uid inside the path
+      (<code>users/{uid}</code>, <code>users/{uid}/favourites/{mealId}</code>,
+      <code>orders/{uid}/items/{orderId}</code>) — so orders are deliberately <em>not</em> a shared collection, because
+      a query for all orders would need a rule that cannot distinguish rows. Anything unmatched is denied, so a new
+      collection fails closed.</p>
+      <p>Runtime initialisation is <code>Firebase.initializeApp()</code> with no options argument
+      (<code>injection.dart:336</code>), i.e. it relies entirely on the native <code>google-services.json</code>.</p>
+    </div>
+    <div class="ar">
+      <p><code>firebase.json</code> و<code>firestore.rules</code> ملتزَمان في git؛ و
+      <code>google-services.json</code> و<code>ios/Runner/GoogleService-Info.plist</code> مستثنيان. وملف القواعد هو
+      ما أغلق SB-114: بدونه كانت كل قراءة وكتابة في Firestore تُعيد <code>PERMISSION_DENIED</code> بينما يستمر Auth
+      في العمل، فتفشلت ثلاث شاشات وبدا التطبيق «سليمًا في الغالب». ومجموعة القواعد كلها فكرة واحدة —
+      <code>isOwner(uid)</code> — والمعرّف داخل المسار (<code>users/{uid}</code>،
+      <code>users/{uid}/favourites/{mealId}</code>، <code>orders/{uid}/items/{orderId}</code>) — فالطلبات ليست
+      مجموعة مشتركة <em>عن قصد</em>، لأن استعلام كل الطلبات يحتاج قاعدة لا تستطيع التمييز بين الصفوف. وكل غير مطابق
+      مرفوض، فمجموعة جديدة تفشل مغلقة.</p>
+      <p>وبادئ التشغيل هو <code>Firebase.initializeApp()</code> بلا وسائط (<code>injection.dart:336</code>)، أي
+      أنه يعتمد كاملًا على <code>google-services.json</code> الأصلي.</p>
+    </div>
+  </div>
+
+  <p class="warn"><b>Two build-time residues, recorded rather than hidden.</b>
+  (1) <code>firebase.json</code> still lists <code>lib/firebase_options.dart</code> under its <code>flutter.dart</code>
+  key, but that file was removed during the dead-code pass (commit <code>cdc93ee</code>) — nothing imports it, because
+  initialisation never used it. The reference is stale, not harmful, and cleaning it is a one-line edit.
+  (2) <code>cupertino_icons</code> is declared in <code>pubspec.yaml</code> and never used: the app ships Android only
+  and no Cupertino widget is instantiated. Neither is a defect, but both are the kind of claim a report should be able
+  to check rather than assert.<span class="t-ar">
+  <b>بقاياان في البناء، مسجَّلة لا مخفيّة.</b> (1) لا يزال <code>firebase.json</code> يذكر
+  <code>lib/firebase_options.dart</code> تحت مفتاح <code>flutter.dart</code>، لكن هذا الملف أُزيل في جولة الكود الميت
+  (اللزمة <code>cdc93ee</code>) — لا أحد يستورده، لأن التهيئة لم تستخدمه قط. والمرجع بائت لا ضارّ، وتنظيفه سطر واحد.
+  (2) و<code>cupertino_icons</code> معلن في <code>pubspec.yaml</code> ولا يُستخدم أبدًا: التطبيق يصدَّر لأندرويد فقط
+  ولا تُنشَأ أي ودجة Cupertino. ولا هذا ولا ذاك عيب، لكنهما من نوع الادعاءات الذي يجب أن يستطيع التقرير التحقق منها
+  لا الجزم بها.</span></p>
+
+  <h3><span class="t-en">Assets, icons and the lint gate</span><span class="t-ar">الأصول والأيقونات وبوابة التدقيق</span></h3>
+
+  <div class="bi">
+    <div class="en">
+      <p>The <code>flutter</code> block in <code>pubspec.yaml</code> is deliberately tiny:
+      <code>uses-material-design: true</code>, <code>generate: true</code> (which is what makes
+      <code>flutter run</code> rebuild the localisation classes), and a single asset folder,
+      <code>assets/images/</code>, holding the three launcher-icon bitmaps. The 1024 px master files live in
+      <code>assets/icon/</code> — <em>outside</em> the declared folder on purpose, with a comment explaining that
+      declaring it would ship the masters inside the APK. They are generated by
+      <code>scripts/make_launcher_icons.py</code> and packaged by <code>flutter_launcher_icons</code>.</p>
+      <p>Quality gates are two commands and no more: <code>dart format .</code> and <code>flutter analyze</code>.
+      <code>analysis_options.yaml</code> is the untouched template — it includes
+      <code>package:flutter_lints/flutter.yaml</code> and enables <em>zero</em> additional project rules, and it
+      excludes <code>build/</code> and every platform folder from analysis. So "No issues found" means "no lint
+      errors under the standard Flutter ruleset", not "the project wrote and enforced its own rules". The three
+      Python scripts under <code>flutter_app/scripts/</code> are the only custom tooling:
+      <code>make_launcher_icons.py</code>, plus <code>check_unused_arb.py</code> and <code>prune_arb.py</code> which
+      keep the 356 ARB entries (§10) free of dead keys.</p>
+      <p>There is <b>no CI</b>. No <code>.github/</code> directory, no pipeline file anywhere in the repository. Every
+      number in §13 comes from a command run by hand on one machine, which is stated here so it is not discovered
+      later.</p>
+    </div>
+    <div class="ar">
+      <p>كتلة <code>flutter</code> في <code>pubspec.yaml</code> صغيرة عن قصد:
+      <code>uses-material-design: true</code>، و<code>generate: true</code> (وهو ما يجعل <code>flutter run</code> يعيد
+      بناء أصناف الترجمة)، ومجلد أصول واحد <code>assets/images/</code> يحمل ثلاث صور للأيقونة. وملفات الأصل
+      بحجم 1024 بكسل تعيش في <code>assets/icon/</code> — <em>خارج</em> المجلد المعلن عن قصد، مع تعليق يشرح أن
+      الإعلان كان سيضعها داخل APK. وتُولّدها <code>scripts/make_launcher_icons.py</code> وتُغلّفها إضافة
+      <code>flutter_launcher_icons</code>.</p>
+      <p>وبوابتا الجودة أمران لا أكثر: <code>dart format .</code> و<code>flutter analyze</code>. و
+      <code>analysis_options.yaml</code> قالب لم يُمسَّ — يضمّ <code>package:flutter_lints/flutter.yaml</code>
+      ويُمكّن <em>صفر</em> قاعدة خاصة بالمشروع، ويستثني <code>build/</code> وكل مجلدات المنصات من التحليل. فـ «لا مشاكل
+      وجدت» تعني «لا أخطاء تدقيق تحت مجموعة قواعد Flutter القياسية»، لا «المشروع كتب قواعده وفرضها». والدوال Python
+      الثلاث تحت <code>flutter_app/scripts/</code> هي الأداة الخاصة الوحيدة:
+      <code>make_launcher_icons.py</code>، و<code>check_unused_arb.py</code> و<code>prune_arb.py</code> يُبقيان
+      مفاتيح ARB الـ 356 (§10) خالية من الميت.</p>
+      <p>ولا <b>CI</b> أبدًا: لا مجلد <code>.github/</code> ولا ملف مسار أنابيب في المستودع. وكل رقم في §13 من أمر
+      شُغِّل يدويًا على آلة واحدة، ويُقال هذا هنا حتى لا يُكتشف متأخرًا.</p>
+    </div>
+  </div>
+
+  <h3><span class="t-en">From clone to phone</span><span class="t-ar">من الاستنساخ إلى الهاتف</span></h3>
+
+  <div class="flow">
+    <div class="st"><b>1 · Clone &amp; configure</b><code>flutter pub get</code> — then optionally
+      <code>cp android/key.properties.example android/key.properties</code> and drop in
+      <code>google-services.json</code>
+      <span class="t-ar">١ · استنساخ وإعداد: <code>flutter pub get</code>، ثم — اختيارًا — نسخ ملف الخصائص ووضع
+      <code>google-services.json</code></span></div>
+    <div class="st"><b>2 · Run</b><code>flutter run</code> — builds debug, installs, no Firebase or Maps key
+      required
+      <span class="t-ar">٢ · تشغيل: <code>flutter run</code> يبني نسخة التصحيح ويثبّتها، ولا يطلب مفتاح Firebase
+      ولا خرائط</span></div>
+    <div class="st"><b>3 · Build the release</b><code>flutter build apk --release</code> →
+      <code>build/app/outputs/flutter-apk/app-release.apk</code> (≈ 63 MB, R8-minified, debug-signed)
+      <span class="t-ar">٣ · بناء الإطلاق: الأمر المذكور يُنتج APK نحو 63 ميغابايت، مُقلَّص بـ R8 وموقَّع للتصحيح</span></div>
+    <div class="st"><b>4 · Distribute</b><code>firebase appdistribution:distribute …apk --testers … --release-notes …</code>
+      <span class="t-ar">٤ · التوزيع: أمر App Distribution مع المختبِرين وملاحظات الإصدار</span></div>
+    <div class="st ok"><b>5 · Verify</b><code>flutter test</code> (99) · install on the handset ·
+      <code>mvn -f automation/pom.xml test</code> (6)
+      <span class="t-ar">٥ · التحقق: الاختبارات التسعة والتسعون، ثم التثبيت على الهاتف، ثم ست حالات Appium</span></div>
+  </div>
+
+  <div class="bi">
+    <div class="en">
+      <p>The two APKs in the working tree are useful evidence of what "release" costs here:
+      <code>app-debug.apk</code> is 197 MB, <code>app-release.apk</code> is 63 MB — a 3.1× reduction that is minification,
+      resource shrinking, and the absence of the debug service extension and observatory. Each sits beside a
+      <code>.sha1</code> file, which is what the Appium suite's install step can compare against a stale artefact
+      (a lesson learned the hard way when the suite ran against an APK older than the code under test).</p>
+    </div>
+    <div class="ar">
+      <p>ملفا APK الموجودان في شجرة العمل دليل نافع على كلفة «الإطلاق» هنا: <code>app-debug.apk</code> وزنُه
+      197 ميغابايت،
+      و<code>app-release.apk</code> 63 ميغابايت — تقليص 3.1 مرّات مصدره التصغير، وتقليص الموارد، وغياب امتداد خدمة
+      التصحيح وobservatory. وكل واحد بجانبه ملف <code>.sha1</code>، وهو ما تستطيع خطوة التثبيت في مجموعة Appium أن
+      تقارن به مُخرَجًا بائتًا — درس استُخرج بالقوة حين شغّلت المجموعة على APK أقدم من الكود محلّ الاختبار.</p>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+    <a href="13-testing.html"><span class="lbl"><span class="t-en">Previous · §13</span><span class="t-ar">السابق · §13</span></span><span class="to"><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></span></a>
+    <a class="next" href="15-files.html"><span class="lbl"><span class="t-en">Next · §15</span><span class="t-ar">التالي · §15</span></span><span class="to"><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e07c28b</code>, 2026-10-17 · <a href="index.html">all 18 sections</a></span><span class="t-ar">كُتب عند التزام <code>e07c28b</code> في 2026-10-17 · <a href="index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#build">↑ Top · الأعلى</a>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
