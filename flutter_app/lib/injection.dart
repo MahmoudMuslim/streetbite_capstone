@@ -165,9 +165,6 @@ Future<void> configureDependencies() async {
 
   sl.registerFactory<GetMeals>(() => GetMeals(sl<MealRepository>()));
   sl.registerFactory<GetHotOffers>(() => GetHotOffers(sl<MealRepository>()));
-  sl.registerFactory<ClearMealCache>(
-    () => ClearMealCache(sl<MealRepository>()),
-  );
 
   sl.registerFactory<AddToCart>(AddToCart.new);
   sl.registerFactory<RemoveFromCart>(RemoveFromCart.new);

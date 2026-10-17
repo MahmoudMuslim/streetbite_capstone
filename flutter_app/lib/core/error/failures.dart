@@ -41,12 +41,6 @@ class AuthFailure extends Failure {
   const AuthFailure(super.messageKey, {super.details});
 }
 
-/// Thrown/returned when the device has no fingerprint / face enrolled, or the
-/// check was rejected.
-class BiometricFailure extends Failure {
-  const BiometricFailure(super.messageKey, {super.details});
-}
-
 /// Thrown/returned when the user cancelled an action (picker dismissed, ...).
 class CancelledFailure extends Failure {
   const CancelledFailure() : super('failureCancelled');

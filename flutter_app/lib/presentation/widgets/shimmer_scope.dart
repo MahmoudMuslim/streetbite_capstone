@@ -9,10 +9,9 @@ import '../../core/theme/app_glass_tokens.dart';
 /// whole skeleton is what makes it read as "one thing loading", and it costs one
 /// repaint boundary instead of a dozen.
 class ShimmerScope extends StatelessWidget {
-  const ShimmerScope({super.key, required this.child, this.padding});
+  const ShimmerScope({super.key, required this.child});
 
   final Widget child;
-  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +32,7 @@ class ShimmerScope extends StatelessWidget {
       period: const Duration(milliseconds: 1400),
       // Placeholders must never eat a tap: a skeleton that looks like a card but
       // swallows the press is how "the app froze" bug reports start.
-      child: IgnorePointer(
-        child: Padding(padding: padding ?? EdgeInsets.zero, child: child),
-      ),
+      child: IgnorePointer(child: child),
     );
   }
 }

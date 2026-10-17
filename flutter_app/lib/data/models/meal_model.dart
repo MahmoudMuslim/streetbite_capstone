@@ -1,3 +1,4 @@
+import '../../core/constants/app_constants.dart';
 import '../../domain/entities/meal_entity.dart';
 
 /// Data-layer representation of a TheMealDB meal.
@@ -106,7 +107,7 @@ class MealModel extends MealEntity {
   /// band used by the Figma design. Keeping it deterministic means the cached
   /// menu and a freshly fetched one always agree.
   static double priceForId(String id) {
-    if (id.isEmpty) return 8.99;
+    if (id.isEmpty) return AppConstants.baseMealPrice;
     final seed = id.codeUnits.fold<int>(0, (sum, unit) => sum + unit);
     const lowestCents = 699;
     const step = 1800; // 18.00 in cents -> $6.99 .. $24.99

@@ -25,10 +25,9 @@ enum MealDataSource {
 ///
 /// Rather than a `switch` scattered over the call sites, the *decision* lives
 /// in one method, [selectDataSource]. A caller (the pull-to-refresh gesture, a
-/// future "offline mode" toggle, a startup warm-up) asks for a strategy and
-/// the repository wires the matching pair of data sources. Adding a third
-/// backend (say GraphQL) means one enum value and one branch here — no other
-/// file changes.
+/// future "offline mode" toggle) asks for a strategy and the repository wires
+/// the matching pair of data sources. Adding a third backend (say GraphQL)
+/// means one enum value and one branch here — no other file changes.
 ///
 /// The repository is registered with the **Factory Method** flavour of the
 /// pattern in `injection.dart`: the `MealRepository` interface is bound to
@@ -49,29 +48,6 @@ class MealRepositoryImpl implements MealRepository {
   @override
   Future<Either<Failure, List<MealEntity>>> getHotOffers() =>
       _fetch(source: defaultSource, isHotOffers: true);
-
-  @override
-  Future<Either<Failure, MealEntity?>> getMealById(String mealId) async {
-    if (mealId.isEmpty) {
-      return const Left<Failure, MealEntity?>(
-        ValidationFailure('mealNotFound'),
-      );
-    }
-
-    try {
-      final meal = await _remote.getMealById(mealId);
-      if (meal != null) return Right<Failure, MealEntity?>(meal);
-      return Right<Failure, MealEntity?>(_findCached(mealId));
-    } on NetworkException catch (error) {
-      // Offline: a cached copy is better than an error screen.
-      final cached = _findCached(mealId);
-      if (cached != null) return Right<Failure, MealEntity?>(cached);
-      return Left(ServerFailure(details: error.message));
-    }
-  }
-
-  @override
-  Future<void> clearCache() => _local.clear();
 
   // ---------------------------------------------------------------------------
   // The factory
@@ -156,31 +132,5 @@ class MealRepositoryImpl implements MealRepository {
     } else {
       await _local.cacheMeals(meals);
     }
-  }
-
-  /// Looks a meal up in either cache slot by id (details screen, offline).
-  MealEntity? _findCached(String mealId) {
-    for (final meal in [..._readCache(false), ..._readCache(true)]) {
-      if (meal.id == mealId) return meal;
-    }
-    return null;
-  }
-
-  /// Warms the cache in the background so the next cold start is instant.
-  ///
-  /// Called once from the Home screen's `initState`; failures are swallowed on
-  /// purpose because the visible content never depends on this call.
-  Future<void> warmUpCache() async {
-    try {
-      final meals = await _remote.getMeals();
-      await _persist(false, meals);
-    } catch (_) {
-      // Intentionally ignored — see doc comment.
-    }
-  }
-
-  /// Refreshes the cache without blocking, used after a successful order.
-  Future<void> refreshInBackground() async {
-    await warmUpCache();
   }
 }

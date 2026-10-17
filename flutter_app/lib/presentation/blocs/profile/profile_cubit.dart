@@ -65,7 +65,4 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   /// Clears the one-shot SnackBar message once it has been shown.
   void consumeMessage() => emit(state.copyWith(clearMessage: true));
-
-  /// Keeps the profile in sync when the auth state changes (e.g. after login).
-  void updateUser(UserEntity user) => emit(state.copyWith(user: user));
 }

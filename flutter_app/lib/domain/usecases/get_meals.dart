@@ -19,17 +19,6 @@ class GetMeals implements UseCase<Either<Failure, List<MealEntity>>, NoParams> {
       _repository.getMeals();
 }
 
-/// Loads one meal for the Meal Details screen.
-class GetMealById implements UseCase<Either<Failure, MealEntity?>, String> {
-  const GetMealById(this._repository);
-
-  final MealRepository _repository;
-
-  @override
-  Future<Either<Failure, MealEntity?>> call(String mealId) =>
-      _repository.getMealById(mealId);
-}
-
 /// Loads the horizontal "Hot Offers" strip (five items).
 class GetHotOffers
     implements UseCase<Either<Failure, List<MealEntity>>, NoParams> {
@@ -40,14 +29,4 @@ class GetHotOffers
   @override
   Future<Either<Failure, List<MealEntity>>> call(NoParams params) =>
       _repository.getHotOffers();
-}
-
-/// Drops the cached menu payload (sign out, or an explicit forced refresh).
-class ClearMealCache implements UseCase<void, NoParams> {
-  const ClearMealCache(this._repository);
-
-  final MealRepository _repository;
-
-  @override
-  Future<void> call(NoParams params) => _repository.clearCache();
 }

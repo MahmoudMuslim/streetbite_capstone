@@ -18,10 +18,6 @@ class Responsive {
   static bool isCompact(BuildContext context) =>
       MediaQuery.sizeOf(context).width < compactBreakpoint;
 
-  /// `true` on tablets and desktop-sized windows.
-  static bool isExpanded(BuildContext context) =>
-      MediaQuery.sizeOf(context).width >= compactBreakpoint;
-
   /// Number of columns for the meals [GridView].
   /// * phone  -> 2 columns (as designed in Figma)
   /// * tablet -> 3 columns
@@ -40,10 +36,6 @@ class Responsive {
     if (width >= compactBreakpoint) return 24;
     return 20;
   }
-
-  /// Vertical spacing between sections that grows on tablets.
-  static double sectionSpacing(BuildContext context) =>
-      isExpanded(context) ? 28 : 20;
 
   /// Bottom scroll padding that lets the last row of a tab clear the app's
   /// bottom bar while the body still paints *behind* it.

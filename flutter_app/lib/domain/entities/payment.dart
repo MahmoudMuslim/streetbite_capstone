@@ -106,17 +106,3 @@ class CardPayment implements PaymentMethod {
   @override
   int get hashCode => Object.hash(type, last4);
 }
-
-/// The factory that turns a persisted [PaymentType] back into a strategy.
-///
-/// A **Factory** pattern: the creation logic lives in one place, so callers
-/// never `switch` over an enum themselves and a new type only needs to be
-/// registered here.
-class PaymentFactory {
-  const PaymentFactory._();
-
-  static PaymentMethod create(PaymentType type) => switch (type) {
-    PaymentType.cash => const CashPayment(),
-    PaymentType.card => const CardPayment(),
-  };
-}

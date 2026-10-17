@@ -10,14 +10,11 @@ import 'theme_options_sheet.dart';
 /// Appearance button that opens the theme options sheet.
 ///
 /// Exposed as a shared widget so the same affordance (and the same key) is used
-/// on the Login screen, the Home AppBar and the Settings screen. It used to
-/// cycle light -> dark -> glass light -> glass dark on every tap, which with four
-/// looks meant guessing where the next tap lands; the icon still shows the look
-/// you are *in*.
+/// on the three auth screens. It used to cycle light -> dark -> glass light ->
+/// glass dark on every tap, which with four looks meant guessing where the next
+/// tap lands; the icon still shows the look you are *in*.
 class ThemeToggleButton extends StatelessWidget {
-  const ThemeToggleButton({super.key, this.onDarkBackground = false});
-
-  final bool onDarkBackground;
+  const ThemeToggleButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +23,6 @@ class ThemeToggleButton extends StatelessWidget {
         return IconButton(
           key: const ValueKey('theme_toggle_button'),
           tooltip: context.l10n.themeSheetTitle,
-          color: onDarkBackground ? Colors.white : null,
           onPressed: () => showThemeOptionsSheet(context),
           icon: AnimatedSwitcher(
             duration: const Duration(milliseconds: 220),

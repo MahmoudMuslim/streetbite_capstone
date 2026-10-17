@@ -20,17 +20,11 @@ class MealLocalDataSource {
 
   final SharedPreferences _preferences;
 
-  /// Persists the meals together with the fetch timestamp used for TTL checks.
-  Future<void> cacheMeals(List<MealModel> meals) async {
-    await _preferences.setString(
-      AppConstants.cacheMealsKey,
-      jsonEncode(meals.map((meal) => meal.toJson()).toList()),
-    );
-    await _preferences.setString(
-      AppConstants.cacheTimestampKey,
-      DateTime.now().toIso8601String(),
-    );
-  }
+  /// Persists the whole menu as one JSON payload.
+  Future<void> cacheMeals(List<MealModel> meals) => _preferences.setString(
+    AppConstants.cacheMealsKey,
+    jsonEncode(meals.map((meal) => meal.toJson()).toList()),
+  );
 
   /// Persists the Hot Offers strip under its own key so a failure to cache the
   /// offers can never invalidate a good menu cache.
@@ -46,22 +40,6 @@ class MealLocalDataSource {
   List<MealModel>? getMeals() => _read(AppConstants.cacheMealsKey);
 
   List<MealModel>? getHotOffers() => _read(AppConstants.cacheHotOffersKey);
-
-  /// `true` while the cache is younger than [AppConstants.cacheTtl].
-  bool get isFresh {
-    final stamp = _preferences.getString(AppConstants.cacheTimestampKey);
-    if (stamp == null) return false;
-    final writtenAt = DateTime.tryParse(stamp);
-    if (writtenAt == null) return false;
-    return DateTime.now().difference(writtenAt) < AppConstants.cacheTtl;
-  }
-
-  /// Wipes every cached menu payload (used on sign-out).
-  Future<void> clear() async {
-    await _preferences.remove(AppConstants.cacheMealsKey);
-    await _preferences.remove(AppConstants.cacheHotOffersKey);
-    await _preferences.remove(AppConstants.cacheTimestampKey);
-  }
 
   List<MealModel>? _read(String key) {
     final raw = _preferences.getString(key);

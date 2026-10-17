@@ -3,8 +3,8 @@ import '../../domain/entities/payment.dart';
 /// Serialisable snapshot of a [PaymentMethod] strategy.
 ///
 /// The model stores only the *discriminator* and the masked card suffix, never
-/// the payment object itself — the strategy itself is re-created on read by
-/// [PaymentFactory], which keeps the SOLID contract intact across the wire.
+/// the payment object itself — the strategy is re-created on read by
+/// [toEntity], which keeps the SOLID contract intact across the wire.
 class PaymentModel {
   const PaymentModel({required this.type, this.last4});
 

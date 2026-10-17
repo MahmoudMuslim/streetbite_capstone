@@ -1,5 +1,4 @@
 import '../../core/constants/app_constants.dart';
-import '../../core/error/exceptions.dart';
 import '../../core/network/dio_client.dart';
 import '../models/meal_model.dart';
 
@@ -18,16 +17,6 @@ class MealRemoteDataSource {
   Future<List<MealModel>> getMeals() async {
     final json = await _client.getJson(AppConstants.mealsEndpoint);
     return _extractMeals(json);
-  }
-
-  /// Fetches one meal by its TheMealDB id.
-  Future<MealModel?> getMealById(String mealId) async {
-    final json = await _client.getJson(
-      AppConstants.mealByIdEndpoint,
-      queryParameters: {'i': mealId},
-    );
-    final meals = _extractMeals(json);
-    return meals.isEmpty ? null : meals.first;
   }
 
   /// Fetches the "Hot Offers" strip (filtered by category server-side).
@@ -52,6 +41,3 @@ class MealRemoteDataSource {
         .toList();
   }
 }
-
-/// Marker exception kept for clarity in the repository's catch clauses.
-typedef MealFetchException = NetworkException;

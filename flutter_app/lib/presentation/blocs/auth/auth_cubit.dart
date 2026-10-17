@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 
-import '../../../core/error/failures.dart';
 import '../../../core/usecase/usecase.dart';
 import '../../../domain/entities/user_entity.dart';
 import '../../../domain/usecases/get_biometric_sign_in.dart';
@@ -133,11 +132,4 @@ class AuthCubit extends Cubit<AuthState> {
   void clearError() {
     if (state is AuthFailureState) emit(const AuthUnauthenticated());
   }
-
-  /// Maps a thrown [Failure] that escaped a use case into a UI state.
-  ///
-  /// Nothing should reach this, but having it guarantees the "no unhandled
-  /// exception" promise even if a future use case throws unexpectedly.
-  void reportUnexpected(Failure failure) =>
-      emit(AuthFailureState(failure.messageKey));
 }

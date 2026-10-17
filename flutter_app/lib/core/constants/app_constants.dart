@@ -15,9 +15,6 @@ class AppConstants {
   /// Endpoint that returns every meal (first page is enough for a feed).
   static const String mealsEndpoint = 'json/v1/1/search.php?s=';
 
-  /// Endpoint that returns a single meal by its TheMealDB id.
-  static const String mealByIdEndpoint = 'json/v1/1/lookup.php?i=';
-
   /// Endpoint used for the horizontally scrolling "Hot Offers" strip.
   static const String hotOffersEndpoint = 'json/v1/1/filter.php?c=Beef';
 
@@ -25,10 +22,6 @@ class AppConstants {
   /// feed renders instantly (and offline) on the next launch.
   static const String cacheMealsKey = 'streetbite_cache_meals';
   static const String cacheHotOffersKey = 'streetbite_cache_hot_offers';
-  static const String cacheTimestampKey = 'streetbite_cache_timestamp';
-
-  /// How long a cached payload is considered fresh (24 hours).
-  static const Duration cacheTtl = Duration(hours: 24);
 
   /// Firestore collection names. Centralised so the schema is auditable.
   static const String usersCollection = 'users';

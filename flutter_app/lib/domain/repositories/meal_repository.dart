@@ -14,12 +14,6 @@ abstract interface class MealRepository {
   /// successful response nor a usable local copy.
   Future<Either<Failure, List<MealEntity>>> getMeals();
 
-  /// Returns a single meal, used by the Meal Details screen.
-  Future<Either<Failure, MealEntity?>> getMealById(String mealId);
-
   /// Returns the five-item "Hot Offers" strip.
   Future<Either<Failure, List<MealEntity>>> getHotOffers();
-
-  /// Drops the cached payload so the next [getMeals] hits the network.
-  Future<void> clearCache();
 }
