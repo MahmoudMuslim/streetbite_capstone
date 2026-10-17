@@ -14,6 +14,7 @@ streetbite-capstone/
 ├── automation/       # Appium 3 + Java + TestNG end-to-end suite (6/6 green)
 ├── manual_qa/        # Test plan, 51 cases, traceability matrix, closure PDF
 ├── docs/             # Bilingual code-documentation site (18 sections) + report deck
+├── _audit/           # Tooling that generates the docs site from the source tree
 └── figma/            # reference design assets (PNG exports + Dart notes)
 ```
 
@@ -93,6 +94,24 @@ there is no build step and no server required. Alongside it,
 
 ---
 
+## Tooling — how the artefacts are built
+
+Nothing is maintained by hand twice. The reference tables and the QA workbook are
+*generated* from the source tree, so they cannot quietly drift from the code.
+
+| Folder | What it produces |
+|---|---|
+| `_audit/` | Builds the `docs/code-doc/` site. `gen15.py` / `gen16.py` turn a machine-extracted inventory of `lib/` into the every-file and every-class tables; `build_site.py` assembles the 18 pages plus a single-file export from `_audit/docparts/`; `qa_scan.py`, `graph.mjs`, `find.mjs` and `dupes.mjs` scan the result for untranslated text, dependency edges and duplicate symbols. |
+| `manual_qa/scripts/` | `build_qa_workbook.py` writes the four-sheet plan / cases / traceability / defect workbook; `apply_execution_results.py` and `apply_defect_log.py` overwrite the *designed* suite with what was actually observed on-device; `build_closure_summary.py` renders the one-page closure PDF. |
+| `flutter_app/scripts/` | `check_unused_arb.py` and `prune_arb.py` keep `app_en.arb` / `app_ar.arb` free of dead keys and in lockstep across the two locales; `make_launcher_icons.py` re-renders the launcher icon from the in-app logo. |
+
+Raw on-device captures — screenshots and `uiautomator` dumps used as execution
+evidence — sit under `flutter_app/_audit/` and `manual_qa/screenshots/`; both are
+scratch output, not part of the shipped app. Re-running any generator above is
+optional — the committed outputs are already current.
+
+---
+
 ## Design patterns used, and where
 
 | Pattern | Location |
@@ -157,6 +176,7 @@ reuse is always a one-line import.
 | Test plan + suites + traceability matrix | ✅ [`manual_qa/`](manual_qa/) — 17/51 cases executed |
 | Test closure summary (one page) | ✅ [`TestClosureSummary.pdf`](manual_qa/TestClosureSummary.pdf) — reads NOT READY TO CLOSE |
 | Bilingual code documentation + capstone report deck | ✅ [`docs/code-doc/`](docs/code-doc/index.html) — 18 sections, EN + AR |
+| Docs and QA artefacts generated from source, not hand-copied | ✅ `_audit/` + `*/scripts/` |
 
 ---
 
