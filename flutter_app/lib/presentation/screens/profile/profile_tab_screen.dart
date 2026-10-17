@@ -28,6 +28,7 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
     if (_unlocked) return const ProfileScreen();
 
     return Scaffold(
+      extendBody: true,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(32),

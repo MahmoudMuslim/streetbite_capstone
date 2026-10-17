@@ -105,6 +105,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(title: Text(context.l10n.settings)),
       body: SafeArea(
         child: SingleChildScrollView(
