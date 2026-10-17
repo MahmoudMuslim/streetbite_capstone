@@ -91,9 +91,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get ordersTitle => 'طلباتي';
 
   @override
-  String get profileTitle => 'حسابي';
-
-  @override
   String get searchHint => 'طعام، بقالة، وغيرها';
 
   @override

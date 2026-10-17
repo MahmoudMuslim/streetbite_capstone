@@ -43,7 +43,7 @@ class AppColors {
 
   // --- Splash gradient -----------------------------------------------------
   static const Color splashTop = Color(0xFF00D07A);
-  static const Color splashBottom = Color(0xFF00A85A);
+  static const Color splashBottom = primaryDark;
 
   // --- Liquid Glass (dark) -------------------------------------------------
   /// Canvas the glass surfaces refract against. Deliberately deep and slightly
@@ -53,7 +53,7 @@ class AppColors {
   static const Color glassCanvasBottom = Color(0xFF111C2E);
 
   /// The two aurora blobs painted behind the canvas gradient.
-  static const Color glassAuroraGreen = Color(0xFF00C16A);
+  static const Color glassAuroraGreen = primary;
   static const Color glassAuroraBlue = Color(0xFF2E6BFF);
 
   /// Translucent panel fill + hairline edge used where a real glass widget is
@@ -64,6 +64,10 @@ class AppColors {
 
   static const Color glassTextPrimary = Color(0xFFF2F6FC);
   static const Color glassTextSecondary = Color(0xFF9DAABF);
+
+  /// Sheets and dialogs stay opaque in both glass variants: a modal has nothing
+  /// behind it to refract.
+  static const Color glassPanel = Color(0xFF0F1A2B);
 
   // --- Liquid Glass (light) ------------------------------------------------
   /// Same frosted treatment over a pale canvas: the panels are white-tinted
@@ -77,4 +81,17 @@ class AppColors {
 
   static const Color glassTextPrimaryLight = Color(0xFF12222E);
   static const Color glassTextSecondaryLight = Color(0xFF54687A);
+  static const Color glassPanelLight = Color(0xFFF5FAFD);
+
+  // --- Shimmer sweep -------------------------------------------------------
+  /// Skeleton placeholders sweep between these pairs. Glass sits over a bluer
+  /// canvas than the plain themes, so it needs its own base and highlight.
+  static const Color shimmerBase = Color(0xFFE1E6ED);
+  static const Color shimmerHighlight = Color(0xFFF7F9FC);
+  static const Color shimmerBaseDark = Color(0xFF212B37);
+  static const Color shimmerHighlightDark = Color(0xFF2E3A49);
+  static const Color shimmerBaseGlass = Color(0xFFDCE6F0);
+  static const Color shimmerHighlightGlass = Color(0xFFF4FAFF);
+  static const Color shimmerBaseGlassDark = Color(0xFF1B2637);
+  static const Color shimmerHighlightGlassDark = Color(0xFF2C3B52);
 }

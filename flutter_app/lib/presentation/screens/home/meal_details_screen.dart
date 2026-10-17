@@ -13,6 +13,7 @@ import '../../blocs/cart/cart_state.dart';
 import '../../blocs/favourites/favourites_cubit.dart';
 import '../../blocs/favourites/favourites_state.dart';
 import '../../extensions/l10n_extension.dart';
+import '../../extensions/snack_extension.dart';
 import '../../widgets/app_network_image.dart';
 import '../../widgets/cart_badge.dart';
 import '../../widgets/cart_line_action.dart';
@@ -201,16 +202,10 @@ class MealDetailsScreen extends StatelessWidget {
 
   void _onCartChanged(BuildContext context, CartState state) {
     if (state is! CartUpdated || state.lastAdded == null) return;
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          key: const ValueKey('details_add_to_cart_snackbar'),
-          content: Text(
-            context.trArgs('addedToCart', {'name': state.lastAdded!}),
-          ),
-        ),
-      );
+    context.showSnack(
+      context.trArgs('addedToCart', {'name': state.lastAdded!}),
+      key: const ValueKey('details_add_to_cart_snackbar'),
+    );
   }
 
   Future<void> _toggleFavourite(BuildContext context) async {
@@ -220,20 +215,11 @@ class MealDetailsScreen extends StatelessWidget {
     final isSaved = await context.read<FavouritesCubit>().toggle(uid, meal);
     if (!context.mounted) return;
 
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          key: const ValueKey('details_favourite_snackbar'),
-          content: Text(
-            isSaved == null
-                ? context.l10n.somethingWentWrong
-                : (isSaved
-                      ? context.l10n.savedToFavourites
-                      : context.l10n.removedFromFavouritesMessage),
-          ),
-        ),
-      );
+    context.showSnack(switch (isSaved) {
+      null => context.l10n.somethingWentWrong,
+      true => context.l10n.savedToFavourites,
+      false => context.l10n.removedFromFavouritesMessage,
+    }, key: const ValueKey('details_favourite_snackbar'));
   }
 
   static int _countOf(CartState state) =>

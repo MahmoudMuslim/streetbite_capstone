@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../data/services/biometric_service.dart';
 import '../extensions/l10n_extension.dart';
+import '../extensions/snack_extension.dart';
 
 /// Runs the fingerprint / face check and decides what happens next.
 ///
@@ -40,14 +41,10 @@ Future<void> openBiometricGate(
   }
 
   if (!bypassAllowed) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          key: const ValueKey('biometric_error_snackbar'),
-          content: Text(context.trKey(result.messageKey!)),
-        ),
-      );
+    context.showSnack(
+      context.trKey(result.messageKey!),
+      key: const ValueKey('biometric_error_snackbar'),
+    );
     return;
   }
 

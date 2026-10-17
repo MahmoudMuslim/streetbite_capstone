@@ -13,6 +13,7 @@ import '../../blocs/cart/cart_bloc.dart';
 import '../../blocs/cart/cart_event.dart';
 import '../../blocs/cart/cart_state.dart';
 import '../../extensions/l10n_extension.dart';
+import '../../extensions/snack_extension.dart';
 import '../../widgets/cart_item_tile.dart';
 import '../../widgets/empty_state_view.dart';
 import '../../widgets/order_summary_card.dart';
@@ -54,24 +55,16 @@ class _CartScreenState extends State<CartScreen> {
         listener: (context, state) {
           // "Show a SnackBar when the cart becomes empty" — requirement 4.
           if (state is CartUpdated && state.justEmptied) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                  key: const ValueKey('cart_emptied_snackbar'),
-                  content: Text(context.l10n.yourCartCleared),
-                ),
-              );
+            context.showSnack(
+              context.l10n.yourCartCleared,
+              key: const ValueKey('cart_emptied_snackbar'),
+            );
           }
           if (state is CartFailure) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                  key: const ValueKey('cart_failure_snackbar'),
-                  content: Text(context.trKey(state.messageKey)),
-                ),
-              );
+            context.showSnack(
+              context.trKey(state.messageKey),
+              key: const ValueKey('cart_failure_snackbar'),
+            );
           }
           if (state is CartOrderPlaced) {
             context.read<CartBloc>().add(const CartCleared());
@@ -204,11 +197,7 @@ class _CartScreenState extends State<CartScreen> {
   Future<void> _placeOrder(BuildContext context) async {
     final authState = context.read<AuthCubit>().state;
     if (authState is! AuthAuthenticated) {
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(content: Text(context.l10n.authSessionExpired)),
-        );
+      context.showSnack(context.l10n.authSessionExpired);
       return;
     }
 

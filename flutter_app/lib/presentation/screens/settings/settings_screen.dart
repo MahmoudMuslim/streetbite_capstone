@@ -17,6 +17,7 @@ import '../../blocs/locale/locale_state.dart';
 import '../../blocs/theme/theme_cubit.dart';
 import '../../blocs/theme/theme_state.dart';
 import '../../extensions/l10n_extension.dart';
+import '../../extensions/snack_extension.dart';
 import '../../widgets/app_segmented_picker.dart';
 import '../../widgets/app_surface.dart';
 import '../../widgets/settings_row.dart';
@@ -80,14 +81,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (!result.isSuccess) {
       final messageKey = result.messageKey;
       if (messageKey != null) {
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(
-            SnackBar(
-              key: const ValueKey('biometric_sign_in_error_snackbar'),
-              content: Text(context.trKey(messageKey)),
-            ),
-          );
+        context.showSnack(
+          context.trKey(messageKey),
+          key: const ValueKey('biometric_sign_in_error_snackbar'),
+        );
       }
       return;
     }

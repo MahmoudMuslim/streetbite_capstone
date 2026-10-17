@@ -7,6 +7,7 @@ import '../../../core/utils/responsive.dart';
 import '../../../domain/entities/vendor_entity.dart';
 import '../../../domain/usecases/get_nearby_vendors.dart';
 import '../../extensions/l10n_extension.dart';
+import '../../extensions/snack_extension.dart';
 import '../../widgets/app_error_view.dart';
 import '../../widgets/app_loading_view.dart';
 import '../../widgets/map_error_boundary.dart';
@@ -327,14 +328,8 @@ class _VendorMapScreenState extends State<VendorMapScreen> {
   }
 
   void _showDirections(VendorEntity vendor) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(
-            '${vendor.name} · ${context.trArgs('vendorDistance', {'distance': context.formatNumber(vendor.distanceKm)})}',
-          ),
-        ),
-      );
+    context.showSnack(
+      '${vendor.name} · ${context.trArgs('vendorDistance', {'distance': context.formatNumber(vendor.distanceKm)})}',
+    );
   }
 }

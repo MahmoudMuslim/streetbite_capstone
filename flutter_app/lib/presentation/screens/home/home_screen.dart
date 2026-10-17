@@ -19,6 +19,7 @@ import '../../blocs/favourites/favourites_state.dart';
 import '../../blocs/meals/meals_cubit.dart';
 import '../../blocs/meals/meals_state.dart';
 import '../../extensions/l10n_extension.dart';
+import '../../extensions/snack_extension.dart';
 import '../../widgets/app_error_view.dart';
 import '../../widgets/app_search_field.dart';
 import '../../widgets/cart_badge.dart';
@@ -88,18 +89,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     if (!mounted || isSaved == null) return;
 
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          key: const ValueKey('favourite_snackbar'),
-          content: Text(
-            isSaved
-                ? context.l10n.savedToFavourites
-                : context.l10n.removedFromFavouritesMessage,
-          ),
-        ),
-      );
+    context.showSnack(
+      isSaved
+          ? context.l10n.savedToFavourites
+          : context.l10n.removedFromFavouritesMessage,
+      key: const ValueKey('favourite_snackbar'),
+    );
   }
 
   void _openMeal(MealEntity meal) {
@@ -135,20 +130,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocListener<CartBloc, CartState>(
       listener: (context, state) {
         if (state is! CartUpdated) return;
-        final messenger = ScaffoldMessenger.of(context)..hideCurrentSnackBar();
         if (state.lastAdded != null) {
-          messenger.showSnackBar(
-            SnackBar(
-              key: const ValueKey('add_to_cart_snackbar'),
-              content: Text(
-                context.trArgs('addedToCart', {'name': state.lastAdded!}),
-              ),
-            ),
+          context.showSnack(
+            context.trArgs('addedToCart', {'name': state.lastAdded!}),
+            key: const ValueKey('add_to_cart_snackbar'),
           );
         } else if (state.justEmptied) {
-          messenger.showSnackBar(
-            SnackBar(content: Text(context.l10n.yourCartCleared)),
-          );
+          context.showSnack(context.l10n.yourCartCleared);
         }
       },
       child: Scaffold(

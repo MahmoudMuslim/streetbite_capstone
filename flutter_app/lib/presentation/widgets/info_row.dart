@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_theme.dart';
 import '../extensions/l10n_extension.dart';
 
 /// Label / value line used by the device-information card.
@@ -32,7 +33,7 @@ class InfoRow extends StatelessWidget {
             child: Text(
               _labelFor(context),
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                color: theme.colorScheme.mutedCaption,
               ),
             ),
           ),

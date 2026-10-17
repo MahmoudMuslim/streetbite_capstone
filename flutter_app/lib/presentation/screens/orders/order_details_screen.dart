@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/utils/string_helpers.dart';
 import '../../../domain/entities/cart_item_entity.dart';
@@ -11,6 +12,7 @@ import '../../../domain/entities/payment.dart';
 import '../../blocs/cart/cart_bloc.dart';
 import '../../blocs/cart/cart_event.dart';
 import '../../extensions/l10n_extension.dart';
+import '../../extensions/snack_extension.dart';
 import '../../widgets/app_network_image.dart';
 import '../../widgets/app_surface.dart';
 import '../../widgets/cart_badge.dart';
@@ -130,14 +132,10 @@ class OrderDetailsScreen extends StatelessWidget {
       }
     }
 
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          key: const ValueKey('order_details_reorder_snackbar'),
-          content: Text(context.l10n.reorderDone),
-        ),
-      );
+    context.showSnack(
+      context.l10n.reorderDone,
+      key: const ValueKey('order_details_reorder_snackbar'),
+    );
 
     Navigator.of(context).pushNamed(AppRoutes.cart);
   }
@@ -155,7 +153,7 @@ class _ReceiptHeader extends StatelessWidget {
     final isActive = order.status == OrderStatus.active;
     final accent = isActive
         ? AppColors.primary
-        : theme.colorScheme.onSurface.withValues(alpha: 0.6);
+        : theme.colorScheme.mutedCaption;
 
     return AppSurface(
       padding: const EdgeInsets.all(16),
@@ -203,7 +201,7 @@ class _ReceiptHeader extends StatelessWidget {
           Text(
             context.l10n.placedOn(context.formatOrderDate(order.placedAt)),
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              color: theme.colorScheme.mutedCaption,
             ),
           ),
           const SizedBox(height: 14),
@@ -301,7 +299,7 @@ class _OrderLine extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      color: theme.colorScheme.mutedCaption,
                     ),
                   ),
                 ],
@@ -465,7 +463,7 @@ class _PaymentPanel extends StatelessWidget {
                 Text(
                   context.l10n.paymentMethod,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                    color: theme.colorScheme.mutedCaption,
                   ),
                 ),
                 const SizedBox(height: 2),

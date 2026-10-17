@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/string_helpers.dart';
 import '../../../domain/entities/cart_item_entity.dart';
 import 'app_network_image.dart';
@@ -60,7 +61,7 @@ class CartItemTile extends StatelessWidget {
                 Text(
                   formatPrice(item.meal.price),
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                    color: theme.colorScheme.mutedCaption,
                   ),
                 ),
                 const SizedBox(height: 8),

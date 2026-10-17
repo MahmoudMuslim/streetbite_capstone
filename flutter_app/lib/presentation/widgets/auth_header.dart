@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_theme.dart';
 import '../extensions/l10n_extension.dart';
 
 /// Large title + supporting sentence at the top of Login / Sign Up.
@@ -24,7 +25,7 @@ class AuthHeader extends StatelessWidget {
         Text(
           context.trKey(subtitleKey),
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+            color: theme.colorScheme.mutedCaption,
           ),
         ),
         const SizedBox(height: 24),

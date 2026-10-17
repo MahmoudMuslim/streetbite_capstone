@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../extensions/l10n_extension.dart';
+import 'message_panel.dart';
 
 /// Shared "nothing here yet" panel used by the Cart, the Favourites list and
 /// the Order history.
@@ -28,49 +29,16 @@ class EmptyStateView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 110,
-              height: 110,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withValues(alpha: 0.08),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, size: 52, color: theme.colorScheme.primary),
+    return MessagePanel(
+      icon: icon,
+      title: context.trKey(titleKey),
+      body: context.trKey(bodyKey),
+      action: actionLabelKey == null || onAction == null
+          ? null
+          : FilledButton(
+              onPressed: onAction,
+              child: Text(context.trKey(actionLabelKey!)),
             ),
-            const SizedBox(height: 24),
-            Text(
-              context.trKey(titleKey),
-              style: theme.textTheme.titleLarge,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              context.trKey(bodyKey),
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-              ),
-              textAlign: TextAlign.center,
-            ),
-            if (actionLabelKey != null && onAction != null) ...[
-              const SizedBox(height: 28),
-              SizedBox(
-                width: 240,
-                child: FilledButton(
-                  onPressed: onAction,
-                  child: Text(context.trKey(actionLabelKey!)),
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
     );
   }
 }

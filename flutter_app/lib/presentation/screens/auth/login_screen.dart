@@ -2,19 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_routes.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/validators.dart';
 import '../../blocs/auth/auth_cubit.dart';
 import '../../blocs/auth/auth_state.dart';
 import '../../extensions/l10n_extension.dart';
+import '../../extensions/snack_extension.dart';
 import '../../widgets/app_error_view.dart';
+import '../../widgets/app_loading_view.dart';
 import '../../widgets/app_page_body.dart';
 import '../../widgets/app_text_field.dart';
+import '../../widgets/auth_app_bar_actions.dart';
 import '../../widgets/auth_card.dart';
 import '../../widgets/auth_header.dart';
 import '../../widgets/biometric_login_button.dart';
-import '../../widgets/language_toggle_button.dart';
 import '../../widgets/semantic_id.dart';
-import '../../widgets/theme_toggle_button.dart';
 
 /// Sign-in screen backed by **Firebase Authentication**.
 ///
@@ -62,14 +64,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (!await cubit.retryBiometricSignIn()) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(
-            key: const ValueKey('biometric_unavailable_snackbar'),
-            content: Text(context.l10n.biometricSignInUnavailable),
-          ),
-        );
+      context.showSnack(
+        context.l10n.biometricSignInUnavailable,
+        key: const ValueKey('biometric_unavailable_snackbar'),
+      );
       return;
     }
 
@@ -86,11 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(context.l10n.appName),
-        actions: const [
-          ThemeToggleButton(),
-          LanguageToggleButton(),
-          SizedBox(width: 8),
-        ],
+        actions: authAppBarActions,
       ),
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
@@ -99,14 +93,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 .pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
           }
           if (state is AuthFailureState) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                  key: const ValueKey('login_error_snackbar'),
-                  content: Text(context.trKey(state.messageKey)),
-                ),
-              );
+            context.showSnack(
+              context.trKey(state.messageKey),
+              key: const ValueKey('login_error_snackbar'),
+            );
           }
         },
         builder: (context, state) {
@@ -178,14 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: FilledButton(
                                 onPressed: isLoading ? null : _submit,
                                 child: isLoading
-                                    ? const SizedBox(
-                                        width: 22,
-                                        height: 22,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2.4,
-                                          color: Colors.white,
-                                        ),
-                                      )
+                                    ? const InFlightSpinner(color: Colors.white)
                                     : Text(context.l10n.login),
                               ),
                             ),
@@ -208,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Text(
                     context.l10n.noAccountYet,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      color: theme.colorScheme.mutedCaption,
                     ),
                   ),
                   SemanticId(

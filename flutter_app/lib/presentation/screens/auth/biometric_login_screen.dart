@@ -10,10 +10,9 @@ import '../../blocs/auth/auth_cubit.dart';
 import '../../blocs/auth/auth_state.dart';
 import '../../extensions/l10n_extension.dart';
 import '../../widgets/app_page_body.dart';
+import '../../widgets/auth_app_bar_actions.dart';
 import '../../widgets/auth_card.dart';
-import '../../widgets/language_toggle_button.dart';
 import '../../widgets/semantic_id.dart';
-import '../../widgets/theme_toggle_button.dart';
 
 /// The fingerprint / face prompt that replaces the password on a cold start.
 ///
@@ -120,11 +119,7 @@ class _BiometricLoginScreenState extends State<BiometricLoginScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(context.l10n.appName),
-        actions: const [
-          ThemeToggleButton(),
-          LanguageToggleButton(),
-          SizedBox(width: 8),
-        ],
+        actions: authAppBarActions,
       ),
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {

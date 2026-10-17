@@ -32,3 +32,20 @@ class AppLoadingView extends StatelessWidget {
     );
   }
 }
+
+/// The 22dp ring a control shows while its own action is in flight.
+///
+/// Sized to fit inside a button without changing its layout. Pass [color] when
+/// the ring sits on a filled button, where the theme accent would disappear.
+class InFlightSpinner extends StatelessWidget {
+  const InFlightSpinner({super.key, this.color});
+
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    width: 22,
+    height: 22,
+    child: CircularProgressIndicator(strokeWidth: 2.4, color: color),
+  );
+}

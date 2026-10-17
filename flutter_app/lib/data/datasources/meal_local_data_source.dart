@@ -21,17 +21,16 @@ class MealLocalDataSource {
   final SharedPreferences _preferences;
 
   /// Persists the whole menu as one JSON payload.
-  Future<void> cacheMeals(List<MealModel> meals) => _preferences.setString(
-    AppConstants.cacheMealsKey,
-    jsonEncode(meals.map((meal) => meal.toJson()).toList()),
-  );
+  Future<void> cacheMeals(List<MealModel> meals) =>
+      _write(AppConstants.cacheMealsKey, meals);
 
   /// Persists the Hot Offers strip under its own key so a failure to cache the
   /// offers can never invalidate a good menu cache.
-  Future<void> cacheHotOffers(List<MealModel> meals) => _preferences.setString(
-    AppConstants.cacheHotOffersKey,
-    jsonEncode(meals.map((meal) => meal.toJson()).toList()),
-  );
+  Future<void> cacheHotOffers(List<MealModel> meals) =>
+      _write(AppConstants.cacheHotOffersKey, meals);
+
+  Future<void> _write(String key, List<MealModel> meals) => _preferences
+      .setString(key, jsonEncode(meals.map((meal) => meal.toJson()).toList()));
 
   /// Returns the cached menu, or `null` when nothing has been cached yet.
   ///

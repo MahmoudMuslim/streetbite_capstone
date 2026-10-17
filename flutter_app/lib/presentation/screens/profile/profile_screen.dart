@@ -24,7 +24,9 @@ import '../../blocs/theme/theme_cubit.dart';
 import '../../blocs/theme/theme_state.dart';
 import '../../extensions/app_theme_mode_l10n.dart';
 import '../../extensions/l10n_extension.dart';
+import '../../extensions/snack_extension.dart';
 import '../../widgets/app_error_view.dart';
+import '../../widgets/app_loading_view.dart';
 import '../../widgets/app_surface.dart';
 import '../../widgets/favourites_skeleton.dart';
 import '../../widgets/info_row.dart';
@@ -122,14 +124,10 @@ class _ProfileViewState extends State<_ProfileView> {
       body: BlocListener<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state.messageKey == null) return;
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                key: const ValueKey('profile_snackbar'),
-                content: Text(context.trKey(state.messageKey!)),
-              ),
-            );
+          context.showSnack(
+            context.trKey(state.messageKey!),
+            key: const ValueKey('profile_snackbar'),
+          );
           context.read<ProfileCubit>().consumeMessage();
         },
         child: SafeArea(
@@ -198,13 +196,7 @@ class _ProfileHeader extends StatelessWidget {
                   ),
                   if (state.isUpdatingPhoto)
                     const Positioned.fill(
-                      child: Center(
-                        child: SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(strokeWidth: 2.4),
-                        ),
-                      ),
+                      child: Center(child: InFlightSpinner()),
                     ),
                   // The camera shortcut sits on top of the avatar and bypasses
                   // the biometric gate: changing your own picture is not a

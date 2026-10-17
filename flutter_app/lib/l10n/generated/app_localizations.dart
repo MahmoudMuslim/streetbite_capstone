@@ -254,12 +254,6 @@ abstract class AppLocalizations {
   /// **'Orders'**
   String get ordersTitle;
 
-  /// No description provided for @profileTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Profile'**
-  String get profileTitle;
-
   /// No description provided for @searchHint.
   ///
   /// In en, this message translates to:

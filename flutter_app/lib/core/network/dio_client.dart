@@ -71,15 +71,9 @@ class DioClient {
   ///
   /// Throws [NetworkException] on any transport problem and
   /// [SerializationException] when the body is not a JSON object.
-  Future<Map<String, dynamic>> getJson(
-    String path, {
-    Map<String, dynamic>? queryParameters,
-  }) async {
+  Future<Map<String, dynamic>> getJson(String path) async {
     try {
-      final response = await _dio.get<dynamic>(
-        path,
-        queryParameters: queryParameters,
-      );
+      final response = await _dio.get<dynamic>(path);
       final data = response.data;
       if (data is Map<String, dynamic>) return data;
       throw const SerializationException('Expected a JSON object response');

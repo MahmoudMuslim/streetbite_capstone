@@ -80,8 +80,8 @@ class AppTheme {
     // Sheets and dialogs stay opaque in both glass variants: a modal has
     // nothing behind it to refract.
     final glassPanel = isDark
-        ? const Color(0xFF0F1A2B)
-        : const Color(0xFFF5FAFD);
+        ? AppColors.glassPanel
+        : AppColors.glassPanelLight;
 
     final scheme =
         ColorScheme.fromSeed(
@@ -374,4 +374,13 @@ class AppTheme {
       ),
     );
   }
+}
+
+/// The supporting-line colour used under headings, prices and captions.
+///
+/// Nine widgets dimmed `onSurface` by hand with the same alpha, so one named
+/// shade replaces the repeated magic number and keeps every muted line the
+/// same distance from the text above it.
+extension MutedCaption on ColorScheme {
+  Color get mutedCaption => onSurface.withValues(alpha: 0.6);
 }

@@ -8,12 +8,13 @@ import '../../../domain/entities/user_entity.dart';
 import '../../blocs/auth/auth_cubit.dart';
 import '../../blocs/auth/auth_state.dart';
 import '../../extensions/l10n_extension.dart';
+import '../../extensions/snack_extension.dart';
+import '../../widgets/app_loading_view.dart';
 import '../../widgets/app_page_body.dart';
 import '../../widgets/app_text_field.dart';
+import '../../widgets/auth_app_bar_actions.dart';
 import '../../widgets/auth_card.dart';
 import '../../widgets/auth_header.dart';
-import '../../widgets/language_toggle_button.dart';
-import '../../widgets/theme_toggle_button.dart';
 
 /// Account creation screen.
 ///
@@ -95,11 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       extendBody: true,
       appBar: AppBar(
         title: Text(context.l10n.signUpTitle),
-        actions: const [
-          ThemeToggleButton(),
-          LanguageToggleButton(),
-          SizedBox(width: 8),
-        ],
+        actions: authAppBarActions,
       ),
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
@@ -107,14 +104,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
             _confirmAndGoHome(state.user);
           }
           if (state is AuthFailureState) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                  key: const ValueKey('sign_up_error_snackbar'),
-                  content: Text(context.trKey(state.messageKey)),
-                ),
-              );
+            context.showSnack(
+              context.trKey(state.messageKey),
+              key: const ValueKey('sign_up_error_snackbar'),
+            );
           }
         },
         builder: (context, state) {
@@ -198,14 +191,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         key: const ValueKey('sign_up_button'),
                         onPressed: isLoading ? null : _submit,
                         child: isLoading
-                            ? const SizedBox(
-                                width: 22,
-                                height: 22,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.4,
-                                  color: Colors.white,
-                                ),
-                              )
+                            ? const InFlightSpinner(color: Colors.white)
                             : Text(context.l10n.signUp),
                       ),
                     ],

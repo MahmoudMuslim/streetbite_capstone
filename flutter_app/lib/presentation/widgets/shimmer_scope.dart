@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_glass_tokens.dart';
 
 /// Wraps placeholder shapes in the shimmer sweep.
@@ -20,15 +21,19 @@ class ShimmerScope extends StatelessWidget {
 
     return Shimmer.fromColors(
       baseColor: glass
-          ? (isDark ? const Color(0xFF1B2637) : const Color(0xFFDCE6F0))
+          ? (isDark
+                ? AppColors.shimmerBaseGlassDark
+                : AppColors.shimmerBaseGlass)
           : isDark
-          ? const Color(0xFF212B37)
-          : const Color(0xFFE1E6ED),
+          ? AppColors.shimmerBaseDark
+          : AppColors.shimmerBase,
       highlightColor: glass
-          ? (isDark ? const Color(0xFF2C3B52) : const Color(0xFFF4FAFF))
+          ? (isDark
+                ? AppColors.shimmerHighlightGlassDark
+                : AppColors.shimmerHighlightGlass)
           : isDark
-          ? const Color(0xFF2E3A49)
-          : const Color(0xFFF7F9FC),
+          ? AppColors.shimmerHighlightDark
+          : AppColors.shimmerHighlight,
       period: const Duration(milliseconds: 1400),
       // Placeholders must never eat a tap: a skeleton that looks like a card but
       // swallows the press is how "the app froze" bug reports start.

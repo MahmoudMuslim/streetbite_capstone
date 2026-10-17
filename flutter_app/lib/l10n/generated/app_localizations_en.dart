@@ -91,9 +91,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ordersTitle => 'Orders';
 
   @override
-  String get profileTitle => 'Profile';
-
-  @override
   String get searchHint => 'Food, groceries, etc.';
 
   @override
