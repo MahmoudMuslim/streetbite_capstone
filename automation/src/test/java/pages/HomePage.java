@@ -30,6 +30,19 @@ public final class HomePage {
     private static final String CART_BUTTON = "open_cart_button";
     private static final String MAP_BUTTON = "open_map_button";
 
+    /**
+     * Fraction of the viewport height inside which a button is safe to tap.
+     *
+     * <p>Home runs with {@code extendBody: true}, so the floating tab bar
+     * overlays the bottom of the feed instead of pushing content above it. A
+     * card scrolled so low that its Add-to-Cart button sits under that overlay
+     * is still "visible" to UiAutomator2, but tapping it hits the tab bar and
+     * the order never changes. The top bound keeps the picker from choosing a
+     * button hidden behind the AppBar.
+     */
+    private static final double TAPPABLE_TOP = 0.15;
+    private static final double TAPPABLE_BOTTOM = 0.78;
+
     private final AndroidDriver driver;
     private final WebDriverWait wait;
 
@@ -62,13 +75,8 @@ public final class HomePage {
         return driver.findElements(LoginPage.id(MEAL_CARD)).size();
     }
 
-    /** Number of Add-to-Cart buttons currently realised. */
-    public int visibleAddToCartButtons() {
-        return driver.findElements(LoginPage.id(ADD_TO_CART)).size();
-    }
-
     /**
-     * Scrolls until an Add-to-Cart button is realised.
+     * Scrolls until an Add-to-Cart button is realised *and* tappable.
      *
      * <p>Two things make this less trivial than it looks:
      * <ul>
@@ -77,19 +85,38 @@ public final class HomePage {
      *   <li>The cards are tall (aspect ratio 0.78). A card enters the tree as
      *       soon as its <i>top</i> crosses the fold, while the Add-to-Cart
      *       button sits at the very bottom of the card - so waiting for a meal
-     *       card is not enough, it must wait for the button itself.</li>
+     *       card is not enough, it must wait for the button itself, and that
+     *       button has to land clear of the floating tab bar.</li>
      * </ul>
      *
-     * @return {@code true} once an Add-to-Cart button is on screen
+     * @return {@code true} once an Add-to-Cart button can actually be tapped
      */
     public boolean scrollToMealsGrid() {
-        for (int attempt = 0; attempt < 8; attempt++) {
-            if (visibleAddToCartButtons() > 0) {
+        for (int attempt = 0; attempt < 10; attempt++) {
+            if (findTappableAddToCart() != null) {
                 return true;
             }
             scrollFeedDown();
         }
-        return visibleAddToCartButtons() > 0;
+        return findTappableAddToCart() != null;
+    }
+
+    /**
+     * The first Add-to-Cart button whose centre falls in the tappable band, or
+     * {@code null} if every realised button is under the AppBar or the floating
+     * tab bar.
+     */
+    private WebElement findTappableAddToCart() {
+        int height = viewportSize().getHeight();
+        for (WebElement button : driver.findElements(LoginPage.id(ADD_TO_CART))) {
+            double centre = button.getLocation().getY()
+                    + button.getSize().getHeight() / 2.0;
+            double ratio = centre / height;
+            if (ratio > TAPPABLE_TOP && ratio < TAPPABLE_BOTTOM) {
+                return button;
+            }
+        }
+        return null;
     }
 
     /** {@code true} once at least one Hot Offer tile is on screen. */
@@ -167,7 +194,13 @@ public final class HomePage {
     }
 
     /**
-     * Taps the Add-to-Cart button of the first visible meal card.
+     * Taps the Add-to-Cart button of the first meal card that is actually
+     * reachable.
+     *
+     * <p>The click deliberately goes to the element object rather than to a
+     * freshly-resolved locator: UiAutomator2 would happily return the topmost
+     * button, which after a scroll is often the one slid under the floating tab
+     * bar.
      *
      * @return the semantic id of the tapped card (e.g.
      *         {@code add_to_cart_button_52771}), which the caller can log as
@@ -176,8 +209,7 @@ public final class HomePage {
     public String addFirstVisibleMealToCart() {
         scrollToMealsGrid();
 
-        WebElement button = wait.until(ExpectedConditions
-                .presenceOfElementLocated(LoginPage.id(ADD_TO_CART)));
+        WebElement button = wait.until(driver -> findTappableAddToCart());
         String resourceId = button.getAttribute("resource-id");
         button.click();
         return resourceId == null ? "" : resourceId;

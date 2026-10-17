@@ -39,6 +39,10 @@ class MealCard extends StatelessWidget {
     return SemanticId(
       id: 'meal_card_${meal.id}',
       label: meal.name,
+      // The card is a tap target, and Android only keeps a node's identifier
+      // once it flattens the subtree if that node declares itself actionable —
+      // which is why the category chips and the cart buttons pass `button` too.
+      button: true,
       // Without this, Flutter folds the card's text *and* its buttons into one
       // accessibility node and the Add-to-Cart `resource-id` disappears.
       explicitChildNodes: true,

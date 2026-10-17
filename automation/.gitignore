@@ -3,3 +3,6 @@ target/
 *.iml
 .vscode/
 .DS_Store
+
+# Console output from a local Appium/Maven run
+*.log
