@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../../core/constants/app_constants.dart';
 import 'cart_item_entity.dart';
 import 'payment.dart';
 
@@ -39,6 +40,22 @@ class OrderEntity extends Equatable {
   double get total => subtotal + deliveryFee + serviceFee;
 
   int get itemCount => items.fold<int>(0, (sum, item) => sum + item.quantity);
+
+  /// The lifecycle this order has at [now].
+  ///
+  /// The stored [status] records what was true when checkout wrote the document;
+  /// it is a snapshot, not a live claim. [OrderStatus.active] therefore only
+  /// means "the vendor still had it in the kitchen at [placedAt]" for as long as
+  /// [AppConstants.orderActiveWindow] covers, after which the delivery is over
+  /// and the order belongs to `past`. Resolving it here rather than writing the
+  /// new value back is deliberate: no client can mark an order delivered for a
+  /// kitchen it cannot see, but every reader still gets the honest answer.
+  OrderStatus statusAt(DateTime now) {
+    if (status == OrderStatus.past) return OrderStatus.past;
+    return now.difference(placedAt) < AppConstants.orderActiveWindow
+        ? OrderStatus.active
+        : OrderStatus.past;
+  }
 
   OrderEntity copyWith({OrderStatus? status}) => OrderEntity(
     id: id,

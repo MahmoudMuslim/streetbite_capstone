@@ -41,6 +41,12 @@ class AppConstants {
   /// Timeout applied to every Dio call so the UI never hangs forever.
   static const Duration networkTimeout = Duration(seconds: 20);
 
+  /// How long an order counts as still being prepared and delivered.
+  ///
+  /// Once it elapses since `OrderEntity.placedAt` the order leaves the
+  /// "Current" block on the Orders screen and belongs to "Past".
+  static const Duration orderActiveWindow = Duration(minutes: 45);
+
   /// When `true` the app transparently falls back to an on-device data source
   /// if Firebase cannot be reached (offline demo / CI / device without a
   /// configured Firebase project). Set to `false` in production builds to make
