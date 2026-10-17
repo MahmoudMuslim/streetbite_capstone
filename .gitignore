@@ -4,3 +4,7 @@ _audit/
 # OS / IDE
 .DS_Store
 Thumbs.db
+
+# Android Studio rewrites these on every open and the churn drowns out real
+# diffs, so the whole directory stays local.
+.idea/
