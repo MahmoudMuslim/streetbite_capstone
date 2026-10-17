@@ -283,6 +283,7 @@ requirement expressed as a structure rather than a promise.
 | All elements "not found" | The app is likely still on the splash. Cold starts use `-Dappium.launchWait`; element waits use `-Dappium.explicitWait` |
 | Test passes on the emulator, fails on hardware | `tapLogin` already dismisses the keyboard; if it still fails, raise `-Dappium.explicitWait` |
 | `SessionNotCreatedException: app not installed` | Check `app.apk` path, or pre-install the APK by hand and set `appium.reset=false` |
+| Login form never appears and the screen shows a fingerprint prompt | The run used `appium.reset=false` on a device that is signed in **and** has *Settings → Security → Biometric sign-in* switched on, so cold start lands on the biometric gate instead of the form. Reset is `true` by default precisely because it wipes that preference; either leave it on, or turn the opt-in off by hand |
 
 ---
 

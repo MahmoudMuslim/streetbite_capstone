@@ -4,8 +4,9 @@
 
 StreetBite is a hyperlocal food-discovery app: users browse a live menu pulled
 from [TheMealDB](https://www.themealdb.com/api.php), find vendors on a live
-Google Map, order from street-food kitchens, save favourites, and manage their
-profile behind a biometric gate — in English or Arabic, light or dark.
+Google Map, order from street-food kitchens, save favourites, sign in again with
+a fingerprint, and manage their profile behind a biometric gate — in English or
+Arabic, light or dark.
 
 Built for the **StreetBite Ventures** graduation capstone.
 
@@ -36,14 +37,17 @@ Implemented from the [Food Delivery Mobile App UI Kit](https://www.figma.com/com
 | Splash / Onboarding | `presentation/screens/splash/splash_screen.dart` | Fade-in logo, session restore in parallel with the animation |
 | Login | `presentation/screens/auth/login_screen.dart` | Firebase Auth + inline validation + localized SnackBars |
 | Sign Up | `presentation/screens/auth/signup_screen.dart` | Name capitalisation, confirm dialog, fade into Home |
+| Biometric sign-in | `presentation/screens/auth/biometric_login_screen.dart` | Cold-start fingerprint gate; declines to the password form without signing the session out |
 | Home feed | `presentation/screens/home/home_screen.dart` | Banner `PageView`, Hot Offers strip, 2-column meals grid |
 | Meal details | `presentation/screens/home/meal_details_screen.dart` | `BlocConsumer` → live badge + SnackBar, favourites write |
 | Cart & checkout | `presentation/screens/cart/cart_screen.dart` | `BlocBuilder` list, `BlocListener` empty SnackBar, payment strategies |
 | Order confirmation | `presentation/screens/cart/order_confirmation_screen.dart` | Arrival estimate |
+| Order details | `presentation/screens/orders/order_details_screen.dart` | Receipt, payment line written by the strategy, reorder into the cart |
 | Browse | `presentation/screens/browse/browse_screen.dart` | Category grid + entry point to the map |
 | Orders | `presentation/screens/orders/orders_screen.dart` | Current / Past split, live from Firestore |
 | Vendor map | `presentation/screens/map/vendor_map_screen.dart` | 5 markers across 5 cities, custom info window |
 | Profile | `presentation/screens/profile/profile_screen.dart` | Biometric gate, `device_info_plus`, `image_picker`, favourites + history |
+| Settings | `presentation/screens/settings/settings_screen.dart` | Appearance and language pickers, Security card with the fingerprint sign-in opt-in |
 
 ---
 
@@ -55,6 +59,29 @@ restart skips Login. The full name is capitalised through
 `capitalizeEachWord()` before it reaches Firestore. Firebase error codes are
 translated to localized sentences by a single table
 (`AuthRemoteDataSource.mapAuthError`).
+
+### Fingerprint sign-in
+A returning user who has switched the opt-in on in **Settings → Security** lands
+on a biometric gate instead of the password form. `AuthCubit.restore()` emits
+`AuthBiometricGate` rather than `AuthAuthenticated`, and only a passed scan
+promotes it — so the Firebase session is never handed out unverified. A skipped
+or failed scan falls back to the password form and deliberately **does not** sign
+the user out: the session is still valid, and logging it out would punish a
+finger that simply slipped.
+
+The opt-in itself is device state, not account state, so it lives in
+`shared_preferences` behind `GetBiometricSignIn` / `SetBiometricSignIn` — another
+device keeps its own choice. Switching it *on* requires a passed scan first,
+because that is the moment the device gains the ability to open the account
+without a password.
+
+### Orders and the delivery window
+`CartBloc` writes every order with `status: active`, and nothing rewrites it: no
+client can observe the kitchen. `OrderEntity.statusAt(now)` therefore resolves
+the stored snapshot against `AppConstants.orderActiveWindow` (45 minutes, wider
+than the 25–30 minute arrival estimate the confirmation screen promises), and
+`GetOrderHistory` applies it on the way out. The Orders split, the tiles and the
+receipt all read `order.status` and stay untouched.
 
 ### Live menu feed
 `MealRemoteDataSource` calls TheMealDB through `DioClient`; `MealLocalDataSource`
@@ -87,8 +114,13 @@ same frame. Favourites and order history are read live from Firestore.
 ### Localization
 `lib/l10n/app_en.arb` and `app_ar.arb` are the **only** source of user-facing
 text. `L10nX.trKey()` is an exhaustive `switch` over every key, so adding a
-string without wiring it is a compile-time error. The EN/AR toggle lives in
-every AppBar and switches at runtime with no restart.
+string without wiring it is a compile-time error. Language and appearance are
+chosen in **Settings** — the two `AppSegmentedPicker`s there drive `LocaleCubit`
+and `ThemeCubit`, which rebuild the whole `MaterialApp` at runtime with no
+restart and flip the layout for Arabic. A quick toggle also stays in the app bar
+of the screens a user reaches *before* Settings (splash, Login, Sign Up,
+fingerprint sign-in) and on Profile, because those have no other way to change
+either setting.
 
 ---
 
@@ -220,7 +252,7 @@ flutter_app/
 │       ├── app_en.arb
 │       ├── app_ar.arb
 │       └── generated/             # flutter gen-l10n output
-├── test/                          # 42 unit + widget tests
+├── test/                          # 95 unit + widget tests across 15 suites
 ├── android/
 │   ├── key.properties.example     # copy to key.properties
 │   └── app/google-services.json   # Firebase config
@@ -286,7 +318,7 @@ Declared in `android/app/src/main/AndroidManifest.xml`:
 | `ACCESS_NETWORK_STATE` | Dio | Distinguishes "offline" from "server error" |
 | `ACCESS_COARSE_LOCATION` | Vendor map | Vendor distance hint |
 | `ACCESS_FINE_LOCATION` | Vendor map | Required by the Maps SDK for the blue dot |
-| `USE_BIOMETRIC` | `local_auth` | Profile gate |
+| `USE_BIOMETRIC` | `local_auth` | Profile gate and fingerprint sign-in |
 | `READ_MEDIA_IMAGES` | `image_picker` | Profile photo (Android 13+) |
 | `READ_EXTERNAL_STORAGE` | `image_picker` | Profile photo (≤ Android 12, `maxSdkVersion=32`) |
 
@@ -401,16 +433,27 @@ should fail loudly instead.
 ```bash
 cd flutter_app
 flutter analyze     # No issues found!
-flutter test        # 42 tests, all green
+flutter test        # 95 tests, all green
 dart format .       # formatting check
 ```
 
 | Suite | File | Covers |
 |---|---|---|
 | Cart use cases | `test/domain/cart_use_cases_test.dart` | Add / remove / totals, free-delivery boundary, immutability |
+| Order lifecycle | `test/domain/order_lifecycle_test.dart` | `statusAt` inside / on the boundary / after the window, an already-past order, clock skew, `GetOrderHistory` mapping and failure passthrough |
+| Orders split | `test/presentation/orders_lifecycle_test.dart` | An order the cart wrote as `active` reaches **Past** through `OrdersCubit` |
 | Models | `test/data/models_test.dart` | `fromJson`/`toJson` round trips, Builder defaults, payment rehydration |
+| Category table | `test/core/app_categories_test.dart` | TheMealDB matching, every chip label key resolves, unique API categories |
 | `CartBloc` | `test/presentation/cart_bloc_test.dart` | Events, `justEmptied` edge case, successful and failed checkout |
+| Cart stepper | `test/presentation/cart_line_action_test.dart` | The +/− line action on a card |
 | Login screen | `test/presentation/login_screen_test.dart` | Rendering, EN/AR, validation, SnackBars, navigation |
+| Auth gate | `test/presentation/auth_biometric_gate_test.dart` | Gate on/off, confirm, declining falls back to the password form **without** signing out, restore failure |
+| Fingerprint screen | `test/presentation/biometric_login_screen_test.dart` | Passed scan → Home; unavailable sensor, rejected and cancelled scan → password form |
+| Settings opt-in | `test/presentation/settings_biometric_sign_in_test.dart` | Switch hidden without a sensor, a scan is required before storing `enabled`, turning it off needs none |
+| Meal details | `test/presentation/meal_details_screen_test.dart` | `BlocConsumer` badge/SnackBar, favourite write |
+| Order details | `test/presentation/order_details_screen_test.dart` | Receipt lines, the payment row written by the strategy, cash vs card |
+| Localisation bridge | `test/presentation/l10n_extension_test.dart` | Every dynamic key resolves to a real sentence — no "Something went wrong" |
+| Theme sheet | `test/presentation/theme_options_sheet_test.dart` | Each appearance, persistence, exactly one marked active |
 
 Two bugs were found by these tests during development and fixed:
 `AppTextField` was rendering raw ARB *keys* instead of localized sentences, and
@@ -463,6 +506,10 @@ build. The cost is a few seconds per plugin module.
 * **Vendors are hardcoded.** Five seeds in `VendorLocalDataSource`. Replacing
   them with a Firestore geo-query touches that one file — `VendorRepository`
   and the map screen stay unchanged.
+* **The delivery window is simulated.** Nothing tells the app when a vendor
+  hands over the bag, so an order leaves **Current** 45 minutes after
+  `placedAt` (`AppConstants.orderActiveWindow`). A real build would read a
+  vendor-side status write and keep `statusAt` only as the safety net.
 * **No order cancellation or vendor-side tooling.** Out of scope for V1.
 * **iOS is scaffolded but unconfigured.** No `GoogleService-Info.plist`, no
   Podfile lock; the task targeted Android.

@@ -5,8 +5,8 @@
 > *"They built that during a course."*
 
 StreetBite combines a live Google Map of street-food vendors, a menu feed pulled
-from a real API, ordering with saved favourites, and a biometric profile — in
-English and Arabic, light and dark.
+from a real API, ordering with saved favourites, fingerprint sign-in and a
+biometric profile — in English and Arabic, light and dark.
 
 ```
 streetbite-capstone/
@@ -28,7 +28,7 @@ flutter run
 
 # 2. Tests
 flutter analyze     # No issues found!
-flutter test        # 42 tests, all green
+flutter test        # 95 tests, all green
 
 # 3. Automation (needs Appium running in another terminal)
 cd ../automation && mvn test
@@ -49,7 +49,7 @@ work on a fresh clone. See [Resilience and the offline fallback](flutter_app/REA
 
 | Area | Highlights |
 |---|---|
-| **Screens** | Splash/onboarding, Login, Sign Up, Home feed, Meal details, Cart & checkout, Order confirmation, Browse, Orders, Vendor map, Profile |
+| **Screens** | Splash/onboarding, Login, Sign Up, Biometric sign-in, Home feed, Meal details, Cart & checkout, Order confirmation, Browse, Orders, Order details, Vendor map, Profile, Settings |
 | **State** | `flutter_bloc` — a full Bloc for the cart (event-driven), Cubits for auth, meals, favourites, orders, theme and locale |
 | **Architecture** | Clean Architecture: `presentation → domain ← data`, with a pure-Dart domain layer |
 | **Data** | Dio (TheMealDB), `shared_preferences` cache, Firebase Auth, Cloud Firestore |
@@ -71,10 +71,12 @@ running Android 16.
 
 ### `manual_qa/` — the QA engagement
 
-A test plan with scope, types, environments and exit criteria; **51 executed
-test cases** across 8 suites with Expected/Actual/Status; a traceability matrix
-mapping all 10 requirements to those cases; a defect log mirroring the Jira
-board; and a one-page closure summary.
+A test plan with scope, types, environments and exit criteria; **51 cases across
+8 suites** with Expected/Actual/Status columns, of which **17 were executed and
+passed on a physical device** and 34 remain recorded as Blocked; a traceability
+matrix mapping all 10 requirements to those cases; a defect log mirroring the
+Jira board (14 raised, 1 open — the Google Maps key); and a one-page closure
+summary that honestly reads **NOT READY TO CLOSE**.
 
 → **[QA README](manual_qa/README.md)**
 
@@ -109,6 +111,11 @@ failure branch — the guarantee is structural, not aspirational.
 **Zero hard-coded strings.** `app_en.arb` / `app_ar.arb` are the only source of
 copy. `L10nX.trKey()` is an exhaustive `switch`, so adding a string without
 wiring it is a compile-time error.
+
+**A stored status is a snapshot, not a live claim.** The cart writes every order
+as `active` and nothing ever rewrites it, because no client can observe the
+kitchen. `OrderEntity.statusAt(now)` resolves that snapshot against the clock at
+read time instead, which is why the Orders screen's Past section can fill.
 
 **Tests found two real bugs.** `AppTextField` was rendering raw ARB keys instead
 of localized sentences, and the locale toggle did not propagate to the screen.
