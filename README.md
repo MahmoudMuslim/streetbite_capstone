@@ -106,9 +106,11 @@ A test plan with scope, types, environments and exit criteria; **51 cases across
 passed on a physical device** and 34 remain recorded as Blocked; a traceability
 matrix mapping all 10 requirements to those cases; a defect log mirroring the
 Jira board (14 raised, 1 open — the Google Maps key); and a one-page closure
-summary that honestly reads **NOT READY TO CLOSE**.
+summary that honestly reads **NOT READY TO CLOSE**. All of it is also published
+as a browsable multi-page **QA dashboard** (`manual_qa/dashboard/index.html`),
+generated from the workbook with the same honest 17/51 figures.
 
-→ **[QA README](manual_qa/README.md)**
+→ **[QA README](manual_qa/README.md)** · **[QA dashboard](manual_qa/dashboard/index.html)**
 
 ### `docs/` — the documentation
 
@@ -242,6 +244,7 @@ owner-scoped rules raised as `SB-114`.
 | `dart format .` applied, unused code removed | ✅ |
 | Appium suite with a shared `BaseTest`, one feature per class | ✅ **6/6 passing** on a physical device (Android 16) — [`automation/README.md`](automation/README.md) |
 | Test plan + suites + traceability matrix | ✅ [`manual_qa/`](manual_qa/) — 17/51 cases executed |
+| Multi-page QA dashboard (generated from the workbook) | ✅ [`manual_qa/dashboard/`](manual_qa/dashboard/index.html) — honest 17/51, 0 broken links |
 | Test closure summary (one page) | ✅ [`TestClosureSummary.pdf`](manual_qa/TestClosureSummary.pdf) — reads NOT READY TO CLOSE |
 | Bilingual code documentation + capstone report deck | ✅ [`docs/code-doc/`](docs/code-doc/index.html) — 18 sections, EN + AR |
 | Docs and QA artefacts generated from source, not hand-copied | ✅ `_audit/` + `*/scripts/` |
