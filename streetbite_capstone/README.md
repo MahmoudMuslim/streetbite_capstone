@@ -143,6 +143,23 @@ of the screens a user reaches *before* Settings (splash, Login, Sign Up,
 fingerprint sign-in) and on Profile, because those have no other way to change
 either setting.
 
+### Cross-device & cross-account continuity
+Anything that belongs to the user is stored in Cloud Firestore under their own
+uid, not on the handset — so signing in on a second device restores favourites,
+order history and profile, while a different account can never read them.
+
+<p align="center">
+  <img src="../manual_qa/screenshots/12-cross-device-sync.png" width="320" alt="Same StreetBite account on the physical handset and the emulator" />
+</p>
+
+`firestore.rules` nests every document under the owner (`users/{uid}`,
+`users/{uid}/favourites/{mealId}`, `orders/{uid}/items/{orderId}`) and allows
+`read, write` only when `request.auth.uid == uid` — no `list()`, no public read,
+no wildcard, and it **fails closed** for any collection without a rule. Orders
+are deliberately not a shared collection precisely so that owner scoping can be
+enforced at the path. The same release APK on a physical handset and on an
+emulator therefore shows the same account's data, and nothing of anyone else's.
+
 ---
 
 ## Architecture

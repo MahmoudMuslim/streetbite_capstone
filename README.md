@@ -41,8 +41,9 @@ streetbite-capstone/
 3. [Tooling — how the artefacts are built](#tooling--how-the-artefacts-are-built)
 4. [Design patterns used, and where](#design-patterns-used-and-where)
 5. [Engineering notes](#engineering-notes)
-6. [Deliverables checklist](#deliverables-checklist)
-7. [Licence](#licence)
+6. [Cross-device & cross-account continuity](#cross-device--cross-account-continuity)
+7. [Deliverables checklist](#deliverables-checklist)
+8. [Licence](#licence)
 
 ---
 
@@ -181,6 +182,46 @@ Both are covered by regression tests now.
 **One class, one file.** Every screen, Cubit/Bloc, use case, repository, model,
 service and reusable widget has its own file — including the tiny ones — so
 reuse is always a one-line import.
+
+---
+
+## Cross-device & cross-account continuity
+
+User state that matters lives in Cloud Firestore, not on the handset — so the
+same account picks up where it left off on any device, while one account can
+never see another's.
+
+<p align="center">
+  <img src="manual_qa/screenshots/12-cross-device-sync.png" width="360" alt="Same StreetBite account on the physical handset and the emulator — favourites and orders persist through Firestore" />
+</p>
+
+**Continuity (same account, two devices).** Favourites, order history and the
+profile (display name, photo) are written under the signed-in user's document,
+so signing in on a second device — here a physical Xiaomi handset and an
+emulator running the *same* release APK — restores them. Nothing device-local
+has to be re-created; Firebase persists the session and Firestore persists the
+data.
+
+**Isolation (different accounts).** Every path is owner-scoped:
+
+```
+users/{uid}                      profile document (displayName, photoUrl)
+users/{uid}/favourites/{mealId}  a saved meal
+orders/{uid}/items/{orderId}     a placed order
+```
+
+`firestore.rules` allows `read, write` only when `request.auth.uid == uid`, with
+no `list()`, no public read and no wildcard — and it **fails closed**, so a new
+collection added without a rule cannot leak. Orders are deliberately *not* a
+shared collection: the uid is part of the path, because a query for all orders
+would need a rule that cannot distinguish rows. This is the fix behind the
+owner-scoped rules raised as `SB-114`.
+
+> [!NOTE]
+> Continuity is verified by the cross-device capture above (both sides showing
+> the same account's favourites/orders). Isolation is a property of the rules,
+> not the client — an unauthenticated or mismatched-uid request is denied by
+> Firestore before it reaches the app.
 
 ---
 
