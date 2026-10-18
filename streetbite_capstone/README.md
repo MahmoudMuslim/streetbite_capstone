@@ -1,6 +1,20 @@
+<div align="center">
+
 # StreetBite — Hyperlocal Food Discovery & Ordering
 
+<img src="assets/icon/launcher_icon.png" width="112" alt="StreetBite logo" />
+
 **Flutter 3.47 · Dart 3.13 · Firebase · Clean Architecture**
+
+![Flutter](https://img.shields.io/badge/Flutter-3.47-027DFB?logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-3.13-0175C2?logo=dart&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-Auth%20%2B%20Firestore-FFCA28?logo=firebase&logoColor=black)
+![Clean%20Architecture](https://img.shields.io/badge/Clean%20Architecture-presentation%E2%86%92domain%E2%86%90data-00C16A)
+![Platform](https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white)
+![Languages](https://img.shields.io/badge/i18n-EN%20%C2%B7%20AR%20(RTL)-12141A)
+![Themes](https://img.shields.io/badge/theme-light%20%C2%B7%20dark%20%C2%B7%20glass-6C4BB6)
+
+</div>
 
 StreetBite is a hyperlocal food-discovery app: users browse a live menu pulled
 from [TheMealDB](https://www.themealdb.com/api.php), find vendors on a live
@@ -8,7 +22,8 @@ Google Map, order from street-food kitchens, save favourites, sign in again with
 a fingerprint, and manage their profile behind a biometric gate — in English or
 Arabic, light or dark.
 
-Built for the **StreetBite Ventures** graduation capstone.
+> [!NOTE]
+> Built for the **StreetBite Ventures** graduation capstone.
 
 ---
 

@@ -1,6 +1,20 @@
+<div align="center">
+
 # StreetBite — Graduation Capstone
 
 **Hyperlocal Food Discovery & Ordering App**
+
+<img src="streetbite_capstone/assets/icon/launcher_icon.png" width="112" alt="StreetBite logo" />
+
+![Flutter](https://img.shields.io/badge/Flutter-3.47-027DFB?logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-3.13-0175C2?logo=dart&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-Auth%20%2B%20Firestore-FFCA28?logo=firebase&logoColor=black)
+![Architecture](https://img.shields.io/badge/Clean%20Architecture-layered-00C16A)
+![Platform](https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white)
+![Languages](https://img.shields.io/badge/i18n-EN%20%C2%B7%20AR%20(RTL)-12141A)
+![Analyzer](https://img.shields.io/badge/flutter%20analyze-0%20issues-brightgreen)
+
+</div>
 
 > *"They built that during a course."*
 
@@ -17,6 +31,18 @@ streetbite-capstone/
 ├── _audit/           # Tooling that generates the docs site from the source tree
 └── figma/            # reference design assets (PNG exports + Dart notes)
 ```
+
+---
+
+## Contents
+
+1. [Quick start](#quick-start)
+2. [What's inside](#whats-inside)
+3. [Tooling — how the artefacts are built](#tooling--how-the-artefacts-are-built)
+4. [Design patterns used, and where](#design-patterns-used-and-where)
+5. [Engineering notes](#engineering-notes)
+6. [Deliverables checklist](#deliverables-checklist)
+7. [Licence](#licence)
 
 ---
 
@@ -39,9 +65,10 @@ cd ../automation && mvn test
 python manual_qa/scripts/build_qa_workbook.py
 ```
 
-The app runs **without any Firebase configuration** — the repositories degrade to
-on-device data sources, so sign-up, login, the feed, favourites and orders all
-work on a fresh clone. See [Resilience and the offline fallback](streetbite_capstone/README.md#resilience-and-the-offline-fallback).
+> [!TIP]
+> The app runs **without any Firebase configuration** — the repositories degrade to
+> on-device data sources, so sign-up, login, the feed, favourites and orders all
+> work on a fresh clone. See [Resilience and the offline fallback](streetbite_capstone/README.md#resilience-and-the-offline-fallback).
 
 ---
 

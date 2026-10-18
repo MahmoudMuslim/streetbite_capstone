@@ -1,9 +1,30 @@
+<div align="center">
+
 # StreetBite — Appium + Java Automation Suite
 
 End-to-end automation for the **StreetBite** Flutter app, targeting the release
 APK distributed through Firebase App Distribution.
 
-Built with **Appium 3 · Java 17 · TestNG · UiAutomator2**.
+<img src="../streetbite_capstone/assets/icon/launcher_icon.png" width="96" alt="StreetBite logo" />
+
+![Appium](https://img.shields.io/badge/Appium-3.x-EC387D?logo=appium&logoColor=white)
+![Java](https://img.shields.io/badge/Java-17-ED8B00?logo=openjdk&logoColor=white)
+![TestNG](https://img.shields.io/badge/TestNG-driven-0087FC)
+![UiAutomator2](https://img.shields.io/badge/UiAutomator2-8.x-3DDC84?logo=android&logoColor=white)
+![Result](https://img.shields.io/badge/Physical%20device-6%2F6%20passing-brightgreen)
+
+</div>
+
+## On this page
+
+- [Contents](#contents)
+- [Prerequisites](#prerequisites)
+- [Configuration](#configuration)
+- [Running the suite](#running-the-suite)
+- [The tests](#the-tests)
+- [Design decisions worth knowing](#design-decisions-worth-knowing)
+- [Troubleshooting](#troubleshooting)
+- [Licence](#licence)
 
 ---
 
@@ -35,9 +56,10 @@ automation/
         └── automation.properties
 ```
 
-**One test class per feature.** `LoginTest` knows nothing about the cart,
-`AddToCartTest` knows nothing about scrolling; they share setup through
-`BaseTest` and locators through page objects.
+> [!NOTE]
+> **One test class per feature.** `LoginTest` knows nothing about the cart,
+> `AddToCartTest` knows nothing about scrolling; they share setup through
+> `BaseTest` and locators through page objects.
 
 ---
 

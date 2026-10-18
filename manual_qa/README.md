@@ -1,11 +1,34 @@
+<div align="center">
+
 # StreetBite — Manual QA Pack
 
 Test plan, execution record and evidence for the **StreetBite** Flutter app,
 build `1.0.0+3`.
 
+<img src="../streetbite_capstone/assets/icon/launcher_icon.png" width="96" alt="StreetBite logo" />
+
+![Build](https://img.shields.io/badge/build-1.0.0%2B3-00C16A)
+![Cases](https://img.shields.io/badge/cases-51-12141A)
+![Executed](https://img.shields.io/badge/executed%20%26%20passed-17%2F51-informational)
+![Blocked](https://img.shields.io/badge/blocked-34-yellow)
+![Defects](https://img.shields.io/badge/defects-14%20raised%2C%201%20open-critical)
+![Automated](https://img.shields.io/badge/appium-6%2F6-brightgreen)
+
+</div>
+
+> [!WARNING]
 > **Status: NOT READY TO CLOSE.** 17 of 51 cases have been executed and passed;
 > 34 are still recorded as **Blocked**. See
 > [`TestClosureSummary.pdf`](TestClosureSummary.pdf) for the one-page version.
+
+## On this page
+
+- [Contents](#contents)
+- [Current numbers](#current-numbers)
+- [Screenshots](#screenshots)
+- [Regenerating the pack](#regenerating-the-pack)
+- [Defects found during the execution rounds](#defects-found-during-the-execution-rounds)
+- [Device used for the manual round](#device-used-for-the-manual-round)
 
 ---
 
@@ -58,6 +81,7 @@ assumed green — an honest 17/51 is worth more than a fabricated 51/51.
 | `09_profile_device.png` | Profile behind the gate, showing device information |
 | `10_dark_mode.png` | Dark theme |
 | `11_biometric_prompt.png` | Fingerprint gate on the Profile tab |
+| `12-cross-device-sync.png` | Cross-device Firestore continuity — same account on the physical handset and the emulator |
 
 Screenshots are numbered to match the case IDs so evidence and test case line
 up without guesswork. All were captured on the physical handset below from the
