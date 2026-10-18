@@ -57,7 +57,7 @@ flutter run
 
 # 2. Tests
 flutter analyze     # No issues found!
-flutter test        # 95 tests, all green
+flutter test        # 99 tests, all green
 
 # 3. Automation (needs Appium running in another terminal)
 cd ../automation && mvn test
