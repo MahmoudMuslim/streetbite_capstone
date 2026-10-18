@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan, objectives, scope · StreetBite QA</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<nav id="toc">
+  <div class="brand">StreetBite<span>Manual QA pack · build 1.0.0+3</span></div>
+  <h3>Overview</h3>
+  <ol>
+    <li><a href="00-overview.html"><b>00</b>Dashboard &amp; status</a></li>
+  </ol>
+  <h3>Test Plan</h3>
+  <ol>
+    <li><a href="01-test-plan.html" class="cur"><b>01</b>Plan, objectives, scope</a></li>
+    <li><a href="02-environment.html"><b>02</b>Environment &amp; criteria</a></li>
+  </ol>
+  <h3>Test Cases</h3>
+  <ol>
+    <li><a href="03-cases-auth.html"><b>03</b>Login &amp; Sign Up</a></li>
+    <li><a href="04-cases-home.html"><b>04</b>Home &amp; Meal details</a></li>
+    <li><a href="05-cases-order.html"><b>05</b>Cart &amp; Map</a></li>
+    <li><a href="06-cases-profile.html"><b>06</b>Profile &amp; General</a></li>
+  </ol>
+  <h3>Coverage &amp; Defects</h3>
+  <ol>
+    <li><a href="07-traceability.html"><b>07</b>Traceability matrix</a></li>
+    <li><a href="08-defects.html"><b>08</b>Defect log</a></li>
+  </ol>
+  <h3>Evidence &amp; Closure</h3>
+  <ol>
+    <li><a href="09-evidence.html"><b>09</b>Evidence &amp; closure</a></li>
+  </ol>
+  <p class="home"><a href="../index.html">↑ Dashboard index</a></p>
+</nav>
+<main>
+<p class="crumb"><a href="../index.html">Dashboard</a> · <span>Section 01 of 10</span></p><header class="doc"><h1>Plan, objectives, scope</h1><p class="sub">StreetBite · Manual QA · build 1.0.0+3</p></header>
+
+<section>
+  <h2><span class="num">01</span> · Test plan, objectives &amp; scope</h2>
+  <p>The plan below is transcribed from the <b>Test Plan</b> sheet of
+     <code>TestPlan_and_TestCases.xlsx</code>. It governs the manual round run
+     against the release APK <code>1.0.0+3</code>.</p>
+</section>
+<section><h3>1. Reference documents</h3><table class="tbl"><thead><tr><th>Key</th><th>Item</th><th>Detail</th></tr></thead><tbody>
+<tr><td><code></code></td><td>Figma design</td><td>Food Delivery Mobile App UI Kit (Figma Community, file 1352761962360670057)</td></tr>
+<tr><td><code></code></td><td>Meal data source</td><td>TheMealDB Free API - https://www.themealdb.com/api.php</td></tr>
+<tr><td><code></code></td><td>QA defect tracker</td><td>Jira - https://m25242305m.atlassian.net/</td></tr>
+<tr><td><code></code></td><td>Automation suite</td><td>automation/ (Appium + Java, TestNG)</td></tr>
+</tbody></table></section>
+<section><h3>2. Objectives</h3><table class="tbl"><thead><tr><th>Key</th><th>Item</th><th>Detail</th></tr></thead><tbody>
+<tr><td><code></code></td><td>O1</td><td>Verify that every functional requirement in the brief behaves as specified on a real device.</td></tr>
+<tr><td><code></code></td><td>O2</td><td>Verify the non-functional requirements: Clean Architecture boundaries, no hard-coded strings, responsive layout and universal error handling.</td></tr>
+<tr><td><code></code></td><td>O3</td><td>Verify that the Arabic localization is complete and switches at runtime.</td></tr>
+<tr><td><code></code></td><td>O4</td><td>Confirm the release APK distributed through Firebase App Distribution behaves identically to the local debug build.</td></tr>
+<tr><td><code></code></td><td>O5</td><td>Raise a Jira defect for every failure, with severity, priority and screenshot evidence.</td></tr>
+</tbody></table></section>
+<section><h3>3. Scope</h3><table class="tbl"><thead><tr><th>Key</th><th>Item</th><th>Detail</th></tr></thead><tbody>
+<tr><td><code></code></td><td>In scope</td><td>Splash/Onboarding, Login, Sign Up, Home feed, Meal details, Cart and checkout, Vendor map, Orders, Profile (biometric, device info, photo, favourites, history), theme toggle, EN/AR localization, offline behaviour.</td></tr>
+<tr><td><code></code></td><td>Out of scope</td><td>iOS build, App Store release, push notifications, real payment gateway, live vendor inventory, analytics and A/B testing.</td></tr>
+<tr><td><code></code></td><td>Test basis</td><td>Release APK 1.0.0 (arm64-v8a), built from flutter_app/.</td></tr>
+</tbody></table></section>
+<section><h3>4. Testing types</h3><table class="tbl"><thead><tr><th>Key</th><th>Item</th><th>Detail</th></tr></thead><tbody>
+<tr><td><code></code></td><td>Functional</td><td>Positive, negative, boundary and GUI (layout, copy, iconography) per screen.</td></tr>
+<tr><td><code></code></td><td>Negative</td><td>Invalid input, wrong credentials, duplicate account, offline, missing API key.</td></tr>
+<tr><td><code></code></td><td>Localization</td><td>Full EN &lt;-&gt; AR switch on every screen, including plural forms.</td></tr>
+<tr><td><code></code></td><td>Compatibility</td><td>Compact phone (360dp) and tablet (800dp); Android 13 and Android 14.</td></tr>
+<tr><td><code></code></td><td>Regression</td><td>Every fix from this cycle re-tested (see the Defect Log sheet).</td></tr>
+<tr><td><code></code></td><td>Exploratory</td><td>One pass with airplane mode across all screens to hunt unhandled exceptions.</td></tr>
+</tbody></table></section>
+
+<nav class="pager">
+  <a href="00-overview.html"><span class="lbl">← Previous</span><span class="to">00 · Dashboard &amp; status</span></a>
+  <a class="next" href="02-environment.html"><span class="lbl">Next →</span><span class="to">02 · Environment &amp; criteria</span></a>
+</nav>
+<footer class="footline">StreetBite QA · generated from <code>TestPlan_and_TestCases.xlsx</code> · commit <code>8b37078</code> · 2026-10-18</footer>
+</main>
+<a class="top" href="#">↑ Top</a>
+</body>
+</html>

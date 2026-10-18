@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login &amp; Sign Up · StreetBite QA</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<nav id="toc">
+  <div class="brand">StreetBite<span>Manual QA pack · build 1.0.0+3</span></div>
+  <h3>Overview</h3>
+  <ol>
+    <li><a href="00-overview.html"><b>00</b>Dashboard &amp; status</a></li>
+  </ol>
+  <h3>Test Plan</h3>
+  <ol>
+    <li><a href="01-test-plan.html"><b>01</b>Plan, objectives, scope</a></li>
+    <li><a href="02-environment.html"><b>02</b>Environment &amp; criteria</a></li>
+  </ol>
+  <h3>Test Cases</h3>
+  <ol>
+    <li><a href="03-cases-auth.html" class="cur"><b>03</b>Login &amp; Sign Up</a></li>
+    <li><a href="04-cases-home.html"><b>04</b>Home &amp; Meal details</a></li>
+    <li><a href="05-cases-order.html"><b>05</b>Cart &amp; Map</a></li>
+    <li><a href="06-cases-profile.html"><b>06</b>Profile &amp; General</a></li>
+  </ol>
+  <h3>Coverage &amp; Defects</h3>
+  <ol>
+    <li><a href="07-traceability.html"><b>07</b>Traceability matrix</a></li>
+    <li><a href="08-defects.html"><b>08</b>Defect log</a></li>
+  </ol>
+  <h3>Evidence &amp; Closure</h3>
+  <ol>
+    <li><a href="09-evidence.html"><b>09</b>Evidence &amp; closure</a></li>
+  </ol>
+  <p class="home"><a href="../index.html">↑ Dashboard index</a></p>
+</nav>
+<main>
+<p class="crumb"><a href="../index.html">Dashboard</a> · <span>Section 03 of 10</span></p><header class="doc"><h1>Login &amp; Sign Up</h1><p class="sub">StreetBite · Manual QA · build 1.0.0+3</p></header>
+<section><h2><span class="num">03</span> · Login &amp; Sign Up</h2><p>Authentication flows: Firebase login, client-side validation, session restore, and the sign-up rules. This suite is the most fully executed of the round.</p></section>
+<div class="suitehead" id="suite-login">Login &mdash; 7 passed / 8</div>
+<div class="case" id="TC_LOGIN_001">
+  <div class="ch"><code>TC_LOGIN_001</code><span class="t">Log in with valid credentials</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>App installed and the QA account exists</dd>
+    <dt>Steps</dt><dd><ol><li>Launch app, wait for splash.</li><li>Enter &#x27;yasmine@streetbite.app&#x27; in Email.</li><li>Enter &#x27;StreetBite123&#x27; in Password.</li><li>Tap Log In.</li></ol></dd>
+    <dt>Expected</dt><dd>The Home feed opens with the greeting, banner, Hot Offers strip and meals grid.</dd>
+    <dt>Actual</dt><dd>Logged in with the seeded Firebase account; the Home feed rendered in ~2s with the banner, category chips, Hot Offers strip and meals grid.</dd>
+    <dt>Requirement</dt><dd><code>FR-1 Login</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_LOGIN_002">
+  <div class="ch"><code>TC_LOGIN_002</code><span class="t">Log in with an incorrect password</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>App installed and the QA account exists</dd>
+    <dt>Steps</dt><dd><ol><li>Open Login.</li><li>Enter a valid e-mail.</li><li>Enter &#x27;WrongPass1&#x27;.</li><li>Tap Log In.</li></ol></dd>
+    <dt>Expected</dt><dd>A friendly SnackBar reads &#x27;Incorrect email or password.&#x27; and the user stays on Login.</dd>
+    <dt>Actual</dt><dd>Wrong password produced the SnackBar &#x27;Incorrect email or password.&#x27; and the Login screen was retained. (Screenshot 02_login_error.png)</dd>
+    <dt>Requirement</dt><dd><code>FR-1 Login</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_LOGIN_003">
+  <div class="ch"><code>TC_LOGIN_003</code><span class="t">Log in with empty fields</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>App installed and the QA account exists</dd>
+    <dt>Steps</dt><dd><ol><li>Open Login.</li><li>Clear both fields.</li><li>Tap Log In.</li></ol></dd>
+    <dt>Expected</dt><dd>Client-side validation blocks the request and paints the field message.</dd>
+    <dt>Actual</dt><dd>Clearing both fields and submitting is blocked by client-side validation; no Firebase request is made.</dd>
+    <dt>Requirement</dt><dd><code>FR-1 Login</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_LOGIN_004">
+  <div class="ch"><code>TC_LOGIN_004</code><span class="t">Log in with a malformed e-mail address</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>App installed and the QA account exists</dd>
+    <dt>Steps</dt><dd><ol><li>Open Login.</li><li>Enter &#x27;not-an-email&#x27;.</li><li>Enter a 6+ character password.</li><li>Tap Log In.</li></ol></dd>
+    <dt>Expected</dt><dd>The e-mail field shows &#x27;Please enter a valid email address.&#x27;</dd>
+    <dt>Actual</dt><dd>A malformed address is rejected by the e-mail validator before submission.</dd>
+    <dt>Requirement</dt><dd><code>FR-1 Login</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_LOGIN_005">
+  <div class="ch"><code>TC_LOGIN_005</code><span class="t">Password shorter than six characters</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>App installed and the QA account exists</dd>
+    <dt>Steps</dt><dd><ol><li>Open Login.</li><li>Enter a valid e-mail.</li><li>Enter &#x27;123&#x27;.</li><li>Tap Log In.</li></ol></dd>
+    <dt>Expected</dt><dd>The password field shows &#x27;Password must be at least 6 characters.&#x27;</dd>
+    <dt>Actual</dt><dd>A 3-character password is rejected with the localized minimum-length message.</dd>
+    <dt>Requirement</dt><dd><code>FR-1 Login</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_LOGIN_006">
+  <div class="ch"><code>TC_LOGIN_006</code><span class="t">Session is restored on restart</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>App installed and the QA account exists</dd>
+    <dt>Steps</dt><dd><ol><li>Sign in successfully.</li><li>Force-stop the app.</li><li>Relaunch.</li></ol></dd>
+    <dt>Expected</dt><dd>The app skips Login and opens straight on the Home feed.</dd>
+    <dt>Actual</dt><dd>After a successful sign-in, force-stop + relaunch restored the session and opened the Home feed directly.</dd>
+    <dt>Requirement</dt><dd><code>FR-1 Login</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_LOGIN_007">
+  <div class="ch"><code>TC_LOGIN_007</code><span class="t">Log in with a non-existent account</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>App installed and the QA account exists</dd>
+    <dt>Steps</dt><dd><ol><li>Open Login.</li><li>Enter &#x27;ghost@streetbite.app&#x27;.</li><li>Enter any 6+ character password.</li><li>Tap Log In.</li></ol></dd>
+    <dt>Expected</dt><dd>A friendly message is shown and the user stays on Login.</dd>
+    <dt>Actual</dt><dd>An unknown e-mail is rejected with the wrong-credential message.</dd>
+    <dt>Requirement</dt><dd><code>FR-1 Login</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_LOGIN_008">
+  <div class="ch"><code>TC_LOGIN_008</code><span class="t">Offline login</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>App installed and the QA account exists</dd>
+    <dt>Steps</dt><dd><ol><li>Enable airplane mode.</li><li>Sign out and relaunch.</li><li>Attempt to log in.</li></ol></dd>
+    <dt>Expected</dt><dd>A network-oriented message is shown; the app does not crash.</dd>
+    <dt>Actual</dt><dd>Not executed - airplane-mode round pending.</dd>
+    <dt>Requirement</dt><dd><code>FR-1 Login, NFR-5 Error handling</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="suitehead" id="suite-sign up">Sign Up &mdash; 0 passed / 5</div>
+<div class="case" id="TC_SIGNUP_001">
+  <div class="ch"><code>TC_SIGNUP_001</code><span class="t">Sign up with valid details</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>App installed and the QA account exists</dd>
+    <dt>Steps</dt><dd><ol><li>Open Login, tap Sign Up.</li><li>Enter &#x27;yasmine adel&#x27;.</li><li>Enter a new e-mail.</li><li>Enter and confirm &#x27;StreetBite123&#x27;.</li><li>Tap Sign Up.</li></ol></dd>
+    <dt>Expected</dt><dd>The name is stored capitalised, a confirmation dialog appears, then Home opens.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-1 Sign Up</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_SIGNUP_002">
+  <div class="ch"><code>TC_SIGNUP_002</code><span class="t">Full name must start with a capital letter</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>App installed and the QA account exists</dd>
+    <dt>Steps</dt><dd><ol><li>Open Sign Up.</li><li>Enter &#x27;yasmine adel&#x27;.</li><li>Fill the remaining fields.</li><li>Tap Sign Up.</li></ol></dd>
+    <dt>Expected</dt><dd>The name field shows &#x27;Names must start with a capital letter.&#x27;</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-1 Sign Up</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_SIGNUP_003">
+  <div class="ch"><code>TC_SIGNUP_003</code><span class="t">Full name must contain two words</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>App installed and the QA account exists</dd>
+    <dt>Steps</dt><dd><ol><li>Open Sign Up.</li><li>Enter &#x27;Yasmine&#x27;.</li><li>Fill the remaining fields.</li><li>Tap Sign Up.</li></ol></dd>
+    <dt>Expected</dt><dd>The name field shows &#x27;Please enter your first and last name.&#x27;</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-1 Sign Up</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_SIGNUP_004">
+  <div class="ch"><code>TC_SIGNUP_004</code><span class="t">Passwords do not match</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>App installed and the QA account exists</dd>
+    <dt>Steps</dt><dd><ol><li>Open Sign Up.</li><li>Fill the fields with different passwords.</li><li>Tap Sign Up.</li></ol></dd>
+    <dt>Expected</dt><dd>The confirm field shows &#x27;Passwords do not match.&#x27;</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-1 Sign Up</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_SIGNUP_005">
+  <div class="ch"><code>TC_SIGNUP_005</code><span class="t">Sign up with an e-mail that already exists</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>App installed and the QA account exists</dd>
+    <dt>Steps</dt><dd><ol><li>Open Sign Up.</li><li>Enter &#x27;yasmine@streetbite.app&#x27;.</li><li>Complete the form.</li><li>Tap Sign Up.</li></ol></dd>
+    <dt>Expected</dt><dd>A friendly message states the account already exists.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-1 Sign Up</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<nav class="pager">
+  <a href="02-environment.html"><span class="lbl">← Previous</span><span class="to">02 · Environment &amp; criteria</span></a>
+  <a class="next" href="04-cases-home.html"><span class="lbl">Next →</span><span class="to">04 · Home &amp; Meal details</span></a>
+</nav>
+<footer class="footline">StreetBite QA · generated from <code>TestPlan_and_TestCases.xlsx</code> · commit <code>8b37078</code> · 2026-10-18</footer>
+</main>
+<a class="top" href="#">↑ Top</a>
+</body>
+</html>

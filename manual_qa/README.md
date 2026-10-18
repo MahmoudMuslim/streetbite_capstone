@@ -37,6 +37,7 @@ build `1.0.0+3`.
 | Artefact | Path | Format |
 |---|---|---|
 | Test plan + cases + traceability | [`TestPlan_and_TestCases.xlsx`](TestPlan_and_TestCases.xlsx) | Excel |
+| **Multi-page QA dashboard** | [`dashboard/index.html`](dashboard/index.html) | HTML |
 | Test closure summary (one page) | [`TestClosureSummary.pdf`](TestClosureSummary.pdf) | PDF |
 | Screenshots | [`screenshots/`](screenshots/) | PNG |
 | Generators | [`scripts/`](scripts/) | Python |
@@ -97,11 +98,15 @@ python scripts\build_qa_workbook.py      # 1. base plan, suites, traceability
 python scripts\apply_execution_results.py # 2. real 17/51 execution record
 python scripts\apply_defect_log.py        # 3. the 8 observed defects
 python scripts\build_closure_summary.py   # 4. the one-page PDF
+python scripts\build_qa_dashboard.py      # 5. the multi-page HTML dashboard
 ```
 
 Run them **in that order**. Each script edits the workbook produced by the
 previous one, so skipping step 2 or 3 leaves the workbook showing the initial
-plan rather than what was actually observed.
+plan rather than what was actually observed. `build_qa_dashboard.py` reads the
+finished workbook and regenerates `dashboard/` (index + `pages/00`–`09`); its
+metrics come from the real Test Cases execution record, not the workbook's
+baseline Traceability row.
 
 ---
 

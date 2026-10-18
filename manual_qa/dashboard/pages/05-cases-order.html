@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cart &amp; Map · StreetBite QA</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<nav id="toc">
+  <div class="brand">StreetBite<span>Manual QA pack · build 1.0.0+3</span></div>
+  <h3>Overview</h3>
+  <ol>
+    <li><a href="00-overview.html"><b>00</b>Dashboard &amp; status</a></li>
+  </ol>
+  <h3>Test Plan</h3>
+  <ol>
+    <li><a href="01-test-plan.html"><b>01</b>Plan, objectives, scope</a></li>
+    <li><a href="02-environment.html"><b>02</b>Environment &amp; criteria</a></li>
+  </ol>
+  <h3>Test Cases</h3>
+  <ol>
+    <li><a href="03-cases-auth.html"><b>03</b>Login &amp; Sign Up</a></li>
+    <li><a href="04-cases-home.html"><b>04</b>Home &amp; Meal details</a></li>
+    <li><a href="05-cases-order.html" class="cur"><b>05</b>Cart &amp; Map</a></li>
+    <li><a href="06-cases-profile.html"><b>06</b>Profile &amp; General</a></li>
+  </ol>
+  <h3>Coverage &amp; Defects</h3>
+  <ol>
+    <li><a href="07-traceability.html"><b>07</b>Traceability matrix</a></li>
+    <li><a href="08-defects.html"><b>08</b>Defect log</a></li>
+  </ol>
+  <h3>Evidence &amp; Closure</h3>
+  <ol>
+    <li><a href="09-evidence.html"><b>09</b>Evidence &amp; closure</a></li>
+  </ol>
+  <p class="home"><a href="../index.html">↑ Dashboard index</a></p>
+</nav>
+<main>
+<p class="crumb"><a href="../index.html">Dashboard</a> · <span>Section 05 of 10</span></p><header class="doc"><h1>Cart &amp; Map</h1><p class="sub">StreetBite · Manual QA · build 1.0.0+3</p></header>
+<section><h2><span class="num">05</span> · Cart &amp; Map</h2><p>Cart state, totals, the SOLID payment strategies and checkout, plus the vendor map. The map cases are blocked by the open <code>SB-119</code> credential issue.</p></section>
+<div class="suitehead" id="suite-cart">Cart &mdash; 1 passed / 8</div>
+<div class="case" id="TC_CART_001">
+  <div class="ch"><code>TC_CART_001</code><span class="t">Add a meal from the grid</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Sign in.</li><li>Tap the + icon on a meal card.</li></ol></dd>
+    <dt>Expected</dt><dd>A SnackBar confirms and the cart badge increments.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-2 / FR-4 Cart</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_CART_002">
+  <div class="ch"><code>TC_CART_002</code><span class="t">Cart lists the item with a price and a remove button</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Add a meal.</li><li>Open the cart from the AppBar.</li></ol></dd>
+    <dt>Expected</dt><dd>The line shows the image, name, unit price and a remove control.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-4 Cart</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_CART_003">
+  <div class="ch"><code>TC_CART_003</code><span class="t">Increment and decrement a line</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Open the cart.</li><li>Tap + on the line three times.</li></ol></dd>
+    <dt>Expected</dt><dd>The quantity and the line total update reactively.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-4 Cart</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_CART_004">
+  <div class="ch"><code>TC_CART_004</code><span class="t">Removing the last serving empties the cart</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Open the cart with a single serving.</li><li>Tap - once.</li></ol></dd>
+    <dt>Expected</dt><dd>The cart empties and a SnackBar says the cart is now empty.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-4 Cart</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_CART_005">
+  <div class="ch"><code>TC_CART_005</code><span class="t">Order summary totals are correct</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Add two servings of a $12.50 meal.</li><li>Open the cart.</li></ol></dd>
+    <dt>Expected</dt><dd>Subtotal $25.00, delivery $0.00 (over the $30 threshold is not met, so fees apply), service fee $1.49 and a matching total are shown.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-4 Cart, SOLID payment</code></dd>
+    <dt>Defect</dt><dd><span class="pill fail">SB-102</span></dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_CART_006">
+  <div class="ch"><code>TC_CART_006</code><span class="t">Place an order with cash on delivery</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Add a meal.</li><li>Open the cart.</li><li>Select Cash.</li><li>Tap Place order.</li></ol></dd>
+    <dt>Expected</dt><dd>The confirmation screen appears and the order is stored in Firestore.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-4 Checkout</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_CART_007">
+  <div class="ch"><code>TC_CART_007</code><span class="t">Place an order with card payment</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Add a meal.</li><li>Open the cart.</li><li>Select Card.</li><li>Tap Place order.</li></ol></dd>
+    <dt>Expected</dt><dd>The confirmation screen appears and the order is stored with the card strategy.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-4 Checkout, SOLID payment</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_CART_008">
+  <div class="ch"><code>TC_CART_008</code><span class="t">The cart is cleared after checkout</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Place an order.</li><li>Re-open the cart from Home.</li></ol></dd>
+    <dt>Expected</dt><dd>The empty-cart state is shown and the badge is 0.</dd>
+    <dt>Actual</dt><dd>Opening the cart with no items shows the empty state with a &#x27;Browse menu&#x27; CTA. (Screenshot 06_cart_empty.png)</dd>
+    <dt>Requirement</dt><dd><code>FR-4 Checkout</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="suitehead" id="suite-map">Map &mdash; 0 passed / 4</div>
+<div class="case" id="TC_MAP_001">
+  <div class="ch"><code>TC_MAP_001</code><span class="t">The Nearby Vendors map loads</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Sign in.</li><li>Tap the map icon in the AppBar.</li></ol></dd>
+    <dt>Expected</dt><dd>A full-screen Google Map titled &#x27;Nearby Vendors&#x27; opens.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-5 Vendor map</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_MAP_002">
+  <div class="ch"><code>TC_MAP_002</code><span class="t">Five vendor markers are pinned</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Open the map.</li><li>Zoom out to the initial camera.</li></ol></dd>
+    <dt>Expected</dt><dd>At least five markers appear across different cities.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-5 Vendor map</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_MAP_003">
+  <div class="ch"><code>TC_MAP_003</code><span class="t">Tapping a marker opens the info window</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Open the map.</li><li>Tap the Cairo marker.</li></ol></dd>
+    <dt>Expected</dt><dd>An info window shows the vendor name, cuisine type, rating and distance.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-5 Vendor map</code></dd>
+    <dt>Defect</dt><dd><span class="pill fail">SB-103</span></dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_MAP_004">
+  <div class="ch"><code>TC_MAP_004</code><span class="t">Map without an API key degrades gracefully</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Remove the Maps key from key.properties.</li><li>Rebuild and open the map.</li></ol></dd>
+    <dt>Expected</dt><dd>A friendly error panel explains the configuration problem; no crash.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>NFR-5 Error handling</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<nav class="pager">
+  <a href="04-cases-home.html"><span class="lbl">← Previous</span><span class="to">04 · Home &amp; Meal details</span></a>
+  <a class="next" href="06-cases-profile.html"><span class="lbl">Next →</span><span class="to">06 · Profile &amp; General</span></a>
+</nav>
+<footer class="footline">StreetBite QA · generated from <code>TestPlan_and_TestCases.xlsx</code> · commit <code>8b37078</code> · 2026-10-18</footer>
+</main>
+<a class="top" href="#">↑ Top</a>
+</body>
+</html>

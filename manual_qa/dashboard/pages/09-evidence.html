@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evidence &amp; closure · StreetBite QA</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<nav id="toc">
+  <div class="brand">StreetBite<span>Manual QA pack · build 1.0.0+3</span></div>
+  <h3>Overview</h3>
+  <ol>
+    <li><a href="00-overview.html"><b>00</b>Dashboard &amp; status</a></li>
+  </ol>
+  <h3>Test Plan</h3>
+  <ol>
+    <li><a href="01-test-plan.html"><b>01</b>Plan, objectives, scope</a></li>
+    <li><a href="02-environment.html"><b>02</b>Environment &amp; criteria</a></li>
+  </ol>
+  <h3>Test Cases</h3>
+  <ol>
+    <li><a href="03-cases-auth.html"><b>03</b>Login &amp; Sign Up</a></li>
+    <li><a href="04-cases-home.html"><b>04</b>Home &amp; Meal details</a></li>
+    <li><a href="05-cases-order.html"><b>05</b>Cart &amp; Map</a></li>
+    <li><a href="06-cases-profile.html"><b>06</b>Profile &amp; General</a></li>
+  </ol>
+  <h3>Coverage &amp; Defects</h3>
+  <ol>
+    <li><a href="07-traceability.html"><b>07</b>Traceability matrix</a></li>
+    <li><a href="08-defects.html"><b>08</b>Defect log</a></li>
+  </ol>
+  <h3>Evidence &amp; Closure</h3>
+  <ol>
+    <li><a href="09-evidence.html" class="cur"><b>09</b>Evidence &amp; closure</a></li>
+  </ol>
+  <p class="home"><a href="../index.html">↑ Dashboard index</a></p>
+</nav>
+<main>
+<p class="crumb"><a href="../index.html">Dashboard</a> · <span>Section 09 of 10</span></p><header class="doc"><h1>Evidence &amp; closure</h1><p class="sub">StreetBite · Manual QA · build 1.0.0+3</p></header>
+
+<section>
+  <h2><span class="num">09</span> · Evidence &amp; closure</h2>
+  <p>Screenshots are numbered to line up with the case IDs. All were captured from
+     the release APK on the physical handset below.</p>
+  <div class="key"><b>Device used for the manual round</b>
+     Xiaomi Redmi 24117RN76G &middot; Android 16 (API 36) &middot; 1080×2400
+     &middot; 480&nbsp;dpi &middot; release APK
+     <code>build/app/outputs/flutter-apk/app-release.apk</code>.
+     The Appium suite ran against the same handset (6/6 passing).</div>
+</section>
+<section>
+  <h3>Execution summary</h3>
+<div class="metricgrid">
+  <div class="metric"><div class="big">51</div><div class="lbl">Total cases</div></div>
+  <div class="metric ok"><div class="big">17</div><div class="lbl">Executed &amp; passed</div></div>
+  <div class="metric warn"><div class="big">34</div><div class="lbl">Blocked</div></div>
+  <div class="metric"><div class="big">0</div><div class="lbl">Failed</div></div>
+  <div class="metric"><div class="big">33%</div><div class="lbl">Pass rate</div></div>
+</div>
+<div class="bar" title="17 of 51 cases passed"><i style="width:33%"></i></div>
+
+  <p>The pack is <b>not ready to close</b>: 17 of 51 cases passed, 34 blocked,
+     one High defect (<code>SB-119</code>) open. The full plan, cases and defect
+     log live in <a href="../../TestPlan_and_TestCases.xlsx">the workbook</a> and
+     <a href="../../TestClosureSummary.pdf">the closure summary</a>.</p>
+</section>
+<section>
+  <h3>Screenshots</h3>
+  <div class="shots">
+  <figure class="shot"><img src="../../screenshots/01_splash.png" alt="Splash during session restore"><figcaption><b>01_splash.png</b><br>Splash during session restore</figcaption></figure>
+  <figure class="shot"><img src="../../screenshots/02_login_error.png" alt="Login SnackBar on a rejected sign-in"><figcaption><b>02_login_error.png</b><br>Login SnackBar on a rejected sign-in</figcaption></figure>
+  <figure class="shot"><img src="../../screenshots/03_signup.png" alt="Create-account form"><figcaption><b>03_signup.png</b><br>Create-account form</figcaption></figure>
+  <figure class="shot"><img src="../../screenshots/04_home_feed.png" alt="Home feed with the live meals grid"><figcaption><b>04_home_feed.png</b><br>Home feed with the live meals grid</figcaption></figure>
+  <figure class="shot"><img src="../../screenshots/05_home_arabic.png" alt="Arabic (RTL), Arabic-Indic digits"><figcaption><b>05_home_arabic.png</b><br>Arabic (RTL), Arabic-Indic digits</figcaption></figure>
+  <figure class="shot"><img src="../../screenshots/06_cart_empty.png" alt="Empty-cart state"><figcaption><b>06_cart_empty.png</b><br>Empty-cart state</figcaption></figure>
+  <figure class="shot"><img src="../../screenshots/07_meal_details.png" alt="Meal details: favourite + add-to-cart"><figcaption><b>07_meal_details.png</b><br>Meal details: favourite + add-to-cart</figcaption></figure>
+  <figure class="shot"><img src="../../screenshots/08_vendor_map_info.png" alt="Vendor map with a selected info window"><figcaption><b>08_vendor_map_info.png</b><br>Vendor map with a selected info window</figcaption></figure>
+  <figure class="shot"><img src="../../screenshots/09_profile_device.png" alt="Profile behind the gate, device info"><figcaption><b>09_profile_device.png</b><br>Profile behind the gate, device info</figcaption></figure>
+  <figure class="shot"><img src="../../screenshots/10_dark_mode.png" alt="Dark theme"><figcaption><b>10_dark_mode.png</b><br>Dark theme</figcaption></figure>
+  <figure class="shot"><img src="../../screenshots/11_biometric_prompt.png" alt="In-app biometric gate on Profile"><figcaption><b>11_biometric_prompt.png</b><br>In-app biometric gate on Profile</figcaption></figure>
+  <figure class="shot"><img src="../../screenshots/12-cross-device-sync.png" alt="Cross-device Firestore continuity"><figcaption><b>12-cross-device-sync.png</b><br>Cross-device Firestore continuity</figcaption></figure>
+  </div>
+</section>
+
+<nav class="pager">
+  <a href="08-defects.html"><span class="lbl">← Previous</span><span class="to">08 · Defect log</span></a>
+</nav>
+<footer class="footline">StreetBite QA · generated from <code>TestPlan_and_TestCases.xlsx</code> · commit <code>8b37078</code> · 2026-10-18</footer>
+</main>
+<a class="top" href="#">↑ Top</a>
+</body>
+</html>

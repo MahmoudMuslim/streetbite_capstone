@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traceability matrix · StreetBite QA</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<nav id="toc">
+  <div class="brand">StreetBite<span>Manual QA pack · build 1.0.0+3</span></div>
+  <h3>Overview</h3>
+  <ol>
+    <li><a href="00-overview.html"><b>00</b>Dashboard &amp; status</a></li>
+  </ol>
+  <h3>Test Plan</h3>
+  <ol>
+    <li><a href="01-test-plan.html"><b>01</b>Plan, objectives, scope</a></li>
+    <li><a href="02-environment.html"><b>02</b>Environment &amp; criteria</a></li>
+  </ol>
+  <h3>Test Cases</h3>
+  <ol>
+    <li><a href="03-cases-auth.html"><b>03</b>Login &amp; Sign Up</a></li>
+    <li><a href="04-cases-home.html"><b>04</b>Home &amp; Meal details</a></li>
+    <li><a href="05-cases-order.html"><b>05</b>Cart &amp; Map</a></li>
+    <li><a href="06-cases-profile.html"><b>06</b>Profile &amp; General</a></li>
+  </ol>
+  <h3>Coverage &amp; Defects</h3>
+  <ol>
+    <li><a href="07-traceability.html" class="cur"><b>07</b>Traceability matrix</a></li>
+    <li><a href="08-defects.html"><b>08</b>Defect log</a></li>
+  </ol>
+  <h3>Evidence &amp; Closure</h3>
+  <ol>
+    <li><a href="09-evidence.html"><b>09</b>Evidence &amp; closure</a></li>
+  </ol>
+  <p class="home"><a href="../index.html">↑ Dashboard index</a></p>
+</nav>
+<main>
+<p class="crumb"><a href="../index.html">Dashboard</a> · <span>Section 07 of 10</span></p><header class="doc"><h1>Traceability matrix</h1><p class="sub">StreetBite · Manual QA · build 1.0.0+3</p></header>
+
+<section>
+  <h2><span class="num">07</span> · Traceability matrix</h2>
+  <p>Requirement → case mapping is taken from the <b>Traceability</b> sheet, but
+     the <i>Passed / Blocked</i> columns are recomputed here from each listed case's
+     real execution status in the <b>Test Cases</b> sheet.</p>
+  <div class="warn"><b>Why this differs from the workbook</b>
+    The Traceability sheet still shows the <i>baseline plan</i> ("51 passed, 0
+    blocked"). The dashboard never copies that number: it reports what was actually
+    observed on the device. A requirement is only marked <i>Passed</i> when every
+    case mapped to it has passed.</div>
+  <table class="tbl"><thead><tr><th>Req</th><th>Requirement</th><th>Cases</th>
+    <th>Passed</th><th>Blocked</th><th>Result</th></tr></thead><tbody>
+<tr><td><code>FR-1</code></td><td>Onboarding, Login and Sign Up with Firebase Auth</td><td class='n'>13</td><td class='n' style='color:var(--green-d);font-weight:700'>7</td><td class='n'>6</td><td><span class="pill blocked">Partial</span></td></tr>
+<tr><td><code>FR-2</code></td><td>Home screen live menu feed, grid, Hot Offers and theme toggle</td><td class='n'>8</td><td class='n' style='color:var(--green-d);font-weight:700'>5</td><td class='n'>3</td><td><span class="pill blocked">Partial</span></td></tr>
+<tr><td><code>FR-3</code></td><td>Meal details screen with cart and favourites</td><td class='n'>4</td><td class='n' style='color:var(--green-d);font-weight:700'>1</td><td class='n'>3</td><td><span class="pill blocked">Partial</span></td></tr>
+<tr><td><code>FR-4</code></td><td>Cart, totals, SOLID payment strategies and checkout</td><td class='n'>8</td><td class='n' style='color:var(--green-d);font-weight:700'>1</td><td class='n'>7</td><td><span class="pill blocked">Partial</span></td></tr>
+<tr><td><code>FR-5</code></td><td>Vendor map with at least five markers and an info window</td><td class='n'>4</td><td class='n' style='color:var(--green-d);font-weight:700'>0</td><td class='n'>4</td><td><span class="pill blocked">Partial</span></td></tr>
+<tr><td><code>FR-6</code></td><td>Profile behind biometrics with device info, photo and Firestore lists</td><td class='n'>7</td><td class='n' style='color:var(--green-d);font-weight:700'>0</td><td class='n'>7</td><td><span class="pill blocked">Partial</span></td></tr>
+<tr><td><code>FR-7</code></td><td>Full English and Arabic localization with a runtime toggle</td><td class='n'>2</td><td class='n' style='color:var(--green-d);font-weight:700'>2</td><td class='n'>0</td><td><span class="pill pass">Passed</span></td></tr>
+<tr><td><code>NFR-5</code></td><td>Every network, Firebase and biometric error is user friendly</td><td class='n'>5</td><td class='n' style='color:var(--green-d);font-weight:700'>0</td><td class='n'>5</td><td><span class="pill blocked">Partial</span></td></tr>
+<tr><td><code>NFR-6</code></td><td>Responsive via MediaQuery across at least two screen sizes</td><td class='n'>4</td><td class='n' style='color:var(--green-d);font-weight:700'>1</td><td class='n'>3</td><td><span class="pill blocked">Partial</span></td></tr>
+<tr><td><code>SOLID</code></td><td>Order model applies SOLID through the payment strategies</td><td class='n'>3</td><td class='n' style='color:var(--green-d);font-weight:700'>0</td><td class='n'>3</td><td><span class="pill blocked">Partial</span></td></tr>
+  </tbody></table>
+</section>
+
+<nav class="pager">
+  <a href="06-cases-profile.html"><span class="lbl">← Previous</span><span class="to">06 · Profile &amp; General</span></a>
+  <a class="next" href="08-defects.html"><span class="lbl">Next →</span><span class="to">08 · Defect log</span></a>
+</nav>
+<footer class="footline">StreetBite QA · generated from <code>TestPlan_and_TestCases.xlsx</code> · commit <code>8b37078</code> · 2026-10-18</footer>
+</main>
+<a class="top" href="#">↑ Top</a>
+</body>
+</html>

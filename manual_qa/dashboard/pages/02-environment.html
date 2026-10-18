@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Environment &amp; criteria · StreetBite QA</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<nav id="toc">
+  <div class="brand">StreetBite<span>Manual QA pack · build 1.0.0+3</span></div>
+  <h3>Overview</h3>
+  <ol>
+    <li><a href="00-overview.html"><b>00</b>Dashboard &amp; status</a></li>
+  </ol>
+  <h3>Test Plan</h3>
+  <ol>
+    <li><a href="01-test-plan.html"><b>01</b>Plan, objectives, scope</a></li>
+    <li><a href="02-environment.html" class="cur"><b>02</b>Environment &amp; criteria</a></li>
+  </ol>
+  <h3>Test Cases</h3>
+  <ol>
+    <li><a href="03-cases-auth.html"><b>03</b>Login &amp; Sign Up</a></li>
+    <li><a href="04-cases-home.html"><b>04</b>Home &amp; Meal details</a></li>
+    <li><a href="05-cases-order.html"><b>05</b>Cart &amp; Map</a></li>
+    <li><a href="06-cases-profile.html"><b>06</b>Profile &amp; General</a></li>
+  </ol>
+  <h3>Coverage &amp; Defects</h3>
+  <ol>
+    <li><a href="07-traceability.html"><b>07</b>Traceability matrix</a></li>
+    <li><a href="08-defects.html"><b>08</b>Defect log</a></li>
+  </ol>
+  <h3>Evidence &amp; Closure</h3>
+  <ol>
+    <li><a href="09-evidence.html"><b>09</b>Evidence &amp; closure</a></li>
+  </ol>
+  <p class="home"><a href="../index.html">↑ Dashboard index</a></p>
+</nav>
+<main>
+<p class="crumb"><a href="../index.html">Dashboard</a> · <span>Section 02 of 10</span></p><header class="doc"><h1>Environment &amp; criteria</h1><p class="sub">StreetBite · Manual QA · build 1.0.0+3</p></header>
+
+<section>
+  <h2><span class="num">02</span> · Environment, criteria &amp; risks</h2>
+  <p>The manual round and the Appium suite both ran on the physical Xiaomi
+     <code>24117RN76G</code> (Android 16, 1080×2400), which makes the manual and
+     automated results comparable rather than anecdotal — see the
+     <a href="09-evidence.html">evidence page</a>. The Test Plan sheet lists the
+     originally planned emulators; the round was executed on hardware.</p>
+</section>
+<section><h3>5. Test environment</h3><table class="tbl"><thead><tr><th>Key</th><th>Item</th><th>Detail</th></tr></thead><tbody>
+<tr><td><code></code></td><td>Device</td><td>Pixel 6a (emulator) - Android 14, API 34, 1080 x 2400, 420 dpi.</td></tr>
+<tr><td><code></code></td><td>Secondary device</td><td>Galaxy A54 (physical) - Android 13, API 33, 1080 x 2340.</td></tr>
+<tr><td><code></code></td><td>Network</td><td>Wi-Fi for the connected run; airplane mode for the offline run.</td></tr>
+<tr><td><code></code></td><td>Build</td><td>flutter build apk --release -&gt; build/app/outputs/flutter-apk/app-release.apk</td></tr>
+<tr><td><code></code></td><td>Distribution</td><td>Firebase App Distribution, 2 testers invited.</td></tr>
+<tr><td><code></code></td><td>Browsers/Viewports</td><td>Flutter renders natively; responsiveness verified at 360dp and 800dp widths.</td></tr>
+</tbody></table></section>
+<section><h3>6. Entry criteria</h3><table class="tbl"><thead><tr><th>Key</th><th>Item</th><th>Detail</th></tr></thead><tbody>
+<tr><td><code></code></td><td>E1</td><td>The release APK builds successfully and installs on the target device.</td></tr>
+<tr><td><code></code></td><td>E2</td><td>Firebase Auth is enabled with Email/Password sign-in.</td></tr>
+<tr><td><code></code></td><td>E3</td><td>Cloud Firestore is created and the rules allow authenticated read/write.</td></tr>
+<tr><td><code></code></td><td>E4</td><td>The Google Maps API key is configured in android/key.properties.</td></tr>
+<tr><td><code></code></td><td>E5</td><td>The QA account (yasmine@streetbite.app) exists.</td></tr>
+</tbody></table></section>
+<section><h3>7. Exit criteria</h3>
+  <div class="warn"><b>Exit status</b>
+     X1–X2 are <b>not met</b>: only 17 of 51 cases were executed, so Login/Home
+     coverage is partial and total coverage is below 95%. X3–X4 are <b>not met</b>:
+     <code>SB-119</code> (High) is still open. X5–X7 hold for the cases that were
+     run.</div>
+  <table class="tbl"><thead><tr><th>Key</th><th>Item</th><th>Detail</th></tr></thead><tbody>
+<tr><td><code></code></td><td>X1</td><td>100% of the Login and Home suites executed (0 Blocked).</td></tr>
+<tr><td><code></code></td><td>X2</td><td>At least 95% of the total suite executed.</td></tr>
+<tr><td><code></code></td><td>X3</td><td>Zero open Critical or Blocker defects.</td></tr>
+<tr><td><code></code></td><td>X4</td><td>Zero open High-severity defects.</td></tr>
+<tr><td><code></code></td><td>X5</td><td>Every failed case has a Jira ticket with severity, priority and a screenshot.</td></tr>
+<tr><td><code></code></td><td>X6</td><td>The Traceability Matrix shows every in-scope requirement mapped to at least one executed case.</td></tr>
+<tr><td><code></code></td><td>X7</td><td>The Appium suite passes on both the emulator and the physical device.</td></tr>
+</tbody></table></section>
+<section><h3>8. Risks &amp; mitigations</h3><table class="tbl"><thead><tr><th>Key</th><th>Item</th><th>Detail</th></tr></thead><tbody>
+<tr><td><code>R1</code></td><td>TheMealDB is a free third-party API and can rate-limit or go down.</td><td>The repository falls back to the shared_preferences cache; TC_HOME_003 covers it.</td></tr>
+<tr><td><code>R2</code></td><td>Firebase App Distribution shares the same project as the course.</td><td>Emails are restricted per tester group; documented in the README.</td></tr>
+<tr><td><code>R3</code></td><td>Google Play Services are missing on some emulators, breaking the map.</td><td>MapErrorBoundary renders a friendly panel; TC_MAP_004 covers it.</td></tr>
+<tr><td><code>R4</code></td><td>local_auth behaves differently when no fingerprint is enrolled.</td><td>The gate offers an explicit bypass; TC_PROFILE_003 covers it.</td></tr>
+</tbody></table></section>
+<section><h3>9. Deliverables</h3><table class="tbl"><thead><tr><th>Key</th><th>Item</th><th>Detail</th></tr></thead><tbody>
+<tr><td><code></code></td><td>D1</td><td>This workbook: Test Plan, Test Cases, Traceability Matrix, Defect Log.</td></tr>
+<tr><td><code></code></td><td>D2</td><td>Screenshots of the Jira board showing every defect.</td></tr>
+<tr><td><code></code></td><td>D3</td><td>Test Closure Summary (one page).</td></tr>
+<tr><td><code></code></td><td>D4</td><td>automation/ - the Appium suite and its run reports.</td></tr>
+</tbody></table></section>
+
+<nav class="pager">
+  <a href="01-test-plan.html"><span class="lbl">← Previous</span><span class="to">01 · Plan, objectives, scope</span></a>
+  <a class="next" href="03-cases-auth.html"><span class="lbl">Next →</span><span class="to">03 · Login &amp; Sign Up</span></a>
+</nav>
+<footer class="footline">StreetBite QA · generated from <code>TestPlan_and_TestCases.xlsx</code> · commit <code>8b37078</code> · 2026-10-18</footer>
+</main>
+<a class="top" href="#">↑ Top</a>
+</body>
+</html>

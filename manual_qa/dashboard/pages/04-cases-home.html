@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home &amp; Meal details · StreetBite QA</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<nav id="toc">
+  <div class="brand">StreetBite<span>Manual QA pack · build 1.0.0+3</span></div>
+  <h3>Overview</h3>
+  <ol>
+    <li><a href="00-overview.html"><b>00</b>Dashboard &amp; status</a></li>
+  </ol>
+  <h3>Test Plan</h3>
+  <ol>
+    <li><a href="01-test-plan.html"><b>01</b>Plan, objectives, scope</a></li>
+    <li><a href="02-environment.html"><b>02</b>Environment &amp; criteria</a></li>
+  </ol>
+  <h3>Test Cases</h3>
+  <ol>
+    <li><a href="03-cases-auth.html"><b>03</b>Login &amp; Sign Up</a></li>
+    <li><a href="04-cases-home.html" class="cur"><b>04</b>Home &amp; Meal details</a></li>
+    <li><a href="05-cases-order.html"><b>05</b>Cart &amp; Map</a></li>
+    <li><a href="06-cases-profile.html"><b>06</b>Profile &amp; General</a></li>
+  </ol>
+  <h3>Coverage &amp; Defects</h3>
+  <ol>
+    <li><a href="07-traceability.html"><b>07</b>Traceability matrix</a></li>
+    <li><a href="08-defects.html"><b>08</b>Defect log</a></li>
+  </ol>
+  <h3>Evidence &amp; Closure</h3>
+  <ol>
+    <li><a href="09-evidence.html"><b>09</b>Evidence &amp; closure</a></li>
+  </ol>
+  <p class="home"><a href="../index.html">↑ Dashboard index</a></p>
+</nav>
+<main>
+<p class="crumb"><a href="../index.html">Dashboard</a> · <span>Section 04 of 10</span></p><header class="doc"><h1>Home &amp; Meal details</h1><p class="sub">StreetBite · Manual QA · build 1.0.0+3</p></header>
+<section><h2><span class="num">04</span> · Home &amp; Meal details</h2><p>The live TheMealDB feed, scrolling, Hot Offers, the theme and language toggles, and the meal details screen.</p></section>
+<div class="suitehead" id="suite-home">Home &mdash; 6 passed / 9</div>
+<div class="case" id="TC_HOME_001">
+  <div class="ch"><code>TC_HOME_001</code><span class="t">Home feed renders the live menu</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Sign in.</li><li>Observe the Home tab.</li></ol></dd>
+    <dt>Expected</dt><dd>Banner PageView, category chips, Hot Offers strip and a 2-column meals grid appear.</dd>
+    <dt>Actual</dt><dd>Home rendered the live feed from TheMealDB: 5-item banner PageView with page indicators, 7 category chips, Hot Offers strip and the 2-column meals grid. (Screenshot 04_home_feed.png)</dd>
+    <dt>Requirement</dt><dd><code>FR-2 Home feed</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_HOME_002">
+  <div class="ch"><code>TC_HOME_002</code><span class="t">Loading indicator is shown while fetching</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Sign out.</li><li>Enable airplane mode for 3s.</li><li>Sign in and observe Home.</li></ol></dd>
+    <dt>Expected</dt><dd>A CircularProgressIndicator is visible until the request settles.</dd>
+    <dt>Actual</dt><dd>A CircularProgressIndicator is shown while the feed request is in flight.</dd>
+    <dt>Requirement</dt><dd><code>FR-2 Home feed</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_HOME_003">
+  <div class="ch"><code>TC_HOME_003</code><span class="t">Feed falls back to the local cache offline</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Load Home once with a connection.</li><li>Enable airplane mode.</li><li>Force-stop and relaunch, then sign in.</li></ol></dd>
+    <dt>Expected</dt><dd>The previously cached meals render instead of an error screen.</dd>
+    <dt>Actual</dt><dd>Not executed - cache round pending.</dd>
+    <dt>Requirement</dt><dd><code>FR-2 Home feed, NFR-5 Error handling</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_HOME_004">
+  <div class="ch"><code>TC_HOME_004</code><span class="t">Scroll through the meals grid</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Sign in.</li><li>Swipe up three times on the grid.</li><li>Swipe down to the top.</li></ol></dd>
+    <dt>Expected</dt><dd>Further meal cards are revealed and the banner returns.</dd>
+    <dt>Actual</dt><dd>The CustomScrollView scrolls and later cards are realised without a crash.</dd>
+    <dt>Requirement</dt><dd><code>FR-2 Home feed</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_HOME_005">
+  <div class="ch"><code>TC_HOME_005</code><span class="t">Hot Offers strip shows five items</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Sign in.</li><li>Scroll to the Hot Offers row.</li><li>Swipe it horizontally.</li></ol></dd>
+    <dt>Expected</dt><dd>A horizontal list of five discounted cards is present and scrollable.</dd>
+    <dt>Actual</dt><dd>The Hot Offers strip is present and horizontally scrollable, with discount ribbons on each tile.</dd>
+    <dt>Requirement</dt><dd><code>FR-2 Home feed</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_HOME_006">
+  <div class="ch"><code>TC_HOME_006</code><span class="t">Search filters the meals grid</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Sign in.</li><li>Type &#x27;chicken&#x27; in the search field.</li></ol></dd>
+    <dt>Expected</dt><dd>Only meals whose name, category or area matches remain.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-2 Home feed</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_HOME_007">
+  <div class="ch"><code>TC_HOME_007</code><span class="t">Theme toggle switches to dark mode</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Sign in.</li><li>Tap the theme toggle in the AppBar.</li></ol></dd>
+    <dt>Expected</dt><dd>The whole app re-renders in the dark palette and the icon flips to a sun.</dd>
+    <dt>Actual</dt><dd>Dark mode applied to the AppBar, search field, chips, cards and the bottom navigation; the toggle icon flipped to a sun. (Screenshot 10_dark_mode.png)</dd>
+    <dt>Requirement</dt><dd><code>FR-2 Theme, NFR-6 Responsiveness</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_HOME_008">
+  <div class="ch"><code>TC_HOME_008</code><span class="t">Language toggle switches to Arabic at runtime</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Sign in.</li><li>Tap the EN/AR toggle in the AppBar.</li></ol></dd>
+    <dt>Expected</dt><dd>Every visible string switches to Arabic and the layout mirrors to RTL.</dd>
+    <dt>Actual</dt><dd>The EN/AR toggle switched every string to Arabic and the layout mirrored to RTL, including Arabic-Indic digits in the address. (Screenshot 05_home_arabic.png)</dd>
+    <dt>Requirement</dt><dd><code>FR-7 Localization</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_HOME_009">
+  <div class="ch"><code>TC_HOME_009</code><span class="t">Network error shows a friendly retry widget</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Enable airplane mode.</li><li>Clear the app cache.</li><li>Sign in.</li></ol></dd>
+    <dt>Expected</dt><dd>The error widget explains the problem and offers a Retry button.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>NFR-5 Error handling</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="suitehead" id="suite-meal details">Meal details &mdash; 1 passed / 4</div>
+<div class="case" id="TC_MEAL_001">
+  <div class="ch"><code>TC_MEAL_001</code><span class="t">Open the meal details screen</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Sign in.</li><li>Tap any meal card.</li></ol></dd>
+    <dt>Expected</dt><dd>Image, name, category, origin, instructions and price are shown.</dd>
+    <dt>Actual</dt><dd>Tapping a meal card opened the details screen with the image, name, category, origin, price and full instructions from TheMealDB.</dd>
+    <dt>Requirement</dt><dd><code>FR-3 Meal details</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_MEAL_002">
+  <div class="ch"><code>TC_MEAL_002</code><span class="t">Add to cart from the details screen</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Open a meal.</li><li>Tap Add to Cart.</li></ol></dd>
+    <dt>Expected</dt><dd>A SnackBar confirms the addition and the AppBar badge increments.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-3 Meal details</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_MEAL_003">
+  <div class="ch"><code>TC_MEAL_003</code><span class="t">Save the meal to favourites</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Open a meal.</li><li>Tap Save to favourites.</li></ol></dd>
+    <dt>Expected</dt><dd>The heart fills, a SnackBar confirms, and the meal appears under Profile &gt; Favourites.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-3 Favourites</code></dd>
+    <dt>Defect</dt><dd><span class="pill fail">SB-101</span></dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_MEAL_004">
+  <div class="ch"><code>TC_MEAL_004</code><span class="t">Remove the meal from favourites</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Open a saved meal.</li><li>Tap the filled heart.</li></ol></dd>
+    <dt>Expected</dt><dd>The heart empties and the meal leaves the Favourites list.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-3 Favourites</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<nav class="pager">
+  <a href="03-cases-auth.html"><span class="lbl">← Previous</span><span class="to">03 · Login &amp; Sign Up</span></a>
+  <a class="next" href="05-cases-order.html"><span class="lbl">Next →</span><span class="to">05 · Cart &amp; Map</span></a>
+</nav>
+<footer class="footline">StreetBite QA · generated from <code>TestPlan_and_TestCases.xlsx</code> · commit <code>8b37078</code> · 2026-10-18</footer>
+</main>
+<a class="top" href="#">↑ Top</a>
+</body>
+</html>

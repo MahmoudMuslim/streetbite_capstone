@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profile &amp; General · StreetBite QA</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<nav id="toc">
+  <div class="brand">StreetBite<span>Manual QA pack · build 1.0.0+3</span></div>
+  <h3>Overview</h3>
+  <ol>
+    <li><a href="00-overview.html"><b>00</b>Dashboard &amp; status</a></li>
+  </ol>
+  <h3>Test Plan</h3>
+  <ol>
+    <li><a href="01-test-plan.html"><b>01</b>Plan, objectives, scope</a></li>
+    <li><a href="02-environment.html"><b>02</b>Environment &amp; criteria</a></li>
+  </ol>
+  <h3>Test Cases</h3>
+  <ol>
+    <li><a href="03-cases-auth.html"><b>03</b>Login &amp; Sign Up</a></li>
+    <li><a href="04-cases-home.html"><b>04</b>Home &amp; Meal details</a></li>
+    <li><a href="05-cases-order.html"><b>05</b>Cart &amp; Map</a></li>
+    <li><a href="06-cases-profile.html" class="cur"><b>06</b>Profile &amp; General</a></li>
+  </ol>
+  <h3>Coverage &amp; Defects</h3>
+  <ol>
+    <li><a href="07-traceability.html"><b>07</b>Traceability matrix</a></li>
+    <li><a href="08-defects.html"><b>08</b>Defect log</a></li>
+  </ol>
+  <h3>Evidence &amp; Closure</h3>
+  <ol>
+    <li><a href="09-evidence.html"><b>09</b>Evidence &amp; closure</a></li>
+  </ol>
+  <p class="home"><a href="../index.html">↑ Dashboard index</a></p>
+</nav>
+<main>
+<p class="crumb"><a href="../index.html">Dashboard</a> · <span>Section 06 of 10</span></p><header class="doc"><h1>Profile &amp; General</h1><p class="sub">StreetBite · Manual QA · build 1.0.0+3</p></header>
+<section><h2><span class="num">06</span> · Profile &amp; General</h2><p>The biometric profile gate, device info, Firestore-backed lists, and the cross-cutting responsive / localization / theme cases.</p></section>
+<div class="suitehead" id="suite-profile">Profile &mdash; 0 passed / 7</div>
+<div class="case" id="TC_PROFILE_001">
+  <div class="ch"><code>TC_PROFILE_001</code><span class="t">The profile icon is behind a biometric gate</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Sign in.</li><li>Tap the profile avatar in the AppBar.</li></ol></dd>
+    <dt>Expected</dt><dd>The OS biometric prompt is shown before the profile opens.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-6 Biometrics</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_PROFILE_002">
+  <div class="ch"><code>TC_PROFILE_002</code><span class="t">A successful scan opens the profile</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Tap the avatar.</li><li>Complete the fingerprint scan.</li></ol></dd>
+    <dt>Expected</dt><dd>The Profile screen opens with the photo, name, e-mail and device info.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-6 Biometrics</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_PROFILE_003">
+  <div class="ch"><code>TC_PROFILE_003</code><span class="t">A device without biometrics offers a bypass</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Use an emulator with no fingerprint enrolled.</li><li>Tap the avatar.</li></ol></dd>
+    <dt>Expected</dt><dd>A dialog explains the situation and offers &#x27;Continue without biometrics&#x27;.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-6 Biometrics, NFR-5 Error handling</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_PROFILE_004">
+  <div class="ch"><code>TC_PROFILE_004</code><span class="t">Device model and OS version are shown</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Open the Profile screen.</li></ol></dd>
+    <dt>Expected</dt><dd>The device card lists the model, the OS version and the manufacturer.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-6 Device info</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_PROFILE_005">
+  <div class="ch"><code>TC_PROFILE_005</code><span class="t">Change the profile photo from the gallery</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Open the Profile screen.</li><li>Tap the camera badge.</li><li>Choose a gallery image.</li></ol></dd>
+    <dt>Expected</dt><dd>The picker opens, the photo is written to Firestore and the avatar updates immediately.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-6 image_picker</code></dd>
+    <dt>Defect</dt><dd><span class="pill fail">SB-105</span></dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_PROFILE_006">
+  <div class="ch"><code>TC_PROFILE_006</code><span class="t">Favourites are read live from Firestore</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Favourite two meals.</li><li>Open the Profile screen.</li></ol></dd>
+    <dt>Expected</dt><dd>Both meals are listed under Favourites.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-6 Firestore</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_PROFILE_007">
+  <div class="ch"><code>TC_PROFILE_007</code><span class="t">Order history is split into Current and Past</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Place an order.</li><li>Open the Profile screen.</li></ol></dd>
+    <dt>Expected</dt><dd>The order appears under &#x27;Current&#x27;; &#x27;Past&#x27; shows completed ones.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-6 Firestore</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="suitehead" id="suite-general">General &mdash; 2 passed / 6</div>
+<div class="case" id="TC_GEN_001">
+  <div class="ch"><code>TC_GEN_001</code><span class="t">Layout on a compact phone (360dp)</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Run on a 360 x 800 dp device.</li></ol></dd>
+    <dt>Expected</dt><dd>The 2-column grid, cards and forms fit with no overflow.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>NFR-6 Responsiveness</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_GEN_002">
+  <div class="ch"><code>TC_GEN_002</code><span class="t">Layout on a tablet (800dp)</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Run on an 800 dp wide tablet.</li></ol></dd>
+    <dt>Expected</dt><dd>The grid grows to 3-4 columns and content is width-constrained.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>NFR-6 Responsiveness</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_GEN_003">
+  <div class="ch"><code>TC_GEN_003</code><span class="t">No hard-coded strings remain</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Switch between English and Arabic.</li><li>Traverse every screen.</li></ol></dd>
+    <dt>Expected</dt><dd>Every visible string changes language; none stays English.</dd>
+    <dt>Actual</dt><dd>Home and Login verified in both languages with no English left on screen.</dd>
+    <dt>Requirement</dt><dd><code>FR-7 Localization</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_GEN_004">
+  <div class="ch"><code>TC_GEN_004</code><span class="t">Dark mode across every screen</span><span class="pill pass">Pass</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Enable dark mode.</li><li>Traverse every screen.</li></ol></dd>
+    <dt>Expected</dt><dd>Every screen is legible in dark mode with no unreadable contrast.</dd>
+    <dt>Actual</dt><dd>Home feed and Login verified in dark mode; contrast acceptable.</dd>
+    <dt>Requirement</dt><dd><code>FR-2 Theme</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>P1</dd>
+  </dl></div></div>
+<div class="case" id="TC_GEN_005">
+  <div class="ch"><code>TC_GEN_005</code><span class="t">Airplane-mode resilience across all screens</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Enable airplane mode.</li><li>Traverse Home, Cart, Orders, Profile and the Map.</li></ol></dd>
+    <dt>Expected</dt><dd>No crash; every screen shows data or a friendly message.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>NFR-5 Error handling</code></dd>
+    <dt>Defect</dt><dd>&mdash;</dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<div class="case" id="TC_GEN_006">
+  <div class="ch"><code>TC_GEN_006</code><span class="t">Dark-mode SnackBar contrast on the Cart screen</span><span class="pill blocked">Blocked</span></div>
+  <div class="bd"><dl class="kv">
+    <dt>Pre-condition</dt><dd>Signed in as the QA account</dd>
+    <dt>Steps</dt><dd><ol><li>Enable dark mode.</li><li>Remove the last cart line.</li></ol></dd>
+    <dt>Expected</dt><dd>The &#x27;your cart is now empty&#x27; SnackBar must be legible in dark mode.</dd>
+    <dt>Actual</dt><dd>Not executed - case is designed and ready but this execution round did not reach it.</dd>
+    <dt>Requirement</dt><dd><code>FR-2 Theme, NFR-6 Responsiveness</code></dd>
+    <dt>Defect</dt><dd><span class="pill fail">SB-104</span></dd>
+    <dt>Priority</dt><dd>&mdash;</dd>
+  </dl></div></div>
+<nav class="pager">
+  <a href="05-cases-order.html"><span class="lbl">← Previous</span><span class="to">05 · Cart &amp; Map</span></a>
+  <a class="next" href="07-traceability.html"><span class="lbl">Next →</span><span class="to">07 · Traceability matrix</span></a>
+</nav>
+<footer class="footline">StreetBite QA · generated from <code>TestPlan_and_TestCases.xlsx</code> · commit <code>8b37078</code> · 2026-10-18</footer>
+</main>
+<a class="top" href="#">↑ Top</a>
+</body>
+</html>
