@@ -154,14 +154,9 @@ nav .home{margin-top:12px}
 .crumb .t-ar{font-size:12px}
 .vh{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;
   clip:rect(0 0 0 0);white-space:nowrap;border:0;padding:0}
-/* The sidebar rule `nav{...height:100vh;position:sticky;background;...}` leaks onto
-   this <nav class="pager"> too, which stretches the grid row and inflates both buttons.
-   Reset the inherited nav chrome here (.pager out-specifies bare `nav`). */
-.pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:38px 0 8px;
-  position:static;height:auto;overflow:visible;padding:0;border:0;background:none}
-.pager a{border:1px solid var(--line);border-radius:12px;padding:12px 14px;
-  text-decoration:none;color:inherit;background:#fff;
-  display:flex;flex-direction:column;justify-content:center;min-height:56px}
+.pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:38px 0 8px}
+.pager a{border:1px solid var(--line);border-radius:12px;padding:10px 14px;
+  text-decoration:none;color:inherit;background:#fff}
 .pager a:hover{border-color:var(--green)}
 .pager .lbl{display:block;font-size:11px;letter-spacing:.07em;
   text-transform:uppercase;color:var(--muted);font-weight:700}
@@ -169,8 +164,6 @@ nav .home{margin-top:12px}
 .pager .to .t-ar{font-size:12.5px;color:var(--muted);direction:rtl}
 .pager .next{text-align:right}
 body[data-lang="ar"] .pager .next{text-align:left}
-/* also undo the RTL sidebar border that `body[data-lang="ar"] nav` leaks onto .pager */
-body[data-lang="ar"] .pager{border:0}
 .footline{font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);
   padding-top:10px;margin-top:20px}
 .footline .t-ar{display:block;direction:rtl;margin-top:2px}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project summary · StreetBite code documentation · §19</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body data-lang="both">
+<nav id="toc">
+  <div class="brand">StreetBite<span>Code documentation · by section<br>توثيق الكود · قسم لكل صفحة</span></div>
+  <div class="langbar">
+    <button data-lang="both" aria-pressed="true">Both</button>
+    <button data-lang="en" aria-pressed="false">EN</button>
+    <button data-lang="ar" aria-pressed="false">عربي</button>
+  </div>
+  <h3><span class="t-en">Front matter</span><span class="t-ar">المدخل</span></h3>
+  <ol>
+    <li><a href="00-cover.html"><b>00</b><span class="t-en">Cover page</span><span class="t-ar">صفحة الغلاف</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part I · Concepts</span><span class="t-ar">الجزء الأول · المفاهيم</span></h3>
+  <ol>
+    <li><a href="01-overview.html"><b>01</b><span class="t-en">What the app is</span><span class="t-ar">ما هو هذا التطبيق</span></a></li>
+    <li><a href="02-stack.html"><b>02</b><span class="t-en">Tech stack</span><span class="t-ar">التقنيات المستخدمة</span></a></li>
+    <li><a href="03-architecture.html"><b>03</b><span class="t-en">Architecture</span><span class="t-ar">المعمارية</span></a></li>
+    <li><a href="04-di.html"><b>04</b><span class="t-en">Composition root &amp; DI</span><span class="t-ar">جذر التركيب وحقن التبعيات</span></a></li>
+    <li><a href="05-state.html"><b>05</b><span class="t-en">State management</span><span class="t-ar">إدارة الحالة</span></a></li>
+    <li><a href="06-errors.html"><b>06</b><span class="t-en">Error handling</span><span class="t-ar">معالجة الأخطاء</span></a></li>
+    <li><a href="07-data.html"><b>07</b><span class="t-en">Data &amp; resilience</span><span class="t-ar">البيانات والصمود</span></a></li>
+    <li><a href="08-domain.html"><b>08</b><span class="t-en">Business rules</span><span class="t-ar">قواعد العمل</span></a></li>
+    <li><a href="09-theme.html"><b>09</b><span class="t-en">Theming &amp; layout</span><span class="t-ar">السمة والتخطيط</span></a></li>
+    <li><a href="10-l10n.html"><b>10</b><span class="t-en">Localisation</span><span class="t-ar">التعريب</span></a></li>
+    <li><a href="11-security.html"><b>11</b><span class="t-en">Security &amp; privacy</span><span class="t-ar">الأمان والخصوصية</span></a></li>
+    <li><a href="12-navigation.html"><b>12</b><span class="t-en">Navigation</span><span class="t-ar">التنقّل</span></a></li>
+    <li><a href="13-testing.html"><b>13</b><span class="t-en">Testing &amp; QA</span><span class="t-ar">الاختبار وضبط الجودة</span></a></li>
+    <li><a href="14-build.html"><b>14</b><span class="t-en">Build &amp; release</span><span class="t-ar">البناء والإصدار</span></a></li>
+  </ol>
+  <h3><span class="t-en">Part II · Reference</span><span class="t-ar">الجزء الثاني · المرجع</span></h3>
+  <ol>
+    <li><a href="15-files.html"><b>15</b><span class="t-en">Every file in <code>lib/</code></span><span class="t-ar">كل ملف في <code>lib/</code></span></a></li>
+    <li><a href="16-classes.html"><b>16</b><span class="t-en">Class &amp; type index</span><span class="t-ar">فهرس الأصناف والأنواع</span></a></li>
+    <li><a href="17-keys.html"><b>17</b><span class="t-en">Constants &amp; keys</span><span class="t-ar">الثوابت والمفاتيح والمعرّفات</span></a></li>
+    <li><a href="18-glossary.html"><b>18</b><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></a></li>
+  </ol>
+  <h3><span class="t-en">Back matter</span><span class="t-ar">الملخص</span></h3>
+  <ol>
+    <li><a href="19-project-summary.html" class="cur"><b>19</b><span class="t-en">Project summary</span><span class="t-ar">ملخّص المشروع</span></a></li>
+  </ol>
+  <p class="home"><a href="../index.html">↑ Full index · الفهرس</a></p>
+</nav>
+<main>
+<h1 class="vh">StreetBite code documentation · §19 Project summary</h1>
+<p class="crumb"><span class="t-en">StreetBite code documentation · <a href="../index.html">Full index</a></span><span class="t-ar">توثيق كود StreetBite · <a href="../index.html">الفهرس الكامل</a></span></p>
+<section id="summary">
+  <div class="bi">
+    <div class="en">
+      <h2>Project summary</h2>
+      <p><b>What shipped.</b> A fourteen-screen Flutter app on Clean Architecture with a
+      pure-Dart domain, one Bloc (the cart) and seven Cubits, GetIt dependency injection
+      against abstract interfaces, a Dio + TheMealDB feed mirrored into a local cache,
+      Firebase Auth and Cloud Firestore, full English/Arabic with RTL, three themes, and a
+      fingerprint-gated profile.</p>
+      <p><b>How honest the numbers are.</b> <code>flutter analyze</code> reports 0 issues and
+      the Dart suite is green; Appium is <b>6/6</b> on a physical Android 16 handset; the manual
+      QA pack records <b>17 of 51</b> cases executed and passed, with the other 34 left
+      <em>Blocked</em> rather than assumed. Fourteen defects were raised, thirteen fixed and
+      re-verified; one (SB-119, the Google Maps key) stays open as a credential/billing limit.</p>
+      <p><b>Continuity.</b> The same signed-in account on a physical handset and an emulator
+      renders the identical live feed from one Cloud Firestore backend.</p>
+      <p>Read the <a href="13-testing.html">testing &amp; QA</a> section, or return to the
+      <a href="../index.html">full index</a>.</p>
+    </div>
+    <div class="ar">
+      <h2>ملخّص المشروع</h2>
+      <p><b>ما الذي تم بناؤه.</b> تطبيق Flutter من أربع عشرة شاشة ببنية نظيفة وطبقة مجال بلغة
+      Dart خالصة، وBloc واحد (السلة) وسبع كيوبتات، وحقن اعتماديات GetIt مقابل واجهات مجرّدة،
+      وتغذية Dio من TheMealDB مع نسخة مخزّنة محليًا، وFirebase Auth وCloud Firestore، وتوطين كامل
+      إنجليزي/عربي مع RTL، وثلاثة مظاهر، وملف شخصي خلف بوابة بصمة.</p>
+      <p><b>مدى صدق الأرقام.</b> يُبلّغ <code>flutter analyze</code> عن صفر ملاحظات ومجموعة Dart
+      خضراء؛ وAppium <b>٦/٦</b> على هاتف Android 16 حقيقي؛ وتسجّل حزمة الجودة اليدوية تنفيذ ونجاح
+      <b>١٧ من ٥١</b> حالة مع إبقاء الـ٣٤ الباقية <em>محجوبة</em> بدل افتراضها. رُفع أربعة عشر عيبًا،
+      وأُصلح ثلاثة عشر وأُعيد اختبارها، وبقي واحد (SB-119، مفتاح Google Maps) مفتوحًا لكونه قيد
+      اعتمادات/فاتورة.</p>
+      <p><b>الاستمرارية.</b> يعرض الحساب نفسه على هاتف حقيقي ومحاكي التغذية الحيّة نفسها من خلفية
+      Cloud Firestore واحدة.</p>
+      <p>اقرأ قسم <a href="13-testing.html">الاختبار والجودة</a>، أو عُد إلى <a href="../index.html">الفهرس الكامل</a>.</p>
+    </div>
+  </div>
+</section>
+<nav class="pager">
+    <a href="18-glossary.html"><span class="lbl"><span class="t-en">Previous · §18</span><span class="t-ar">السابق · §18</span></span><span class="to"><span class="t-en">Glossary</span><span class="t-ar">المعجم</span></span></a>
+    <a class="next" href="../index.html"><span class="lbl"><span class="t-en">Back to</span><span class="t-ar">العودة إلى</span></span><span class="to"><span class="t-en">Full index</span><span class="t-ar">الفهرس الكامل</span></span></a>
+</nav>
+<p class="footline"><span class="t-en">Written against commit <code>e4db6c6</code>, 2026-10-18 · <a href="../index.html">all 18 sections</a></span><span class="t-ar">كُتب عند الالتزام <code>e4db6c6</code> في 2026-10-18 · <a href="../index.html">الأقسام الـ18 كلها</a></span></p>
+<a class="top" href="#summary">↑ Top · الأعلى</a>
+</main>
+<script src="../app.js"></script>
+</body>
+</html>
