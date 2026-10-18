@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="6" passed="6" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2026-10-17T14:49:31 EEST" name="StreetBite" finished-at="2026-10-17T14:52:20 EEST" duration-ms="169736">
+    <groups>
+    </groups>
+    <test started-at="2026-10-17T14:49:31 EEST" name="Login" finished-at="2026-10-17T14:50:52 EEST" duration-ms="81351">
+      <class name="tests.LoginTest">
+        <test-method is-config="true" signature="setUpDriver()[pri:0, instance:tests.LoginTest@2a8448fa]" started-at="2026-10-17T14:49:32 EEST" name="setUpDriver" finished-at="2026-10-17T14:50:10 EEST" duration-ms="38614" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpDriver -->
+        <test-method is-config="true" signature="resetAppStateBeforeEachTest()[pri:0, instance:tests.LoginTest@2a8448fa]" started-at="2026-10-17T14:50:11 EEST" name="resetAppStateBeforeEachTest" finished-at="2026-10-17T14:50:11 EEST" duration-ms="708" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetAppStateBeforeEachTest -->
+        <test-method is-config="true" signature="openLoginScreen()[pri:0, instance:tests.LoginTest@2a8448fa]" started-at="2026-10-17T14:50:11 EEST" name="openLoginScreen" finished-at="2026-10-17T14:50:15 EEST" duration-ms="4068" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- openLoginScreen -->
+        <test-method signature="testLoginWithEmptyFields()[pri:0, instance:tests.LoginTest@2a8448fa]" started-at="2026-10-17T14:50:15 EEST" name="testLoginWithEmptyFields" description="TC-LOGIN-003 Empty fields are blocked by client-side validation" finished-at="2026-10-17T14:50:19 EEST" duration-ms="3389" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginWithEmptyFields -->
+        <test-method is-config="true" signature="captureEvidenceOnFailure(org.testng.ITestResult)[pri:0, instance:tests.LoginTest@2a8448fa]" started-at="2026-10-17T14:50:19 EEST" name="captureEvidenceOnFailure" finished-at="2026-10-17T14:50:19 EEST" duration-ms="4" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=testLoginWithEmptyFields status=SUCCESS method=LoginTest.testLoginWithEmptyFields()[pri:0, instance:tests.LoginTest@2a8448fa] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- captureEvidenceOnFailure -->
+        <test-method is-config="true" signature="resetAppStateBeforeEachTest()[pri:0, instance:tests.LoginTest@2a8448fa]" started-at="2026-10-17T14:50:19 EEST" name="resetAppStateBeforeEachTest" finished-at="2026-10-17T14:50:19 EEST" duration-ms="627" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetAppStateBeforeEachTest -->
+        <test-method is-config="true" signature="openLoginScreen()[pri:0, instance:tests.LoginTest@2a8448fa]" started-at="2026-10-17T14:50:19 EEST" name="openLoginScreen" finished-at="2026-10-17T14:50:23 EEST" duration-ms="4038" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- openLoginScreen -->
+        <test-method signature="testLoginWithInvalidCredentials()[pri:0, instance:tests.LoginTest@2a8448fa]" started-at="2026-10-17T14:50:23 EEST" name="testLoginWithInvalidCredentials" description="TC-LOGIN-002 Wrong password is rejected with a friendly message" finished-at="2026-10-17T14:50:33 EEST" duration-ms="9291" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginWithInvalidCredentials -->
+        <test-method is-config="true" signature="captureEvidenceOnFailure(org.testng.ITestResult)[pri:0, instance:tests.LoginTest@2a8448fa]" started-at="2026-10-17T14:50:33 EEST" name="captureEvidenceOnFailure" finished-at="2026-10-17T14:50:33 EEST" duration-ms="1" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=testLoginWithInvalidCredentials status=SUCCESS method=LoginTest.testLoginWithInvalidCredentials()[pri:0, instance:tests.LoginTest@2a8448fa] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- captureEvidenceOnFailure -->
+        <test-method is-config="true" signature="resetAppStateBeforeEachTest()[pri:0, instance:tests.LoginTest@2a8448fa]" started-at="2026-10-17T14:50:33 EEST" name="resetAppStateBeforeEachTest" finished-at="2026-10-17T14:50:33 EEST" duration-ms="622" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetAppStateBeforeEachTest -->
+        <test-method is-config="true" signature="openLoginScreen()[pri:0, instance:tests.LoginTest@2a8448fa]" started-at="2026-10-17T14:50:33 EEST" name="openLoginScreen" finished-at="2026-10-17T14:50:37 EEST" duration-ms="4148" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- openLoginScreen -->
+        <test-method signature="testLoginWithValidCredentials()[pri:0, instance:tests.LoginTest@2a8448fa]" started-at="2026-10-17T14:50:37 EEST" name="testLoginWithValidCredentials" description="TC-LOGIN-001 Valid credentials sign the user in and open the Home feed" finished-at="2026-10-17T14:50:49 EEST" duration-ms="11139" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testLoginWithValidCredentials -->
+        <test-method is-config="true" signature="captureEvidenceOnFailure(org.testng.ITestResult)[pri:0, instance:tests.LoginTest@2a8448fa]" started-at="2026-10-17T14:50:49 EEST" name="captureEvidenceOnFailure" finished-at="2026-10-17T14:50:49 EEST" duration-ms="1" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=testLoginWithValidCredentials status=SUCCESS method=LoginTest.testLoginWithValidCredentials()[pri:0, instance:tests.LoginTest@2a8448fa] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- captureEvidenceOnFailure -->
+        <test-method is-config="true" signature="tearDownDriver()[pri:0, instance:tests.LoginTest@2a8448fa]" started-at="2026-10-17T14:50:49 EEST" name="tearDownDriver" finished-at="2026-10-17T14:50:52 EEST" duration-ms="3320" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDownDriver -->
+      </class> <!-- tests.LoginTest -->
+    </test> <!-- Login -->
+    <test started-at="2026-10-17T14:50:53 EEST" name="HomeScroll" finished-at="2026-10-17T14:51:47 EEST" duration-ms="53588">
+      <class name="tests.HomeScrollTest">
+        <test-method is-config="true" signature="setUpDriver()[pri:0, instance:tests.HomeScrollTest@66ea810]" started-at="2026-10-17T14:50:53 EEST" name="setUpDriver" finished-at="2026-10-17T14:51:01 EEST" duration-ms="8135" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpDriver -->
+        <test-method is-config="true" signature="resetAppStateBeforeEachTest()[pri:0, instance:tests.HomeScrollTest@66ea810]" started-at="2026-10-17T14:51:01 EEST" name="resetAppStateBeforeEachTest" finished-at="2026-10-17T14:51:02 EEST" duration-ms="740" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetAppStateBeforeEachTest -->
+        <test-method is-config="true" signature="signInAndOpenHome()[pri:0, instance:tests.HomeScrollTest@66ea810]" started-at="2026-10-17T14:51:02 EEST" name="signInAndOpenHome" finished-at="2026-10-17T14:51:19 EEST" duration-ms="16558" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- signInAndOpenHome -->
+        <test-method signature="testHotOffersStripIsRendered()[pri:0, instance:tests.HomeScrollTest@66ea810]" started-at="2026-10-17T14:51:19 EEST" name="testHotOffersStripIsRendered" description="TC-HOME-005 The Hot Offers strip is a horizontal list" finished-at="2026-10-17T14:51:20 EEST" duration-ms="1624" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testHotOffersStripIsRendered -->
+        <test-method is-config="true" signature="captureEvidenceOnFailure(org.testng.ITestResult)[pri:0, instance:tests.HomeScrollTest@66ea810]" started-at="2026-10-17T14:51:20 EEST" name="captureEvidenceOnFailure" finished-at="2026-10-17T14:51:20 EEST" duration-ms="3" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=testHotOffersStripIsRendered status=SUCCESS method=HomeScrollTest.testHotOffersStripIsRendered()[pri:0, instance:tests.HomeScrollTest@66ea810] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- captureEvidenceOnFailure -->
+        <test-method is-config="true" signature="resetAppStateBeforeEachTest()[pri:0, instance:tests.HomeScrollTest@66ea810]" started-at="2026-10-17T14:51:20 EEST" name="resetAppStateBeforeEachTest" finished-at="2026-10-17T14:51:21 EEST" duration-ms="768" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetAppStateBeforeEachTest -->
+        <test-method is-config="true" signature="signInAndOpenHome()[pri:0, instance:tests.HomeScrollTest@66ea810]" started-at="2026-10-17T14:51:21 EEST" name="signInAndOpenHome" finished-at="2026-10-17T14:51:34 EEST" duration-ms="13498" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- signInAndOpenHome -->
+        <test-method signature="testScrollThroughMealsGrid()[pri:0, instance:tests.HomeScrollTest@66ea810]" started-at="2026-10-17T14:51:34 EEST" name="testScrollThroughMealsGrid" description="TC-HOME-004 The meals grid scrolls down and back to the top" finished-at="2026-10-17T14:51:46 EEST" duration-ms="11225" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testScrollThroughMealsGrid -->
+        <test-method is-config="true" signature="captureEvidenceOnFailure(org.testng.ITestResult)[pri:0, instance:tests.HomeScrollTest@66ea810]" started-at="2026-10-17T14:51:46 EEST" name="captureEvidenceOnFailure" finished-at="2026-10-17T14:51:46 EEST" duration-ms="1" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=testScrollThroughMealsGrid status=SUCCESS method=HomeScrollTest.testScrollThroughMealsGrid()[pri:0, instance:tests.HomeScrollTest@66ea810] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- captureEvidenceOnFailure -->
+        <test-method is-config="true" signature="tearDownDriver()[pri:0, instance:tests.HomeScrollTest@66ea810]" started-at="2026-10-17T14:51:46 EEST" name="tearDownDriver" finished-at="2026-10-17T14:51:47 EEST" duration-ms="1015" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDownDriver -->
+      </class> <!-- tests.HomeScrollTest -->
+    </test> <!-- HomeScroll -->
+    <test started-at="2026-10-17T14:51:47 EEST" name="AddToCart" finished-at="2026-10-17T14:52:20 EEST" duration-ms="33599">
+      <class name="tests.AddToCartTest">
+        <test-method is-config="true" signature="setUpDriver()[pri:0, instance:tests.AddToCartTest@51891008]" started-at="2026-10-17T14:51:47 EEST" name="setUpDriver" finished-at="2026-10-17T14:51:55 EEST" duration-ms="8694" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpDriver -->
+        <test-method is-config="true" signature="resetAppStateBeforeEachTest()[pri:0, instance:tests.AddToCartTest@51891008]" started-at="2026-10-17T14:51:55 EEST" name="resetAppStateBeforeEachTest" finished-at="2026-10-17T14:51:56 EEST" duration-ms="601" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetAppStateBeforeEachTest -->
+        <test-method is-config="true" signature="signInAndOpenHome()[pri:0, instance:tests.AddToCartTest@51891008]" started-at="2026-10-17T14:51:56 EEST" name="signInAndOpenHome" finished-at="2026-10-17T14:52:11 EEST" duration-ms="15434" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- signInAndOpenHome -->
+        <test-method signature="testAddToCartFromMealCard()[pri:0, instance:tests.AddToCartTest@51891008]" started-at="2026-10-17T14:52:11 EEST" name="testAddToCartFromMealCard" description="TC-CART-001 Adding a meal shows a SnackBar and the line reaches the cart" finished-at="2026-10-17T14:52:19 EEST" duration-ms="7798" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testAddToCartFromMealCard -->
+        <test-method is-config="true" signature="captureEvidenceOnFailure(org.testng.ITestResult)[pri:0, instance:tests.AddToCartTest@51891008]" started-at="2026-10-17T14:52:19 EEST" name="captureEvidenceOnFailure" finished-at="2026-10-17T14:52:19 EEST" duration-ms="0" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=testAddToCartFromMealCard status=SUCCESS method=AddToCartTest.testAddToCartFromMealCard()[pri:0, instance:tests.AddToCartTest@51891008] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- captureEvidenceOnFailure -->
+        <test-method is-config="true" signature="tearDownDriver()[pri:0, instance:tests.AddToCartTest@51891008]" started-at="2026-10-17T14:52:19 EEST" name="tearDownDriver" finished-at="2026-10-17T14:52:20 EEST" duration-ms="1058" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDownDriver -->
+      </class> <!-- tests.AddToCartTest -->
+    </test> <!-- AddToCart -->
+  </suite> <!-- StreetBite -->
+</testng-results>

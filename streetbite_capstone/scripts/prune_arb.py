@@ -1,6 +1,6 @@
 """Strips ARB entries that no Dart source file references.
 
-Run from `flutter_app/`:  python scripts/prune_arb.py
+Run from `streetbite_capstone/`:  python scripts/prune_arb.py
 
 The brief requires "remove all unused ARB entries before submission". Running
 this keeps `app_en.arb` and `app_ar.parb` in lockstep: a key is removed from

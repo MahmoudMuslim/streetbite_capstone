@@ -1,6 +1,9 @@
 # Local device-audit scratch (screenshots + uiautomator dumps)
 _audit/
 
+# Local device-capture scratch (adb screenshots + uiautomator dumps)
+_cap/
+
 # OS / IDE
 .DS_Store
 Thumbs.db
@@ -8,3 +11,4 @@ Thumbs.db
 # Android Studio rewrites these on every open and the churn drowns out real
 # diffs, so the whole directory stays local.
 .idea/
+node_modules

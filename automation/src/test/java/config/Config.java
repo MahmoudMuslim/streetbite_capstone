@@ -117,7 +117,7 @@ public final class Config {
 
     /** The APK installed on the device under test. */
     public static String apkPath() {
-        return get("app.apk", "../flutter_app/build/app/outputs/flutter-apk/app-release.apk");
+        return get("app.apk", "../streetbite_capstone/build/app/outputs/flutter-apk/app-release.apk");
     }
 
     // ---- Appium ---------------------------------------------------------

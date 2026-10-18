@@ -51,7 +51,7 @@
       <p>StreetBite navigates with the framework's own <em>imperative</em> API — <code>Navigator.pushNamed</code> and
       a route-name table — not with a router package. There is exactly one place where a name becomes a widget:
       <code>AppRouter.resolve</code>, wired as <code>onGenerateRoute</code> on the <code>MaterialApp</code> in
-      <a href="../../flutter_app/lib/app.dart"><code>app.dart:103</code></a> with <code>initialRoute: AppRoutes.splash</code>.</p>
+      <a href="../../streetbite_capstone/lib/app.dart"><code>app.dart:103</code></a> with <code>initialRoute: AppRoutes.splash</code>.</p>
       <p>The consequence is a property the code relies on rather than a library feature: the graph is complete <b>by
       construction</b>. <code>AppRoutes</code> declares twelve names; the <code>switch</code> has twelve cases plus a
       <code>default</code>. A route name with no screen behind it cannot exist, because adding a constant without a
@@ -157,7 +157,7 @@
       real <code>PageRoute</code>, the meal-card <em>Hero</em> flights still work. A fade alone would have killed the
       photo flight between the card and the detail screen.</p>
       <p>Both ends of that flight carry the same tag, <code>'meal-image-${meal.id}</code>, in three widgets —
-      <a href="../../flutter_app/lib/presentation/widgets/meal_card.dart"><code>meal_card.dart:59</code></a>,
+      <a href="../../streetbite_capstone/lib/presentation/widgets/meal_card.dart"><code>meal_card.dart:59</code></a>,
       <code>meal_banner_page.dart:56</code> and <code>meal_details_screen.dart:68</code> — so a tap on a home feed
       card, a hot-offers banner, or a search-sheet row all animate into the detail photo. The tag is keyed on the
       meal id, which is why two cards can be on screen at once without the flight jumping between them.</p>

@@ -1,6 +1,6 @@
 """Reports ARB entries that no Dart source file references.
 
-Run from `flutter_app/`:  python scripts/check_unused_arb.py
+Run from `streetbite_capstone/`:  python scripts/check_unused_arb.py
 
 The brief requires "remove all unused ARB entries before submission", so this
 is the check that proves it. A key counts as used when it appears either as a

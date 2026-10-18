@@ -22,7 +22,7 @@ import io.appium.java_client.android.AndroidDriver;
  * </ul>
  * StreetBite therefore tags its interactive nodes with
  * {@code Semantics(identifier:)} (see
- * {@code flutter_app/lib/presentation/widgets/semantic_id.dart}) and this page
+ * {@code streetbite_capstone/lib/presentation/widgets/semantic_id.dart}) and this page
  * object addresses them by {@code resource-id}. That is what makes the suite
  * survive a redesign: a card can move, restyle or be reordered without
  * breaking a test, and nothing here depends on a label that changes when the

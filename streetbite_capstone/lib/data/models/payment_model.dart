@@ -29,9 +29,7 @@ class PaymentModel {
     if (last4 != null) last4Key: last4,
   };
 
-  /// Rehydrates the SOLID strategy that produced this snapshot.
-  PaymentMethod toEntity() => switch (type) {
-    PaymentType.card => CardPayment(last4: last4 ?? '4242'),
-    PaymentType.cash => const CashPayment(),
-  };
+  /// Rehydrates the SOLID strategy through [PaymentFactory] so the
+  /// switch logic lives in the domain layer, not here.
+  PaymentMethod toEntity() => PaymentFactory.create(type, last4: last4);
 }

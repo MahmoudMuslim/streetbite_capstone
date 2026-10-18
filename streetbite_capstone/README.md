@@ -226,7 +226,7 @@ a `Future` would only add microtask hops.
 ## Folder structure
 
 ```
-flutter_app/
+streetbite_capstone/
 ├── lib/
 │   ├── main.dart                  # entry point + boot sequence
 │   ├── app.dart                   # MaterialApp, theme/locale wiring, providers
@@ -258,7 +258,7 @@ flutter_app/
 │       ├── app_en.arb
 │       ├── app_ar.arb
 │       └── generated/             # flutter gen-l10n output
-├── test/                          # 95 unit + widget tests across 15 suites
+├── test/                          # 99 unit + widget tests across 15 suites
 ├── android/
 │   ├── key.properties.example     # copy to key.properties
 │   └── app/google-services.json   # Firebase config
@@ -289,7 +289,7 @@ reusing a widget is always a one-line import.
 
 ```bash
 git clone <your-repo-url> streetbite-capstone
-cd streetbite-capstone/flutter_app
+cd streetbite-capstone/streetbite_capstone
 
 flutter pub get
 flutter gen-l10n          # regenerate AppLocalizations from the ARB files
@@ -367,7 +367,7 @@ with no Dart-visible error unless **all four** of these are true:
    `com.google.android.geo.API_KEY` by `app/build.gradle.kts`:
 
    ```bash
-   cd flutter_app/android
+   cd streetbite_capstone/android
    cp key.properties.example key.properties
    # paste your Maps SDK for Android key
    ```
@@ -383,7 +383,7 @@ crashing, and the vendor list button keeps all five stops reachable
 `com.example.streetbite_capstone`. To use your own project:
 
 1. Firebase console → **Add app → Android**, package `com.example.streetbite_capstone`.
-2. Download `google-services.json` into `flutter_app/android/app/`.
+2. Download `google-services.json` into `streetbite_capstone/android/app/`.
 3. **Authentication → Sign-in method** → enable **Email/Password**.
 4. **Firestore Database** → create, then paste the rules below.
 
@@ -437,9 +437,9 @@ should fail loudly instead.
 ## Testing
 
 ```bash
-cd flutter_app
+cd streetbite_capstone
 flutter analyze     # No issues found!
-flutter test        # 95 tests, all green
+flutter test        # 99 tests, all green
 dart format .       # formatting check
 ```
 
@@ -470,7 +470,7 @@ the signed-in screen kept rendering Login while the locale toggled.
 ## Build & Firebase App Distribution
 
 ```bash
-cd flutter_app
+cd streetbite_capstone
 flutter build apk --release
 # -> build/app/outputs/flutter-apk/app-release.apk
 ```
@@ -484,15 +484,45 @@ flutter build apk --release
 ```bash
 npm install -g firebase-tools
 firebase login
-firebase init appdistribution     # in flutter_app/android/
-firebase appdistribution:distribute ../../build/app/outputs/flutter-apk/app-release.apk \
+firebase appdistribution:distribute \
+  build/app/outputs/flutter-apk/app-release.apk \
+  --app "1:441539093867:android:0fc0d7ea3c6f46c255582e" \
   --testers "yasmine@streetbite.app,mahmoud@streetbite.app" \
   --release-notes "StreetBite 1.0.0 - first public beta"
 ```
 
 Add testers once from the console under **App Distribution → Testers →
-Add testers**, then re-run the command above. See
-`manual_qa/screenshots/` for the dashboard evidence.
+Add testers**, then re-run the command above.
+
+### Beta distribution evidence (verified)
+
+The command above was run against the current release APK and completed
+successfully:
+
+| Item | Value |
+|---|---|
+| Firebase project | `studio-3887960052-c09f5` |
+| Android app | `com.example.streetbite_capstone` (`…0fc0d7ea3c6f46c255582e`) |
+| APK uploaded | `build/app/outputs/flutter-apk/app-release.apk` (60.2 MB) |
+| Release | `1.0.0 (3)` — `uploaded new release 1.0.0 (3) successfully!` |
+| Release ID | `6nmj4hn1eubc8` |
+| Testers (2 invited) | `m25242305m@gmail.com`, `mahmoudmuslim1999@gmail.com` (see dashboard below) |
+| Result | `added release notes successfully` · `distributed to testers/groups successfully` |
+
+The raw CLI transcript is saved at
+[`manual_qa/screenshots/firebase_app_distribution_cli_output.txt`](../manual_qa/screenshots/firebase_app_distribution_cli_output.txt).
+
+Dashboard links (open while signed in to the project account):
+
+* Release page — <https://console.firebase.google.com/project/studio-3887960052-c09f5/appdistribution/app/android:com.example.streetbite_capstone/releases/6nmj4hn1eubc8>
+* Testers page — <https://console.firebase.google.com/project/studio-3887960052-c09f5/appdistribution/app/android:com.example.streetbite_capstone/testers>
+
+**Dashboard evidence.** The App Distribution console shows release `1.0.0 (3)`
+with **Invited: 2** testers, and the Testers & Groups tab lists both accounts:
+
+![Firebase App Distribution — release 1.0.0 (3), 2 testers invited](../manual_qa/screenshots/app_distribution_releases.png)
+
+![Firebase App Distribution — Testers & Groups (2 testers)](../manual_qa/screenshots/app_distribution_testers.png)
 
 ### Windows note
 

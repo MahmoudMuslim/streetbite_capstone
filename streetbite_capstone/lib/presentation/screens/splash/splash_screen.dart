@@ -148,7 +148,7 @@ class _SplashScreenState extends State<SplashScreen>
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    'StreetBite',
+                                    context.l10n.appName,
                                     textAlign: TextAlign.center,
                                     style: Theme.of(context)
                                         .textTheme

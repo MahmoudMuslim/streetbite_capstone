@@ -226,13 +226,6 @@
   "language": "Language",
   "english": "English",
   "arabic": "العربية",
-  "@notificationAdded": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "retry": "Retry",
   "somethingWentWrong": "Something went wrong",
   "loading": "Loading",

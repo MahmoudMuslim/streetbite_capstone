@@ -74,7 +74,7 @@ this order (first match wins):
 |---|---|---|
 | `app.package` | `com.example.streetbite_capstone` | Android package under test |
 | `app.activity` | `.MainActivity` | Launcher activity |
-| `app.apk` | `../flutter_app/build/app/outputs/flutter-apk/app-release.apk` | APK to install |
+| `app.apk` | `../streetbite_capstone/build/app/outputs/flutter-apk/app-release.apk` | APK to install |
 | `appium.server` | `http://127.0.0.1:4723/wd/hub` | Appium endpoint (base path matters) |
 | `appium.device` | `Android Emulator` | AVD name **or** a physical serial |
 | `appium.reset` | `true` | Clear app data between classes |
@@ -114,7 +114,7 @@ The base path matters: with the default (`/`) the suite must be pointed at
 
 ```bash
 # 1. Build the APK the suite installs
-cd ../flutter_app
+cd ../streetbite_capstone
 flutter build apk --release
 
 # 2. Run the automation suite
@@ -193,7 +193,7 @@ UiAutomator2 — the accessibility tree is built from `Semantics`, and
 `Semantics(identifier:)` is what Android publishes as `resource-id`.
 
 StreetBite therefore tags its interactive nodes through
-`flutter_app/lib/presentation/widgets/semantic_id.dart`:
+`streetbite_capstone/lib/presentation/widgets/semantic_id.dart`:
 
 ```dart
 SemanticId(id: 'login_email_field', label: 'Email', child: TextFormField(...))
@@ -239,6 +239,26 @@ Tests run: 6, Failures: 0, Errors: 0, Skipped: 0 — BUILD SUCCESS
 
 Physical device `24117RN76G`, Android 16, 1080×2400. `suite-report.txt` is
 truncated at the start of each run, so it only ever describes the latest run.
+
+### Captured evidence (committed to the repo)
+
+The transient `target/screenshots/` output is promoted into a tracked folder so
+the run survives `mvn clean`:
+
+| Folder | Device | Contents |
+|---|---|---|
+| [`screenshots/physical-device/`](screenshots/physical-device/) | Xiaomi `24117RN76G`, Android 16 | The 6/6 Appium run — `TC_LOGIN_001/002/003`, `TC_HOME_004/005`, `TC_CART_001` PNGs + `testng-results-physical.xml` |
+| [`screenshots/emulator/`](screenshots/emulator/) | AVD `Medium_Phone_API_37.0`, Android 16, 1080×2400 | The same release APK running on an emulator — `TC_LOGIN_emulator.png`, `TC_HOME_emulator.png` |
+
+The Appium harness is device-agnostic — the only thing that changes between an
+emulator run and a hardware run is `-Dappium.device=<serial>` (see
+*Running on a physical device* above). The full six-scenario pass with
+accessibility-tree evidence was captured on the physical handset; the emulator
+folder shows the identical build launching, authenticating and rendering the
+live feed on a Google-APIs AVD. (Maps tiles are not asserted on the emulator —
+the Google-APIs image ships without Play Services, so the map stops at its
+availability check; the vendor map and its info window are evidenced on the
+physical device and in the manual QA pack.)
 
 ### Test isolation wipes app data, not just the process
 

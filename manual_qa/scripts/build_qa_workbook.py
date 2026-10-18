@@ -470,7 +470,7 @@ TEST_PLAN_SECTIONS = [
                      "theme toggle, EN/AR localization, offline behaviour."],
         ["Out of scope", "iOS build, App Store release, push notifications, real payment gateway, "
                          "live vendor inventory, analytics and A/B testing."],
-        ["Test basis", "Release APK 1.0.0 (arm64-v8a), built from flutter_app/."],
+        ["Test basis", "Release APK 1.0.0 (arm64-v8a), built from streetbite_capstone/."],
     ]),
     ("4. Testing types", [
         ["Functional", "Positive, negative, boundary and GUI (layout, copy, iconography) per screen."],

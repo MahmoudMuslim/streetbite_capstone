@@ -80,6 +80,25 @@ class CashPayment implements PaymentMethod {
   int get hashCode => type.hashCode;
 }
 
+/// **Factory pattern** — rehydrates a strategy from its persisted discriminator
+/// so callers never `switch` over the enum themselves.
+///
+/// Adding a new payment type means one class here and one branch in [create];
+/// the UI selector, the model, and every repository read path stay untouched.
+class PaymentFactory {
+  const PaymentFactory._();
+
+  /// Returns the concrete [PaymentMethod] for [type].
+  ///
+  /// [last4] is forwarded to [CardPayment] when the type is `card`; ignored
+  /// otherwise.
+  static PaymentMethod create(PaymentType type, {String? last4}) =>
+      switch (type) {
+        PaymentType.cash => const CashPayment(),
+        PaymentType.card => CardPayment(last4: last4 ?? '4242'),
+      };
+}
+
 /// Strategy #2 — the customer pays with a stored card.
 class CardPayment implements PaymentMethod {
   const CardPayment({this.last4 = '4242'});
